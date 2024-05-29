@@ -280,7 +280,7 @@
             this.puertoWebTxt.Enabled = false;
             this.puertoWebTxt.Location = new System.Drawing.Point(109, 32);
             this.puertoWebTxt.Name = "puertoWebTxt";
-            this.puertoWebTxt.Size = new System.Drawing.Size(76, 20);
+            this.puertoWebTxt.Size = new System.Drawing.Size(76, 23);
             this.puertoWebTxt.TabIndex = 7;
             // 
             // label4
@@ -288,7 +288,7 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(6, 35);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(64, 13);
+            this.label4.Size = new System.Drawing.Size(83, 17);
             this.label4.TabIndex = 6;
             this.label4.Text = "Puerto Web";
             // 
@@ -297,7 +297,7 @@
             this.puertoArduinoTxt.Enabled = false;
             this.puertoArduinoTxt.Location = new System.Drawing.Point(109, 58);
             this.puertoArduinoTxt.Name = "puertoArduinoTxt";
-            this.puertoArduinoTxt.Size = new System.Drawing.Size(76, 20);
+            this.puertoArduinoTxt.Size = new System.Drawing.Size(76, 23);
             this.puertoArduinoTxt.TabIndex = 5;
             // 
             // label3
@@ -305,7 +305,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(6, 61);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(90, 13);
+            this.label3.Size = new System.Drawing.Size(121, 17);
             this.label3.TabIndex = 4;
             this.label3.Text = "Puerto Centralitas";
             // 
@@ -340,10 +340,10 @@
             this.datos1.Controls.Add(this.label11);
             this.datos1.Controls.Add(this.tablaCentralitas);
             this.datos1.Controls.Add(this.tablaAlmacenes);
-            this.datos1.Location = new System.Drawing.Point(4, 22);
+            this.datos1.Location = new System.Drawing.Point(4, 25);
             this.datos1.Name = "datos1";
             this.datos1.Padding = new System.Windows.Forms.Padding(3);
-            this.datos1.Size = new System.Drawing.Size(806, 601);
+            this.datos1.Size = new System.Drawing.Size(806, 598);
             this.datos1.TabIndex = 0;
             this.datos1.Text = "Almacenes, Centralitas y Modulos";
             this.datos1.UseVisualStyleBackColor = true;
@@ -353,7 +353,7 @@
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(3, 127);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(47, 13);
+            this.label8.Size = new System.Drawing.Size(61, 17);
             this.label8.TabIndex = 15;
             this.label8.Text = "Modulos";
             // 
@@ -373,6 +373,7 @@
             this.tablaModulos.MultiSelect = false;
             this.tablaModulos.Name = "tablaModulos";
             this.tablaModulos.ReadOnly = true;
+            this.tablaModulos.RowHeadersWidth = 51;
             this.tablaModulos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.tablaModulos.Size = new System.Drawing.Size(794, 447);
             this.tablaModulos.TabIndex = 14;
@@ -424,6 +425,7 @@
             // moduloBloqueante
             // 
             this.moduloBloqueante.HeaderText = "Modulo";
+            this.moduloBloqueante.MinimumWidth = 6;
             this.moduloBloqueante.Name = "moduloBloqueante";
             this.moduloBloqueante.ReadOnly = true;
             this.moduloBloqueante.Width = 75;
@@ -433,7 +435,7 @@
             this.label9.AutoSize = true;
             this.label9.Location = new System.Drawing.Point(337, 7);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(56, 13);
+            this.label9.Size = new System.Drawing.Size(75, 17);
             this.label9.TabIndex = 11;
             this.label9.Text = "Centralitas";
             // 
@@ -442,7 +444,7 @@
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(3, 7);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(59, 13);
+            this.label11.Size = new System.Drawing.Size(77, 17);
             this.label11.TabIndex = 13;
             this.label11.Text = "Almacenes";
             // 
@@ -460,6 +462,7 @@
             this.tablaCentralitas.MultiSelect = false;
             this.tablaCentralitas.Name = "tablaCentralitas";
             this.tablaCentralitas.ReadOnly = true;
+            this.tablaCentralitas.RowHeadersWidth = 51;
             this.tablaCentralitas.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.tablaCentralitas.Size = new System.Drawing.Size(434, 93);
             this.tablaCentralitas.TabIndex = 9;
@@ -497,6 +500,7 @@
             this.ipCentralita.MinimumWidth = 6;
             this.ipCentralita.Name = "ipCentralita";
             this.ipCentralita.ReadOnly = true;
+            this.ipCentralita.Width = 125;
             // 
             // tablaAlmacenes
             // 
@@ -511,6 +515,7 @@
             this.tablaAlmacenes.MultiSelect = false;
             this.tablaAlmacenes.Name = "tablaAlmacenes";
             this.tablaAlmacenes.ReadOnly = true;
+            this.tablaAlmacenes.RowHeadersWidth = 51;
             this.tablaAlmacenes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.tablaAlmacenes.Size = new System.Drawing.Size(354, 93);
             this.tablaAlmacenes.TabIndex = 12;
@@ -546,10 +551,10 @@
             // 
             this.datos2.Controls.Add(this.label21);
             this.datos2.Controls.Add(this.tablaPosiciones);
-            this.datos2.Location = new System.Drawing.Point(4, 22);
+            this.datos2.Location = new System.Drawing.Point(4, 25);
             this.datos2.Name = "datos2";
             this.datos2.Padding = new System.Windows.Forms.Padding(3);
-            this.datos2.Size = new System.Drawing.Size(806, 601);
+            this.datos2.Size = new System.Drawing.Size(806, 598);
             this.datos2.TabIndex = 1;
             this.datos2.Text = "Posiciones";
             this.datos2.UseVisualStyleBackColor = true;
@@ -559,7 +564,7 @@
             this.label21.AutoSize = true;
             this.label21.Location = new System.Drawing.Point(6, 9);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(58, 13);
+            this.label21.Size = new System.Drawing.Size(76, 17);
             this.label21.TabIndex = 14;
             this.label21.Text = "Posiciones";
             // 
@@ -586,6 +591,7 @@
             this.tablaPosiciones.MultiSelect = false;
             this.tablaPosiciones.Name = "tablaPosiciones";
             this.tablaPosiciones.ReadOnly = true;
+            this.tablaPosiciones.RowHeadersWidth = 51;
             this.tablaPosiciones.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.tablaPosiciones.Size = new System.Drawing.Size(794, 565);
             this.tablaPosiciones.TabIndex = 8;
@@ -712,9 +718,9 @@
             this.datos3.Controls.Add(this.obtenerProductosBtn);
             this.datos3.Controls.Add(this.tablaProductos);
             this.datos3.Controls.Add(this.tablaEnvases);
-            this.datos3.Location = new System.Drawing.Point(4, 22);
+            this.datos3.Location = new System.Drawing.Point(4, 25);
             this.datos3.Name = "datos3";
-            this.datos3.Size = new System.Drawing.Size(806, 601);
+            this.datos3.Size = new System.Drawing.Size(806, 598);
             this.datos3.TabIndex = 3;
             this.datos3.Text = "Productos y envases";
             this.datos3.UseVisualStyleBackColor = true;
@@ -724,7 +730,7 @@
             this.label24.AutoSize = true;
             this.label24.Location = new System.Drawing.Point(3, 7);
             this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(55, 13);
+            this.label24.Size = new System.Drawing.Size(72, 17);
             this.label24.TabIndex = 15;
             this.label24.Text = "Productos";
             // 
@@ -733,7 +739,7 @@
             this.label25.AutoSize = true;
             this.label25.Location = new System.Drawing.Point(3, 411);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(48, 13);
+            this.label25.Size = new System.Drawing.Size(62, 17);
             this.label25.TabIndex = 17;
             this.label25.Text = "Envases";
             // 
@@ -762,6 +768,7 @@
             this.tablaProductos.MultiSelect = false;
             this.tablaProductos.Name = "tablaProductos";
             this.tablaProductos.ReadOnly = true;
+            this.tablaProductos.RowHeadersWidth = 51;
             this.tablaProductos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.tablaProductos.Size = new System.Drawing.Size(789, 382);
             this.tablaProductos.TabIndex = 14;
@@ -826,6 +833,7 @@
             this.tablaEnvases.MultiSelect = false;
             this.tablaEnvases.Name = "tablaEnvases";
             this.tablaEnvases.ReadOnly = true;
+            this.tablaEnvases.RowHeadersWidth = 51;
             this.tablaEnvases.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.tablaEnvases.Size = new System.Drawing.Size(789, 95);
             this.tablaEnvases.TabIndex = 16;
@@ -855,6 +863,7 @@
             this.ancho.MinimumWidth = 6;
             this.ancho.Name = "ancho";
             this.ancho.ReadOnly = true;
+            this.ancho.Width = 125;
             // 
             // largo
             // 
@@ -862,6 +871,7 @@
             this.largo.MinimumWidth = 6;
             this.largo.Name = "largo";
             this.largo.ReadOnly = true;
+            this.largo.Width = 125;
             // 
             // alto
             // 
@@ -869,6 +879,7 @@
             this.alto.MinimumWidth = 6;
             this.alto.Name = "alto";
             this.alto.ReadOnly = true;
+            this.alto.Width = 125;
             // 
             // volumen
             // 
@@ -876,6 +887,7 @@
             this.volumen.MinimumWidth = 6;
             this.volumen.Name = "volumen";
             this.volumen.ReadOnly = true;
+            this.volumen.Width = 125;
             // 
             // peso
             // 
@@ -883,6 +895,7 @@
             this.peso.MinimumWidth = 6;
             this.peso.Name = "peso";
             this.peso.ReadOnly = true;
+            this.peso.Width = 125;
             // 
             // datos4
             // 
@@ -890,9 +903,9 @@
             this.datos4.Controls.Add(this.label23);
             this.datos4.Controls.Add(this.tablaOperarios);
             this.datos4.Controls.Add(this.tablaRoles);
-            this.datos4.Location = new System.Drawing.Point(4, 22);
+            this.datos4.Location = new System.Drawing.Point(4, 25);
             this.datos4.Name = "datos4";
-            this.datos4.Size = new System.Drawing.Size(806, 601);
+            this.datos4.Size = new System.Drawing.Size(806, 598);
             this.datos4.TabIndex = 2;
             this.datos4.Text = "Operarios y Roles";
             this.datos4.UseVisualStyleBackColor = true;
@@ -902,7 +915,7 @@
             this.label22.AutoSize = true;
             this.label22.Location = new System.Drawing.Point(3, 7);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(52, 13);
+            this.label22.Size = new System.Drawing.Size(71, 17);
             this.label22.TabIndex = 15;
             this.label22.Text = "Operarios";
             // 
@@ -911,7 +924,7 @@
             this.label23.AutoSize = true;
             this.label23.Location = new System.Drawing.Point(475, 7);
             this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(34, 13);
+            this.label23.Size = new System.Drawing.Size(44, 17);
             this.label23.TabIndex = 17;
             this.label23.Text = "Roles";
             // 
@@ -929,6 +942,7 @@
             this.tablaOperarios.MultiSelect = false;
             this.tablaOperarios.Name = "tablaOperarios";
             this.tablaOperarios.ReadOnly = true;
+            this.tablaOperarios.RowHeadersWidth = 51;
             this.tablaOperarios.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.tablaOperarios.Size = new System.Drawing.Size(466, 567);
             this.tablaOperarios.TabIndex = 14;
@@ -981,6 +995,7 @@
             this.tablaRoles.MultiSelect = false;
             this.tablaRoles.Name = "tablaRoles";
             this.tablaRoles.ReadOnly = true;
+            this.tablaRoles.RowHeadersWidth = 51;
             this.tablaRoles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.tablaRoles.Size = new System.Drawing.Size(319, 169);
             this.tablaRoles.TabIndex = 16;
@@ -1014,9 +1029,9 @@
             this.datos5.Controls.Add(this.tablaPedidos);
             this.datos5.Controls.Add(this.label5);
             this.datos5.Controls.Add(this.tablaLineasPedido);
-            this.datos5.Location = new System.Drawing.Point(4, 22);
+            this.datos5.Location = new System.Drawing.Point(4, 25);
             this.datos5.Name = "datos5";
-            this.datos5.Size = new System.Drawing.Size(806, 601);
+            this.datos5.Size = new System.Drawing.Size(806, 598);
             this.datos5.TabIndex = 4;
             this.datos5.Text = "Pedidos y Contenido";
             this.datos5.UseVisualStyleBackColor = true;
@@ -1039,7 +1054,7 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(6, 52);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(38, 13);
+            this.label7.Size = new System.Drawing.Size(49, 17);
             this.label7.TabIndex = 31;
             this.label7.Text = "Hasta:";
             // 
@@ -1047,7 +1062,7 @@
             // 
             this.barcelonaHastaPS.Location = new System.Drawing.Point(53, 47);
             this.barcelonaHastaPS.Name = "barcelonaHastaPS";
-            this.barcelonaHastaPS.Size = new System.Drawing.Size(260, 20);
+            this.barcelonaHastaPS.Size = new System.Drawing.Size(260, 23);
             this.barcelonaHastaPS.TabIndex = 30;
             // 
             // label12
@@ -1055,7 +1070,7 @@
             this.label12.AutoSize = true;
             this.label12.Location = new System.Drawing.Point(6, 24);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(41, 13);
+            this.label12.Size = new System.Drawing.Size(53, 17);
             this.label12.TabIndex = 29;
             this.label12.Text = "Desde:";
             // 
@@ -1063,7 +1078,7 @@
             // 
             this.barcelonaDesdePS.Location = new System.Drawing.Point(53, 19);
             this.barcelonaDesdePS.Name = "barcelonaDesdePS";
-            this.barcelonaDesdePS.Size = new System.Drawing.Size(260, 20);
+            this.barcelonaDesdePS.Size = new System.Drawing.Size(260, 23);
             this.barcelonaDesdePS.TabIndex = 28;
             // 
             // groupBox7
@@ -1084,7 +1099,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(6, 52);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(38, 13);
+            this.label2.Size = new System.Drawing.Size(49, 17);
             this.label2.TabIndex = 31;
             this.label2.Text = "Hasta:";
             // 
@@ -1092,7 +1107,7 @@
             // 
             this.fechaHastaPS.Location = new System.Drawing.Point(53, 47);
             this.fechaHastaPS.Name = "fechaHastaPS";
-            this.fechaHastaPS.Size = new System.Drawing.Size(260, 20);
+            this.fechaHastaPS.Size = new System.Drawing.Size(260, 23);
             this.fechaHastaPS.TabIndex = 30;
             // 
             // label1
@@ -1100,7 +1115,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(6, 24);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(41, 13);
+            this.label1.Size = new System.Drawing.Size(53, 17);
             this.label1.TabIndex = 29;
             this.label1.Text = "Desde:";
             // 
@@ -1108,7 +1123,7 @@
             // 
             this.fechaDesdePS.Location = new System.Drawing.Point(53, 19);
             this.fechaDesdePS.Name = "fechaDesdePS";
-            this.fechaDesdePS.Size = new System.Drawing.Size(260, 20);
+            this.fechaDesdePS.Size = new System.Drawing.Size(260, 23);
             this.fechaDesdePS.TabIndex = 28;
             // 
             // tablaMovimientos
@@ -1124,6 +1139,7 @@
             this.tablaMovimientos.MultiSelect = false;
             this.tablaMovimientos.Name = "tablaMovimientos";
             this.tablaMovimientos.ReadOnly = true;
+            this.tablaMovimientos.RowHeadersWidth = 51;
             this.tablaMovimientos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.tablaMovimientos.Size = new System.Drawing.Size(290, 180);
             this.tablaMovimientos.TabIndex = 23;
@@ -1170,7 +1186,7 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(6, 11);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(100, 13);
+            this.label6.Size = new System.Drawing.Size(133, 17);
             this.label6.TabIndex = 16;
             this.label6.Text = "Pedidos pendientes";
             // 
@@ -1190,6 +1206,7 @@
             this.tablaPedidos.MultiSelect = false;
             this.tablaPedidos.Name = "tablaPedidos";
             this.tablaPedidos.ReadOnly = true;
+            this.tablaPedidos.RowHeadersWidth = 51;
             this.tablaPedidos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.tablaPedidos.Size = new System.Drawing.Size(462, 359);
             this.tablaPedidos.TabIndex = 14;
@@ -1229,10 +1246,12 @@
             this.envio.MinimumWidth = 6;
             this.envio.Name = "envio";
             this.envio.ReadOnly = true;
+            this.envio.Width = 125;
             // 
             // transportista
             // 
             this.transportista.HeaderText = "Transp.";
+            this.transportista.MinimumWidth = 6;
             this.transportista.Name = "transportista";
             this.transportista.ReadOnly = true;
             this.transportista.Width = 50;
@@ -1250,7 +1269,7 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(6, 394);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(107, 13);
+            this.label5.Size = new System.Drawing.Size(142, 17);
             this.label5.TabIndex = 15;
             this.label5.Text = "Contenido del pedido";
             // 
@@ -1268,6 +1287,7 @@
             this.tablaLineasPedido.MultiSelect = false;
             this.tablaLineasPedido.Name = "tablaLineasPedido";
             this.tablaLineasPedido.ReadOnly = true;
+            this.tablaLineasPedido.RowHeadersWidth = 51;
             this.tablaLineasPedido.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.tablaLineasPedido.Size = new System.Drawing.Size(491, 180);
             this.tablaLineasPedido.TabIndex = 14;
@@ -1302,6 +1322,7 @@
             // cantidad_recogida
             // 
             this.cantidad_recogida.HeaderText = "Rec.";
+            this.cantidad_recogida.MinimumWidth = 6;
             this.cantidad_recogida.Name = "cantidad_recogida";
             this.cantidad_recogida.ReadOnly = true;
             this.cantidad_recogida.Width = 50;
@@ -1326,10 +1347,10 @@
             this.tabConfiguracion.Controls.Add(this.logo_mme);
             this.tabConfiguracion.Controls.Add(this.groupBox2);
             this.tabConfiguracion.Controls.Add(this.groupBox1);
-            this.tabConfiguracion.Location = new System.Drawing.Point(4, 22);
+            this.tabConfiguracion.Location = new System.Drawing.Point(4, 25);
             this.tabConfiguracion.Name = "tabConfiguracion";
             this.tabConfiguracion.Padding = new System.Windows.Forms.Padding(3);
-            this.tabConfiguracion.Size = new System.Drawing.Size(1169, 666);
+            this.tabConfiguracion.Size = new System.Drawing.Size(1169, 663);
             this.tabConfiguracion.TabIndex = 0;
             this.tabConfiguracion.Text = "Configuración";
             this.tabConfiguracion.UseVisualStyleBackColor = true;
@@ -1373,7 +1394,7 @@
             this.label20.AutoSize = true;
             this.label20.Location = new System.Drawing.Point(6, 246);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(94, 13);
+            this.label20.Size = new System.Drawing.Size(126, 17);
             this.label20.TabIndex = 26;
             this.label20.Text = "Carga de ordenes:";
             // 
@@ -1389,7 +1410,7 @@
             this.label18.AutoSize = true;
             this.label18.Location = new System.Drawing.Point(6, 168);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(96, 13);
+            this.label18.Size = new System.Drawing.Size(127, 17);
             this.label18.TabIndex = 24;
             this.label18.Text = "Carga de envases:";
             // 
@@ -1405,7 +1426,7 @@
             this.label19.AutoSize = true;
             this.label19.Location = new System.Drawing.Point(6, 142);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(103, 13);
+            this.label19.Size = new System.Drawing.Size(137, 17);
             this.label19.TabIndex = 22;
             this.label19.Text = "Carga de productos:";
             // 
@@ -1421,7 +1442,7 @@
             this.label16.AutoSize = true;
             this.label16.Location = new System.Drawing.Point(6, 116);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(106, 13);
+            this.label16.Size = new System.Drawing.Size(141, 17);
             this.label16.TabIndex = 20;
             this.label16.Text = "Carga de posiciones:";
             // 
@@ -1437,7 +1458,7 @@
             this.label17.AutoSize = true;
             this.label17.Location = new System.Drawing.Point(6, 90);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(95, 13);
+            this.label17.Size = new System.Drawing.Size(127, 17);
             this.label17.TabIndex = 18;
             this.label17.Text = "Carga de modulos:";
             // 
@@ -1453,7 +1474,7 @@
             this.label14.AutoSize = true;
             this.label14.Location = new System.Drawing.Point(6, 220);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(78, 13);
+            this.label14.Size = new System.Drawing.Size(105, 17);
             this.label14.TabIndex = 16;
             this.label14.Text = "Carga de roles:";
             // 
@@ -1469,7 +1490,7 @@
             this.label15.AutoSize = true;
             this.label15.Location = new System.Drawing.Point(6, 194);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(99, 13);
+            this.label15.Size = new System.Drawing.Size(134, 17);
             this.label15.TabIndex = 14;
             this.label15.Text = "Carga de operarios:";
             // 
@@ -1485,7 +1506,7 @@
             this.label13.AutoSize = true;
             this.label13.Location = new System.Drawing.Point(6, 64);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(104, 13);
+            this.label13.Size = new System.Drawing.Size(139, 17);
             this.label13.TabIndex = 12;
             this.label13.Text = "Carga de centralitas:";
             // 
@@ -1501,7 +1522,7 @@
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(6, 38);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(107, 13);
+            this.label10.Size = new System.Drawing.Size(142, 17);
             this.label10.TabIndex = 0;
             this.label10.Text = "Carga de almacenes:";
             // 
@@ -1521,10 +1542,10 @@
             // 
             this.tabControl.Controls.Add(this.groupBox3);
             this.tabControl.Controls.Add(this.groupBox4);
-            this.tabControl.Location = new System.Drawing.Point(4, 22);
+            this.tabControl.Location = new System.Drawing.Point(4, 25);
             this.tabControl.Name = "tabControl";
             this.tabControl.Padding = new System.Windows.Forms.Padding(3);
-            this.tabControl.Size = new System.Drawing.Size(1169, 666);
+            this.tabControl.Size = new System.Drawing.Size(1169, 663);
             this.tabControl.TabIndex = 1;
             this.tabControl.Text = "Control Recogida y Reposicion";
             this.tabControl.UseVisualStyleBackColor = true;
@@ -1548,7 +1569,7 @@
             this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1.Location = new System.Drawing.Point(15, 161);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(131, 17);
+            this.checkBox1.Size = new System.Drawing.Size(175, 21);
             this.checkBox1.TabIndex = 9;
             this.checkBox1.Text = "Priorizar lotes antiguos";
             this.checkBox1.UseVisualStyleBackColor = true;
@@ -1570,7 +1591,7 @@
             this.radioButton2.Checked = true;
             this.radioButton2.Location = new System.Drawing.Point(22, 63);
             this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(204, 17);
+            this.radioButton2.Size = new System.Drawing.Size(273, 21);
             this.radioButton2.TabIndex = 1;
             this.radioButton2.TabStop = true;
             this.radioButton2.Text = "Orden alternativo (Campo preferencia)";
@@ -1581,7 +1602,7 @@
             this.radioButton1.AutoSize = true;
             this.radioButton1.Location = new System.Drawing.Point(22, 30);
             this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(172, 17);
+            this.radioButton1.Size = new System.Drawing.Size(229, 21);
             this.radioButton1.TabIndex = 0;
             this.radioButton1.Text = "Orden númerico (modulo 1 a N)";
             this.radioButton1.UseVisualStyleBackColor = true;
@@ -1622,6 +1643,7 @@
             this.tablaTareas.Location = new System.Drawing.Point(6, 19);
             this.tablaTareas.Name = "tablaTareas";
             this.tablaTareas.ReadOnly = true;
+            this.tablaTareas.RowHeadersWidth = 51;
             this.tablaTareas.RowTemplate.Height = 40;
             this.tablaTareas.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.tablaTareas.Size = new System.Drawing.Size(722, 629);
@@ -1684,18 +1706,20 @@
             // moduloTarea
             // 
             this.moduloTarea.HeaderText = "Modulo";
+            this.moduloTarea.MinimumWidth = 6;
             this.moduloTarea.Name = "moduloTarea";
             this.moduloTarea.ReadOnly = true;
+            this.moduloTarea.Width = 125;
             // 
             // tabEtiquetas
             // 
             this.tabEtiquetas.Controls.Add(this.guardarConfiguracionBtn);
             this.tabEtiquetas.Controls.Add(this.grupoConfiguracion);
             this.tabEtiquetas.Controls.Add(this.groupBox6);
-            this.tabEtiquetas.Location = new System.Drawing.Point(4, 22);
+            this.tabEtiquetas.Location = new System.Drawing.Point(4, 25);
             this.tabEtiquetas.Name = "tabEtiquetas";
             this.tabEtiquetas.Padding = new System.Windows.Forms.Padding(3);
-            this.tabEtiquetas.Size = new System.Drawing.Size(1169, 666);
+            this.tabEtiquetas.Size = new System.Drawing.Size(1169, 663);
             this.tabEtiquetas.TabIndex = 4;
             this.tabEtiquetas.Text = "Etiquetas";
             this.tabEtiquetas.UseVisualStyleBackColor = true;
@@ -1727,7 +1751,7 @@
             this.impresoraEnviosTxt.AutoSize = true;
             this.impresoraEnviosTxt.Location = new System.Drawing.Point(9, 33);
             this.impresoraEnviosTxt.Name = "impresoraEnviosTxt";
-            this.impresoraEnviosTxt.Size = new System.Drawing.Size(0, 13);
+            this.impresoraEnviosTxt.Size = new System.Drawing.Size(0, 17);
             this.impresoraEnviosTxt.TabIndex = 19;
             // 
             // nombreImpresoraTxt
@@ -1735,7 +1759,7 @@
             this.nombreImpresoraTxt.AutoSize = true;
             this.nombreImpresoraTxt.Location = new System.Drawing.Point(9, 26);
             this.nombreImpresoraTxt.Name = "nombreImpresoraTxt";
-            this.nombreImpresoraTxt.Size = new System.Drawing.Size(0, 13);
+            this.nombreImpresoraTxt.Size = new System.Drawing.Size(0, 17);
             this.nombreImpresoraTxt.TabIndex = 18;
             // 
             // seleccionarImpresoraBtn
@@ -1773,15 +1797,15 @@
             // 
             this.pdfEnvioTxt.Location = new System.Drawing.Point(6, 67);
             this.pdfEnvioTxt.Name = "pdfEnvioTxt";
-            this.pdfEnvioTxt.Size = new System.Drawing.Size(364, 20);
+            this.pdfEnvioTxt.Size = new System.Drawing.Size(364, 23);
             this.pdfEnvioTxt.TabIndex = 32;
             // 
             // tabEventos
             // 
             this.tabEventos.Controls.Add(this.eventosTxt);
-            this.tabEventos.Location = new System.Drawing.Point(4, 22);
+            this.tabEventos.Location = new System.Drawing.Point(4, 25);
             this.tabEventos.Name = "tabEventos";
-            this.tabEventos.Size = new System.Drawing.Size(1169, 666);
+            this.tabEventos.Size = new System.Drawing.Size(1169, 663);
             this.tabEventos.TabIndex = 2;
             this.tabEventos.Text = "Eventos";
             this.tabEventos.UseVisualStyleBackColor = true;
@@ -1798,10 +1822,10 @@
             // tabErrores
             // 
             this.tabErrores.Controls.Add(this.erroresTxt);
-            this.tabErrores.Location = new System.Drawing.Point(4, 22);
+            this.tabErrores.Location = new System.Drawing.Point(4, 25);
             this.tabErrores.Name = "tabErrores";
             this.tabErrores.Padding = new System.Windows.Forms.Padding(3);
-            this.tabErrores.Size = new System.Drawing.Size(1169, 666);
+            this.tabErrores.Size = new System.Drawing.Size(1169, 663);
             this.tabErrores.TabIndex = 3;
             this.tabErrores.Text = "Errores";
             this.tabErrores.UseVisualStyleBackColor = true;
@@ -1820,18 +1844,18 @@
             this.tVersion.AutoSize = true;
             this.tVersion.Location = new System.Drawing.Point(1123, 9);
             this.tVersion.Name = "tVersion";
-            this.tVersion.Size = new System.Drawing.Size(49, 13);
+            this.tVersion.Size = new System.Drawing.Size(55, 17);
             this.tVersion.TabIndex = 11;
-            this.tVersion.Text = "v 1.1009";
+            this.tVersion.Text = "v 2.000";
             // 
             // statusStrip1
             // 
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.textoEstado});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 720);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 716);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1184, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1184, 26);
             this.statusStrip1.TabIndex = 12;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -1839,7 +1863,7 @@
             // 
             this.textoEstado.Name = "textoEstado";
             this.textoEstado.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.textoEstado.Size = new System.Drawing.Size(128, 17);
+            this.textoEstado.Size = new System.Drawing.Size(161, 20);
             this.textoEstado.Text = "toolStripStatusLabel1";
             // 
             // temporizador
