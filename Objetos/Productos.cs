@@ -81,6 +81,9 @@ namespace NoCocinoMas
         public Envase envase { get; set; }
         [JsonIgnore]
         public Posiciones posiciones { get; set; }
+        public string posicionClasificacion { get; set; }
+        public string posicionAlmacenamiento { get; set; }
+
 
         public Producto(Parametros parametros)
         {
@@ -89,6 +92,8 @@ namespace NoCocinoMas
             this.nombre = parametros.Buscar("nombre");
             this.envase_id = parametros.BuscarInt("envase_id");
             this.stock = parametros.BuscarInt("stock");
+            this.posicionClasificacion = parametros.Buscar("posicionClasificacion");
+            this.posicionAlmacenamiento = parametros.Buscar("posicionAlmacenamiento");
         }
         public Producto()
         {
@@ -100,6 +105,8 @@ namespace NoCocinoMas
             this.nombre = datos.GetString("nombre");
             this.envase_id = datos.GetInt32("envase_id");
             this.stock = datos.GetInt32("stock");
+            this.posicionClasificacion = datos.GetString("posicionClasificacion");
+            this.posicionAlmacenamiento = datos.GetString("posicionAlmacenamiento");
             this.envase = new Envase();
             this.posiciones = new Posiciones();
         }
@@ -116,7 +123,9 @@ namespace NoCocinoMas
                 this.codigo,
                 this.nombre,
                 this.envase_id,
-                this.stock
+                this.stock,
+                this.posicionClasificacion,
+                this.posicionAlmacenamiento
             };
             return valores;
         }
@@ -129,11 +138,10 @@ namespace NoCocinoMas
         public object[] GetValoresTablas()
         {
             object[] valores = {
-                this.id,
                 this.codigo,
                 this.nombre,
-                this.envase_id,
-                this.stock
+                this.posicionClasificacion,
+                this.posicionAlmacenamiento
             };
             return valores;
         }

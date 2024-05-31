@@ -511,11 +511,11 @@ evento: 192.168.137.18
                         case "TraerPedidos":
                             if (argumentos.ContainsKey("incompletos"))
                             {
-                                return responseOK(JsonSerializer.Serialize<Pedidos>(this.gestor.pedidos.Incompletos().EnPreparacion(argumentos)));
+                                return responseOK(JsonSerializer.Serialize<Pedidos>(this.gestor.pedidos.Incompletos()));
                             }
                             else
                             {
-                                return responseOK(JsonSerializer.Serialize<Pedidos>(this.gestor.pedidos.EnPreparacion(argumentos)));
+                                return responseOK(JsonSerializer.Serialize<Pedidos>(this.gestor.pedidos));
                             }
                         case "CompletarLinea":
                             if (argumentos.ContainsKey("pedido_numero") && argumentos.ContainsKey("codigo_producto") && argumentos.ContainsKey("lote") && argumentos.ContainsKey("cantidad"))
@@ -603,11 +603,11 @@ evento: 192.168.137.18
                             string pedidos = "[]";
                             if (argumentos.ContainsKey("incompletos"))
                             {
-                                pedidos = JsonSerializer.Serialize<Pedidos>(this.gestor.pedidos.Incompletos().EnPreparacion(argumentos));
+                                pedidos = JsonSerializer.Serialize<Pedidos>(this.gestor.pedidos.Incompletos());
                             }
                             else
                             {
-                                pedidos = JsonSerializer.Serialize<Pedidos>(this.gestor.pedidos.EnPreparacion(argumentos));
+                                pedidos = JsonSerializer.Serialize<Pedidos>(this.gestor.pedidos);
                             }
                             string pos = JsonSerializer.Serialize<Posiciones>(this.gestor.posiciones);
                             string jsonListado = "{\"pedidos\": " + pedidos;
@@ -643,6 +643,12 @@ evento: 192.168.137.18
                             }
                             string resultadoRecargarPedido = JsonSerializer.Serialize<Respuesta>(r);
                             return responseOK(resultadoRecargarPedido);
+                        case "TraerPedido":
+                            if (argumentos.ContainsKey("pedido_numero"))
+                            {
+                                return responseOK(JsonSerializer.Serialize<Pedido>(this.gestor.pedidos.BuscarNumero(int.Parse(argumentos["pedido_numero"]))));
+                            }
+                            break;
                         default:
                             return responseOK("Comando no encontrado.");
                     }

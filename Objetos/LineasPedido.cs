@@ -340,5 +340,10 @@ namespace NoCocinoMas
             return this.cantidad - this.recogido;
         }
 
+        public bool ComprobarCantidadRecogida(int c)
+        {
+            int nuevaCantidad = this.recogido + c;
+            return nuevaCantidad <= this.cantidad && nuevaCantidad  >= 0;
+        }
     }
 }

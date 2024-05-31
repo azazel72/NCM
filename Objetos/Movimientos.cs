@@ -97,7 +97,6 @@ namespace NoCocinoMas
         public int linea_pedido_id { get; set; }
         public int accion { get; set; }
         public DateTime fecha { get; set; }
-        public string comentario { get; set; }
         //objetos
         [JsonIgnore]
         public Pedido pedido { get; set; }
@@ -126,7 +125,6 @@ namespace NoCocinoMas
             this.linea_pedido_id = tarea.lineaPedidoActual == null ? 0 : (int) tarea.lineaPedidoActual.id;
             this.accion = tarea.accion;
             this.fecha = DateTime.Now;
-            this.comentario = "";
         }
 
         public Movimiento(Parametros parametros)
@@ -141,7 +139,6 @@ namespace NoCocinoMas
             this.linea_pedido_id = parametros.BuscarInt("linea_pedido_id");
             this.accion = parametros.BuscarInt("accion");
             this.fecha = parametros.BuscarFecha("fecha");
-            this.comentario = "";
         }
         public Movimiento()
         {
@@ -163,7 +160,6 @@ namespace NoCocinoMas
             this.linea_pedido_id = datos.GetInt32("linea_pedido_id");
             this.accion = datos.GetInt32("accion");
             this.fecha = datos.GetDateTime("fecha");
-            this.comentario = "";
             this.pedido = null;
             this.producto = null;
             this.operario = null;
@@ -186,7 +182,6 @@ namespace NoCocinoMas
             this.linea_pedido_id = (int) lineaPedido.id;
             this.accion = 1;
             this.fecha = DateTime.Now;
-            this.comentario = "";
         }
 
         public Movimiento(Parametros parametros, Posicion posicion, Producto producto, Operario operario)
@@ -205,7 +200,6 @@ namespace NoCocinoMas
             this.linea_pedido_id = 0;
             this.accion = parametros.BuscarInt("motivo_extraccion");
             this.fecha = DateTime.Now;
-            this.comentario = parametros.Buscar("comentario_extraccion");
         }
 
         public Movimiento(Posicion posicion, string nuevaPosicion, Producto producto, string lote, int cantidad, Operario operario)
@@ -224,7 +218,6 @@ namespace NoCocinoMas
             this.linea_pedido_id = 0;
             this.accion = 4;
             this.fecha = DateTime.Now;
-            this.comentario = nuevaPosicion;
         }
 
         /// <summary>
@@ -284,7 +277,7 @@ namespace NoCocinoMas
         /// static public string insertMovimiento = "INSERT INTO movimientos (operario_id, producto_codigo, lote, cantidad, posicion_nombre, pedido_numero, linea_pedido_id, accion) VALUES {0};";
         public string GetValoresInsertSQL()
         {
-            return string.Format("({0},{1},'{2}',{3},'{4}',{5},{6},{7},'{8}')",
+            return string.Format("({0},{1},'{2}',{3},'{4}',{5},{6},{7})",
                     this.operario_id,
                     this.producto_codigo,
                     this.lote,
@@ -292,8 +285,7 @@ namespace NoCocinoMas
                     this.posicion_nombre,
                     this.pedido_numero,
                     this.linea_pedido_id,
-                    this.accion,
-                    this.comentario
+                    this.accion
                 );
         }
 

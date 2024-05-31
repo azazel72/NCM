@@ -234,6 +234,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConectorJSON.cs" />
     <Compile Include="ConectorPLC.cs" />
     <Compile Include="ConectorSQL.cs" />
     <Compile Include="Imprimir.cs" />

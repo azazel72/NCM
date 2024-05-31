@@ -4,6 +4,7 @@ using iText.Kernel.Pdf.Canvas.Parser;
 using iText.Kernel.Pdf.Canvas.Parser.Listener;
 using iText.Layout;
 using Microsoft.VisualBasic.FileIO;
+using Org.BouncyCastle.Utilities;
 using RawPrint;
 using System;
 using System.Collections;
@@ -12,11 +13,13 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Resources.ResXFileRef;
 
 namespace NoCocinoMas
 {
@@ -87,7 +90,6 @@ namespace NoCocinoMas
             this.menus = new Menus();
             this.productoIluminado = null;
 
-
             this.configuracion = new Configuracion();
 
             listados = new Dictionary<string, Entidades>();
@@ -111,7 +113,6 @@ namespace NoCocinoMas
             this.tablas.Add("modulos", this.tablaModulos);
             this.tablas.Add("posiciones", this.tablaPosiciones);
             this.tablas.Add("productos", this.tablaProductos);
-            this.tablas.Add("envases", this.tablaEnvases);
             this.tablas.Add("centralitas", this.tablaCentralitas);
             this.tablas.Add("operarios", this.tablaOperarios);
             this.tablas.Add("roles", this.tablaRoles);
@@ -201,7 +202,7 @@ namespace NoCocinoMas
                     ValorProgreso(this.progresoPosiciones, 100);
 
                     //Productos
-                    ConectorSQL.CargarEntidades(ConectorSQL.selectProductos, this.productos);
+                    this.productos = ConectorJSON.CargarObjeto<Productos>("./productos.json") ?? new Productos();
                     this.MostrarEntidades(this.tablaProductos, this.productos);
                     ValorProgreso(this.progresoProductos, 100);
 
@@ -210,7 +211,6 @@ namespace NoCocinoMas
 
                     //Envases
                     ConectorSQL.CargarEntidades(ConectorSQL.selectEnvases, this.envases);
-                    this.MostrarEntidades(this.tablaEnvases, this.envases);
                     ValorProgreso(this.progresoEnvases, 100);
 
                     //Operarios
@@ -730,12 +730,7 @@ namespace NoCocinoMas
                         this.MostrarEntidades(this.tablaPosiciones, this.posiciones, true);
                         break;
                     case "productos":
-                        ((Producto)e).VincularEnvase(this.envases);
                         this.MostrarEntidades(this.tablaProductos, this.productos, true);
-                        break;
-                    case "envases":
-                        this.productos.VincularEnvases(this.envases);
-                        this.MostrarEntidades(this.tablaEnvases, this.envases, true);
                         break;
                     case "pedidos":
                         this.MostrarEntidades(this.tablaPedidos, this.pedidos, true);
@@ -1438,6 +1433,7 @@ namespace NoCocinoMas
                 string respuesta = pedido.CompletarLinea(codigo_producto, lote, cantidad);
                 if (respuesta == null)
                 {
+                    r.entidad = pedido;
                     r.objeto = pedido;
                 }
                 else
@@ -1643,27 +1639,9 @@ namespace NoCocinoMas
             //cargamos los productos de las tablas externas
             ConectorSQL.CargarEntidades(ConectorSQL.obtenerProductosPS, nuevosProductos, false, ConectorSQL.cadenaConexionPS);
             //eliminamos los productos coincidentes por codigo
-            foreach (Producto p in this.productos)
-            {
-                //El codigo coincide con el id en la tabla externa
-                //Eliminamos los que ya tenemos de la lista antes de guardarlos
-                Producto producto = (Producto) nuevosProductos.BuscarId(p.codigo);
-                if (producto != null)
-                {
-                    nuevosProductos.listado.Remove(producto);
-                    if (p.nombre != producto.nombre)
-                    {
-                        p.nombre = producto.nombre;
-                        object[] valores = p.GetValores();
-                        valores[2] = producto.nombre;
-                        ConectorSQL.ActualizarEntidades(ConectorSQL.updateProducto, valores);
-                    }
-                }
-            }
-            //guardamos en la tabla sólo los productos nuevos.
+            nuevosProductos.listado.RemoveAll(p => this.productos.ExisteId(p.id));
             if (nuevosProductos.Contador() > 0)
             {
-                ConectorSQL.GuardarEntidades(ConectorSQL.guardarProductos, nuevosProductos);
                 //agregamos los nuevos a la lista que tenemos
                 this.productos.Agregar(nuevosProductos);
                 //actualizamos la tabla
@@ -1673,6 +1651,7 @@ namespace NoCocinoMas
                 //es necesario volver a vincular los productos a las lineas de pedido
                 this.lineasPedido.VincularProductosNuevos(nuevosProductos);
             }
+            ConectorJSON.GuardarObjeto("./productos.json", this.productos);
             Estado("Actualizacion completada");
         }
 
@@ -1701,7 +1680,6 @@ namespace NoCocinoMas
                     string posicion_id = parametros.Buscar("posicion_extraccion");
                     int producto_id = parametros.BuscarInt("codigo_extraccion");
                     int cantidad = parametros.BuscarInt("cantidad_extraccion");
-                    string comentario = parametros.Buscar("comentario_extraccion");
                     Operario operario = (Operario) this.operarios.BuscarId(operario_id);
                     string lote = parametros.Buscar("lote_extraccion");
 
@@ -2035,7 +2013,6 @@ namespace NoCocinoMas
             DateTime hoy = DateTime.Now;
             DateTime[] fechas = ObtenerFechasPendientes(hoy, hoy);
             fechaHastaPS.Value = fechas[0];
-            barcelonaHastaPS.Value = fechas[1];
         }
         private int ObtenerPedidosPS()
         {
@@ -2044,8 +2021,6 @@ namespace NoCocinoMas
             {
                 string fechaDesde = fechaDesdePS.Value.ToString("yyyy-MM-dd");
                 string fechaHasta = fechaHastaPS.Value.ToString("yyyy-MM-dd");
-                string barcelonaDesde = barcelonaDesdePS.Value.ToString("yyyy-MM-dd");
-                string barcelonaHasta = barcelonaHastaPS.Value.ToString("yyyy-MM-dd");
                 //Obtenemos los ultimos pedidos
                 
                 string cadena = string.Format(ConectorSQL.obtenerPedidosPS, fechaDesde, fechaHasta);
@@ -2320,6 +2295,11 @@ namespace NoCocinoMas
             {
                 EscribirError("ERROR (Guardar Configuracion): " + ex.Message);
             }
+        }
+
+        private void buscador_HelpRequest(object sender, EventArgs e)
+        {
+
         }
     }
 }

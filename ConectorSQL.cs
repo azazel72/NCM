@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections;
+using static Common.Logging.Configuration.ArgUtils;
 
 namespace NoCocinoMas
 {
@@ -35,14 +36,17 @@ namespace NoCocinoMas
         static public string selectConfiguracion = "SELECT * FROM configuracion";
         static public string selectPedido = "SELECT 1 FROM pedidos WHERE numero={0}";
 
+
+
         //CONSULTAS PS
         static public string obtenerPedidoPS = "SELECT o.id_order as numero, ad.postcode as cp, o.date_upd as fecha, 0 as estado, dd.tramo_date as envio, t.id_reference as transportista FROM ps_orders o join ps_cart dd on (dd.id_cart=o.id_cart) join ps_address ad on o.id_address_delivery=ad.id_address JOIN ps_carrier t on o.id_carrier=t.id_carrier WHERE o.id_order = {0} AND current_state in (2,3,4,15,16,20,23) ORDER BY numero ASC";
         static public string obtenerPedidosPS = "SELECT o.id_order as numero, ad.postcode as cp, o.date_upd as fecha, 0 as estado, dd.tramo_date as envio, t.id_reference as transportista FROM ps_orders o join ps_cart dd on (dd.id_cart=o.id_cart) join ps_address ad on o.id_address_delivery=ad.id_address JOIN ps_carrier t on o.id_carrier=t.id_carrier WHERE dd.tramo_date >= '{0}' AND dd.tramo_date <= '{1}' AND current_state in (2,3,4,15,16,20,23) ORDER BY numero ASC";
         static public string obtenerLineasPedidoPS = "SELECT 0 as id, od.id_order AS pedido_numero, od.product_id AS producto_codigo, round(od.product_quantity,2) AS cantidad, 0 as recogido, 0 as estado FROM ps_order_detail od WHERE od.id_order in ({0}) ORDER BY od.id_order ASC";
         static public string obtenerMenusPS = "SELECT id_product_pack AS menu_id, id_product_item AS products_id, quantity AS products_quantity FROM ps_pack";
-        static public string obtenerProductosPS = "SELECT pd.id_product AS id, pd.id_product AS codigo, pd.name AS nombre, 1 as envase_id, 0 as stock FROM ps_product_lang pd join ps_product p on (pd.id_product=p.id_product and active=1)";
+        static public string obtenerProductosPS = "SELECT pd.id_product AS id, pd.id_product AS codigo, pd.name AS nombre, 1 as envase_id, 0 as stock, ppt.posicion_clasif AS posicionClasificacion, ppt.posicion_almac AS posicionAlmacenamiento FROM ps_product_lang pd join ps_product p on (pd.id_product=p.id_product and active=1) JOIN ps_product_ptl ppt ON pd.id_product = ppt.id_product;";
         static public string vaciarStock = "TRUNCATE ps_stock_web;";
         static public string sobreescribirStock = "INSERT INTO ps_stock_web (products_id, fechaLote, cantidad) VALUES ({0}, '{1}', {2}) ON DUPLICATE KEY UPDATE cantidad=cantidad+{2};";
+        //static public string sobreescribirStock = "INSERT INTO ps_stock_web (products_id, fechaLote, cantidad) VALUES ({0}, '{1}', {2}) ON DUPLICATE KEY UPDATE cantidad=cantidad+{2};";
 
         //INSERT
         static public string guardarProductos = "INSERT INTO productos (codigo, nombre, envase_id, stock) VALUES {0};";
@@ -59,7 +63,7 @@ namespace NoCocinoMas
         static public string insertEnvase = "INSERT INTO envases (nombre, ancho, largo, alto, volumen, peso) VALUES {0};";
         static public string insertPedido = "INSERT INTO pedidos (numero, estado, fecha, cp, envio, transportista) VALUES {0};";
         static public string insertLineaPedido = "INSERT INTO lineas_pedido (pedido_numero, producto_codigo, cantidad, recogido, estado) VALUES {0};";
-        static public string insertMovimiento = "INSERT INTO movimientos (operario_id, producto_codigo, lote, cantidad, posicion_nombre, pedido_numero, linea_pedido_id, accion, observaciones) VALUES {0};";
+        static public string insertMovimiento = "INSERT INTO movimientos (operario_id, producto_codigo, lote, cantidad, posicion_nombre, pedido_numero, linea_pedido_id, accion) VALUES {0};";
 
         //UPDATE
         static public string updateOperario = "UPDATE operarios SET nombre='{1}', rol_id={2}, pin='{3}' WHERE id={0};";

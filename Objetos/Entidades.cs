@@ -124,6 +124,11 @@ namespace NoCocinoMas
             return null;
         }
 
+        public bool ExisteId(object id)
+        {
+            return this.listado?.Exists(e => e.Comparar(id)) ?? false;
+        }
+
         /// <summary>
         /// Elimina el elemento del listado
         /// </summary>

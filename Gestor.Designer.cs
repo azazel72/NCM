@@ -78,22 +78,12 @@
             this.estatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.datos3 = new System.Windows.Forms.TabPage();
             this.label24 = new System.Windows.Forms.Label();
-            this.label25 = new System.Windows.Forms.Label();
             this.obtenerProductosBtn = new System.Windows.Forms.Button();
             this.tablaProductos = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn13 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.codigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn16 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.envase_id = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.stock = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tablaEnvases = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn19 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn20 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ancho = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.largo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.alto = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.volumen = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.peso = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.productos_codigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.productos_nombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.productos_clasificacion = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.productos_almacenamiento = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.datos4 = new System.Windows.Forms.TabPage();
             this.label22 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
@@ -106,11 +96,6 @@
             this.dataGridViewTextBoxColumn14 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn15 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.datos5 = new System.Windows.Forms.TabPage();
-            this.groupBox8 = new System.Windows.Forms.GroupBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.barcelonaHastaPS = new System.Windows.Forms.DateTimePicker();
-            this.label12 = new System.Windows.Forms.Label();
-            this.barcelonaDesdePS = new System.Windows.Forms.DateTimePicker();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.fechaHastaPS = new System.Windows.Forms.DateTimePicker();
@@ -156,7 +141,6 @@
             this.label13 = new System.Windows.Forms.Label();
             this.progresoAlmacenes = new System.Windows.Forms.ProgressBar();
             this.label10 = new System.Windows.Forms.Label();
-            this.logo_mme = new System.Windows.Forms.PictureBox();
             this.tabControl = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
@@ -191,6 +175,7 @@
             this.textoEstado = new System.Windows.Forms.ToolStripStatusLabel();
             this.temporizador = new System.Windows.Forms.Timer(this.components);
             this.buscador = new System.Windows.Forms.FolderBrowserDialog();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.contenedorTablas.SuspendLayout();
@@ -202,12 +187,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.tablaPosiciones)).BeginInit();
             this.datos3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tablaProductos)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tablaEnvases)).BeginInit();
             this.datos4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tablaOperarios)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tablaRoles)).BeginInit();
             this.datos5.SuspendLayout();
-            this.groupBox8.SuspendLayout();
             this.groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tablaMovimientos)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tablaPedidos)).BeginInit();
@@ -215,7 +198,6 @@
             this.pestañas.SuspendLayout();
             this.tabConfiguracion.SuspendLayout();
             this.cuadroCargaBBDD.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.logo_mme)).BeginInit();
             this.tabControl.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -280,7 +262,7 @@
             this.puertoWebTxt.Enabled = false;
             this.puertoWebTxt.Location = new System.Drawing.Point(109, 32);
             this.puertoWebTxt.Name = "puertoWebTxt";
-            this.puertoWebTxt.Size = new System.Drawing.Size(76, 23);
+            this.puertoWebTxt.Size = new System.Drawing.Size(76, 20);
             this.puertoWebTxt.TabIndex = 7;
             // 
             // label4
@@ -288,7 +270,7 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(6, 35);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(83, 17);
+            this.label4.Size = new System.Drawing.Size(64, 13);
             this.label4.TabIndex = 6;
             this.label4.Text = "Puerto Web";
             // 
@@ -297,7 +279,7 @@
             this.puertoArduinoTxt.Enabled = false;
             this.puertoArduinoTxt.Location = new System.Drawing.Point(109, 58);
             this.puertoArduinoTxt.Name = "puertoArduinoTxt";
-            this.puertoArduinoTxt.Size = new System.Drawing.Size(76, 23);
+            this.puertoArduinoTxt.Size = new System.Drawing.Size(76, 20);
             this.puertoArduinoTxt.TabIndex = 5;
             // 
             // label3
@@ -305,7 +287,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(6, 61);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(121, 17);
+            this.label3.Size = new System.Drawing.Size(90, 13);
             this.label3.TabIndex = 4;
             this.label3.Text = "Puerto Centralitas";
             // 
@@ -321,6 +303,7 @@
             // 
             // contenedorTablas
             // 
+            this.contenedorTablas.Controls.Add(this.tabPage1);
             this.contenedorTablas.Controls.Add(this.datos1);
             this.contenedorTablas.Controls.Add(this.datos2);
             this.contenedorTablas.Controls.Add(this.datos3);
@@ -340,10 +323,10 @@
             this.datos1.Controls.Add(this.label11);
             this.datos1.Controls.Add(this.tablaCentralitas);
             this.datos1.Controls.Add(this.tablaAlmacenes);
-            this.datos1.Location = new System.Drawing.Point(4, 25);
+            this.datos1.Location = new System.Drawing.Point(4, 22);
             this.datos1.Name = "datos1";
             this.datos1.Padding = new System.Windows.Forms.Padding(3);
-            this.datos1.Size = new System.Drawing.Size(806, 598);
+            this.datos1.Size = new System.Drawing.Size(806, 601);
             this.datos1.TabIndex = 0;
             this.datos1.Text = "Almacenes, Centralitas y Modulos";
             this.datos1.UseVisualStyleBackColor = true;
@@ -353,7 +336,7 @@
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(3, 127);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(61, 17);
+            this.label8.Size = new System.Drawing.Size(47, 13);
             this.label8.TabIndex = 15;
             this.label8.Text = "Modulos";
             // 
@@ -435,7 +418,7 @@
             this.label9.AutoSize = true;
             this.label9.Location = new System.Drawing.Point(337, 7);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(75, 17);
+            this.label9.Size = new System.Drawing.Size(56, 13);
             this.label9.TabIndex = 11;
             this.label9.Text = "Centralitas";
             // 
@@ -444,7 +427,7 @@
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(3, 7);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(77, 17);
+            this.label11.Size = new System.Drawing.Size(59, 13);
             this.label11.TabIndex = 13;
             this.label11.Text = "Almacenes";
             // 
@@ -551,10 +534,10 @@
             // 
             this.datos2.Controls.Add(this.label21);
             this.datos2.Controls.Add(this.tablaPosiciones);
-            this.datos2.Location = new System.Drawing.Point(4, 25);
+            this.datos2.Location = new System.Drawing.Point(4, 22);
             this.datos2.Name = "datos2";
             this.datos2.Padding = new System.Windows.Forms.Padding(3);
-            this.datos2.Size = new System.Drawing.Size(806, 598);
+            this.datos2.Size = new System.Drawing.Size(806, 601);
             this.datos2.TabIndex = 1;
             this.datos2.Text = "Posiciones";
             this.datos2.UseVisualStyleBackColor = true;
@@ -564,7 +547,7 @@
             this.label21.AutoSize = true;
             this.label21.Location = new System.Drawing.Point(6, 9);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(76, 17);
+            this.label21.Size = new System.Drawing.Size(58, 13);
             this.label21.TabIndex = 14;
             this.label21.Text = "Posiciones";
             // 
@@ -714,13 +697,11 @@
             // datos3
             // 
             this.datos3.Controls.Add(this.label24);
-            this.datos3.Controls.Add(this.label25);
             this.datos3.Controls.Add(this.obtenerProductosBtn);
             this.datos3.Controls.Add(this.tablaProductos);
-            this.datos3.Controls.Add(this.tablaEnvases);
-            this.datos3.Location = new System.Drawing.Point(4, 25);
+            this.datos3.Location = new System.Drawing.Point(4, 22);
             this.datos3.Name = "datos3";
-            this.datos3.Size = new System.Drawing.Size(806, 598);
+            this.datos3.Size = new System.Drawing.Size(806, 601);
             this.datos3.TabIndex = 3;
             this.datos3.Text = "Productos y envases";
             this.datos3.UseVisualStyleBackColor = true;
@@ -728,26 +709,18 @@
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(3, 7);
+            this.label24.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label24.Location = new System.Drawing.Point(3, 16);
             this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(72, 17);
+            this.label24.Size = new System.Drawing.Size(81, 20);
             this.label24.TabIndex = 15;
             this.label24.Text = "Productos";
             // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(3, 411);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(62, 17);
-            this.label25.TabIndex = 17;
-            this.label25.Text = "Envases";
-            // 
             // obtenerProductosBtn
             // 
-            this.obtenerProductosBtn.Location = new System.Drawing.Point(6, 528);
+            this.obtenerProductosBtn.Location = new System.Drawing.Point(476, 7);
             this.obtenerProductosBtn.Name = "obtenerProductosBtn";
-            this.obtenerProductosBtn.Size = new System.Drawing.Size(319, 63);
+            this.obtenerProductosBtn.Size = new System.Drawing.Size(319, 39);
             this.obtenerProductosBtn.TabIndex = 21;
             this.obtenerProductosBtn.Text = "Actualizar Productos";
             this.obtenerProductosBtn.UseVisualStyleBackColor = true;
@@ -759,143 +732,51 @@
             this.tablaProductos.AllowUserToDeleteRows = false;
             this.tablaProductos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.tablaProductos.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn13,
-            this.codigo,
-            this.dataGridViewTextBoxColumn16,
-            this.envase_id,
-            this.stock});
-            this.tablaProductos.Location = new System.Drawing.Point(6, 23);
+            this.productos_codigo,
+            this.productos_nombre,
+            this.productos_clasificacion,
+            this.productos_almacenamiento});
+            this.tablaProductos.Location = new System.Drawing.Point(6, 52);
             this.tablaProductos.MultiSelect = false;
             this.tablaProductos.Name = "tablaProductos";
             this.tablaProductos.ReadOnly = true;
             this.tablaProductos.RowHeadersWidth = 51;
             this.tablaProductos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.tablaProductos.Size = new System.Drawing.Size(789, 382);
+            this.tablaProductos.Size = new System.Drawing.Size(789, 546);
             this.tablaProductos.TabIndex = 14;
             // 
-            // dataGridViewTextBoxColumn13
+            // productos_codigo
             // 
-            this.dataGridViewTextBoxColumn13.HeaderText = "ID";
-            this.dataGridViewTextBoxColumn13.MaxInputLength = 10;
-            this.dataGridViewTextBoxColumn13.MinimumWidth = 6;
-            this.dataGridViewTextBoxColumn13.Name = "dataGridViewTextBoxColumn13";
-            this.dataGridViewTextBoxColumn13.ReadOnly = true;
-            this.dataGridViewTextBoxColumn13.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewTextBoxColumn13.Width = 35;
+            this.productos_codigo.HeaderText = "Codigo";
+            this.productos_codigo.MinimumWidth = 6;
+            this.productos_codigo.Name = "productos_codigo";
+            this.productos_codigo.ReadOnly = true;
+            this.productos_codigo.Width = 150;
             // 
-            // codigo
+            // productos_nombre
             // 
-            this.codigo.HeaderText = "Codigo";
-            this.codigo.MinimumWidth = 6;
-            this.codigo.Name = "codigo";
-            this.codigo.ReadOnly = true;
-            this.codigo.Width = 150;
+            this.productos_nombre.HeaderText = "Nombre";
+            this.productos_nombre.MaxInputLength = 6;
+            this.productos_nombre.MinimumWidth = 6;
+            this.productos_nombre.Name = "productos_nombre";
+            this.productos_nombre.ReadOnly = true;
+            this.productos_nombre.Width = 325;
             // 
-            // dataGridViewTextBoxColumn16
+            // productos_clasificacion
             // 
-            this.dataGridViewTextBoxColumn16.HeaderText = "Nombre";
-            this.dataGridViewTextBoxColumn16.MaxInputLength = 6;
-            this.dataGridViewTextBoxColumn16.MinimumWidth = 6;
-            this.dataGridViewTextBoxColumn16.Name = "dataGridViewTextBoxColumn16";
-            this.dataGridViewTextBoxColumn16.ReadOnly = true;
-            this.dataGridViewTextBoxColumn16.Width = 325;
+            this.productos_clasificacion.HeaderText = "Posicion";
+            this.productos_clasificacion.MinimumWidth = 6;
+            this.productos_clasificacion.Name = "productos_clasificacion";
+            this.productos_clasificacion.ReadOnly = true;
+            this.productos_clasificacion.Width = 85;
             // 
-            // envase_id
+            // productos_almacenamiento
             // 
-            this.envase_id.HeaderText = "Envase";
-            this.envase_id.MinimumWidth = 6;
-            this.envase_id.Name = "envase_id";
-            this.envase_id.ReadOnly = true;
-            this.envase_id.Width = 85;
-            // 
-            // stock
-            // 
-            this.stock.HeaderText = "Stock";
-            this.stock.MinimumWidth = 6;
-            this.stock.Name = "stock";
-            this.stock.ReadOnly = true;
-            this.stock.Width = 125;
-            // 
-            // tablaEnvases
-            // 
-            this.tablaEnvases.AllowUserToAddRows = false;
-            this.tablaEnvases.AllowUserToDeleteRows = false;
-            this.tablaEnvases.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.tablaEnvases.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn19,
-            this.dataGridViewTextBoxColumn20,
-            this.ancho,
-            this.largo,
-            this.alto,
-            this.volumen,
-            this.peso});
-            this.tablaEnvases.Location = new System.Drawing.Point(6, 427);
-            this.tablaEnvases.MultiSelect = false;
-            this.tablaEnvases.Name = "tablaEnvases";
-            this.tablaEnvases.ReadOnly = true;
-            this.tablaEnvases.RowHeadersWidth = 51;
-            this.tablaEnvases.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.tablaEnvases.Size = new System.Drawing.Size(789, 95);
-            this.tablaEnvases.TabIndex = 16;
-            // 
-            // dataGridViewTextBoxColumn19
-            // 
-            this.dataGridViewTextBoxColumn19.HeaderText = "ID";
-            this.dataGridViewTextBoxColumn19.MaxInputLength = 10;
-            this.dataGridViewTextBoxColumn19.MinimumWidth = 6;
-            this.dataGridViewTextBoxColumn19.Name = "dataGridViewTextBoxColumn19";
-            this.dataGridViewTextBoxColumn19.ReadOnly = true;
-            this.dataGridViewTextBoxColumn19.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewTextBoxColumn19.Width = 50;
-            // 
-            // dataGridViewTextBoxColumn20
-            // 
-            this.dataGridViewTextBoxColumn20.HeaderText = "Nombre";
-            this.dataGridViewTextBoxColumn20.MaxInputLength = 6;
-            this.dataGridViewTextBoxColumn20.MinimumWidth = 6;
-            this.dataGridViewTextBoxColumn20.Name = "dataGridViewTextBoxColumn20";
-            this.dataGridViewTextBoxColumn20.ReadOnly = true;
-            this.dataGridViewTextBoxColumn20.Width = 175;
-            // 
-            // ancho
-            // 
-            this.ancho.HeaderText = "Ancho";
-            this.ancho.MinimumWidth = 6;
-            this.ancho.Name = "ancho";
-            this.ancho.ReadOnly = true;
-            this.ancho.Width = 125;
-            // 
-            // largo
-            // 
-            this.largo.HeaderText = "Largo";
-            this.largo.MinimumWidth = 6;
-            this.largo.Name = "largo";
-            this.largo.ReadOnly = true;
-            this.largo.Width = 125;
-            // 
-            // alto
-            // 
-            this.alto.HeaderText = "Alto";
-            this.alto.MinimumWidth = 6;
-            this.alto.Name = "alto";
-            this.alto.ReadOnly = true;
-            this.alto.Width = 125;
-            // 
-            // volumen
-            // 
-            this.volumen.HeaderText = "Volumen";
-            this.volumen.MinimumWidth = 6;
-            this.volumen.Name = "volumen";
-            this.volumen.ReadOnly = true;
-            this.volumen.Width = 125;
-            // 
-            // peso
-            // 
-            this.peso.HeaderText = "Peso";
-            this.peso.MinimumWidth = 6;
-            this.peso.Name = "peso";
-            this.peso.ReadOnly = true;
-            this.peso.Width = 125;
+            this.productos_almacenamiento.HeaderText = "Reserva";
+            this.productos_almacenamiento.MinimumWidth = 6;
+            this.productos_almacenamiento.Name = "productos_almacenamiento";
+            this.productos_almacenamiento.ReadOnly = true;
+            this.productos_almacenamiento.Width = 150;
             // 
             // datos4
             // 
@@ -903,9 +784,9 @@
             this.datos4.Controls.Add(this.label23);
             this.datos4.Controls.Add(this.tablaOperarios);
             this.datos4.Controls.Add(this.tablaRoles);
-            this.datos4.Location = new System.Drawing.Point(4, 25);
+            this.datos4.Location = new System.Drawing.Point(4, 22);
             this.datos4.Name = "datos4";
-            this.datos4.Size = new System.Drawing.Size(806, 598);
+            this.datos4.Size = new System.Drawing.Size(806, 601);
             this.datos4.TabIndex = 2;
             this.datos4.Text = "Operarios y Roles";
             this.datos4.UseVisualStyleBackColor = true;
@@ -915,7 +796,7 @@
             this.label22.AutoSize = true;
             this.label22.Location = new System.Drawing.Point(3, 7);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(71, 17);
+            this.label22.Size = new System.Drawing.Size(52, 13);
             this.label22.TabIndex = 15;
             this.label22.Text = "Operarios";
             // 
@@ -924,7 +805,7 @@
             this.label23.AutoSize = true;
             this.label23.Location = new System.Drawing.Point(475, 7);
             this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(44, 17);
+            this.label23.Size = new System.Drawing.Size(34, 13);
             this.label23.TabIndex = 17;
             this.label23.Text = "Roles";
             // 
@@ -1021,7 +902,6 @@
             // 
             // datos5
             // 
-            this.datos5.Controls.Add(this.groupBox8);
             this.datos5.Controls.Add(this.groupBox7);
             this.datos5.Controls.Add(this.tablaMovimientos);
             this.datos5.Controls.Add(this.obtenerPedidosBtn);
@@ -1029,57 +909,12 @@
             this.datos5.Controls.Add(this.tablaPedidos);
             this.datos5.Controls.Add(this.label5);
             this.datos5.Controls.Add(this.tablaLineasPedido);
-            this.datos5.Location = new System.Drawing.Point(4, 25);
+            this.datos5.Location = new System.Drawing.Point(4, 22);
             this.datos5.Name = "datos5";
-            this.datos5.Size = new System.Drawing.Size(806, 598);
+            this.datos5.Size = new System.Drawing.Size(806, 601);
             this.datos5.TabIndex = 4;
             this.datos5.Text = "Pedidos y Contenido";
             this.datos5.UseVisualStyleBackColor = true;
-            // 
-            // groupBox8
-            // 
-            this.groupBox8.Controls.Add(this.label7);
-            this.groupBox8.Controls.Add(this.barcelonaHastaPS);
-            this.groupBox8.Controls.Add(this.label12);
-            this.groupBox8.Controls.Add(this.barcelonaDesdePS);
-            this.groupBox8.Location = new System.Drawing.Point(477, 212);
-            this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(319, 79);
-            this.groupBox8.TabIndex = 32;
-            this.groupBox8.TabStop = false;
-            this.groupBox8.Text = "Barcelona";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 52);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(49, 17);
-            this.label7.TabIndex = 31;
-            this.label7.Text = "Hasta:";
-            // 
-            // barcelonaHastaPS
-            // 
-            this.barcelonaHastaPS.Location = new System.Drawing.Point(53, 47);
-            this.barcelonaHastaPS.Name = "barcelonaHastaPS";
-            this.barcelonaHastaPS.Size = new System.Drawing.Size(260, 23);
-            this.barcelonaHastaPS.TabIndex = 30;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(6, 24);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(53, 17);
-            this.label12.TabIndex = 29;
-            this.label12.Text = "Desde:";
-            // 
-            // barcelonaDesdePS
-            // 
-            this.barcelonaDesdePS.Location = new System.Drawing.Point(53, 19);
-            this.barcelonaDesdePS.Name = "barcelonaDesdePS";
-            this.barcelonaDesdePS.Size = new System.Drawing.Size(260, 23);
-            this.barcelonaDesdePS.TabIndex = 28;
             // 
             // groupBox7
             // 
@@ -1099,7 +934,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(6, 52);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(49, 17);
+            this.label2.Size = new System.Drawing.Size(38, 13);
             this.label2.TabIndex = 31;
             this.label2.Text = "Hasta:";
             // 
@@ -1107,7 +942,7 @@
             // 
             this.fechaHastaPS.Location = new System.Drawing.Point(53, 47);
             this.fechaHastaPS.Name = "fechaHastaPS";
-            this.fechaHastaPS.Size = new System.Drawing.Size(260, 23);
+            this.fechaHastaPS.Size = new System.Drawing.Size(260, 20);
             this.fechaHastaPS.TabIndex = 30;
             // 
             // label1
@@ -1115,7 +950,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(6, 24);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(53, 17);
+            this.label1.Size = new System.Drawing.Size(41, 13);
             this.label1.TabIndex = 29;
             this.label1.Text = "Desde:";
             // 
@@ -1123,7 +958,7 @@
             // 
             this.fechaDesdePS.Location = new System.Drawing.Point(53, 19);
             this.fechaDesdePS.Name = "fechaDesdePS";
-            this.fechaDesdePS.Size = new System.Drawing.Size(260, 23);
+            this.fechaDesdePS.Size = new System.Drawing.Size(260, 20);
             this.fechaDesdePS.TabIndex = 28;
             // 
             // tablaMovimientos
@@ -1186,7 +1021,7 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(6, 11);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(133, 17);
+            this.label6.Size = new System.Drawing.Size(100, 13);
             this.label6.TabIndex = 16;
             this.label6.Text = "Pedidos pendientes";
             // 
@@ -1269,7 +1104,7 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(6, 394);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(142, 17);
+            this.label5.Size = new System.Drawing.Size(107, 13);
             this.label5.TabIndex = 15;
             this.label5.Text = "Contenido del pedido";
             // 
@@ -1344,13 +1179,12 @@
             // tabConfiguracion
             // 
             this.tabConfiguracion.Controls.Add(this.cuadroCargaBBDD);
-            this.tabConfiguracion.Controls.Add(this.logo_mme);
             this.tabConfiguracion.Controls.Add(this.groupBox2);
             this.tabConfiguracion.Controls.Add(this.groupBox1);
-            this.tabConfiguracion.Location = new System.Drawing.Point(4, 25);
+            this.tabConfiguracion.Location = new System.Drawing.Point(4, 22);
             this.tabConfiguracion.Name = "tabConfiguracion";
             this.tabConfiguracion.Padding = new System.Windows.Forms.Padding(3);
-            this.tabConfiguracion.Size = new System.Drawing.Size(1169, 663);
+            this.tabConfiguracion.Size = new System.Drawing.Size(1169, 666);
             this.tabConfiguracion.TabIndex = 0;
             this.tabConfiguracion.Text = "Configuración";
             this.tabConfiguracion.UseVisualStyleBackColor = true;
@@ -1394,7 +1228,7 @@
             this.label20.AutoSize = true;
             this.label20.Location = new System.Drawing.Point(6, 246);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(126, 17);
+            this.label20.Size = new System.Drawing.Size(94, 13);
             this.label20.TabIndex = 26;
             this.label20.Text = "Carga de ordenes:";
             // 
@@ -1410,7 +1244,7 @@
             this.label18.AutoSize = true;
             this.label18.Location = new System.Drawing.Point(6, 168);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(127, 17);
+            this.label18.Size = new System.Drawing.Size(96, 13);
             this.label18.TabIndex = 24;
             this.label18.Text = "Carga de envases:";
             // 
@@ -1426,7 +1260,7 @@
             this.label19.AutoSize = true;
             this.label19.Location = new System.Drawing.Point(6, 142);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(137, 17);
+            this.label19.Size = new System.Drawing.Size(103, 13);
             this.label19.TabIndex = 22;
             this.label19.Text = "Carga de productos:";
             // 
@@ -1442,7 +1276,7 @@
             this.label16.AutoSize = true;
             this.label16.Location = new System.Drawing.Point(6, 116);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(141, 17);
+            this.label16.Size = new System.Drawing.Size(106, 13);
             this.label16.TabIndex = 20;
             this.label16.Text = "Carga de posiciones:";
             // 
@@ -1458,7 +1292,7 @@
             this.label17.AutoSize = true;
             this.label17.Location = new System.Drawing.Point(6, 90);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(127, 17);
+            this.label17.Size = new System.Drawing.Size(95, 13);
             this.label17.TabIndex = 18;
             this.label17.Text = "Carga de modulos:";
             // 
@@ -1474,7 +1308,7 @@
             this.label14.AutoSize = true;
             this.label14.Location = new System.Drawing.Point(6, 220);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(105, 17);
+            this.label14.Size = new System.Drawing.Size(78, 13);
             this.label14.TabIndex = 16;
             this.label14.Text = "Carga de roles:";
             // 
@@ -1490,7 +1324,7 @@
             this.label15.AutoSize = true;
             this.label15.Location = new System.Drawing.Point(6, 194);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(134, 17);
+            this.label15.Size = new System.Drawing.Size(99, 13);
             this.label15.TabIndex = 14;
             this.label15.Text = "Carga de operarios:";
             // 
@@ -1506,7 +1340,7 @@
             this.label13.AutoSize = true;
             this.label13.Location = new System.Drawing.Point(6, 64);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(139, 17);
+            this.label13.Size = new System.Drawing.Size(104, 13);
             this.label13.TabIndex = 12;
             this.label13.Text = "Carga de centralitas:";
             // 
@@ -1522,30 +1356,18 @@
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(6, 38);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(142, 17);
+            this.label10.Size = new System.Drawing.Size(107, 13);
             this.label10.TabIndex = 0;
             this.label10.Text = "Carga de almacenes:";
-            // 
-            // logo_mme
-            // 
-            this.logo_mme.Enabled = false;
-            this.logo_mme.Image = global::NoCocinoMas.Properties.Resources.logo_mme;
-            this.logo_mme.Location = new System.Drawing.Point(68, 559);
-            this.logo_mme.MaximumSize = new System.Drawing.Size(200, 100);
-            this.logo_mme.Name = "logo_mme";
-            this.logo_mme.Size = new System.Drawing.Size(200, 80);
-            this.logo_mme.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.logo_mme.TabIndex = 8;
-            this.logo_mme.TabStop = false;
             // 
             // tabControl
             // 
             this.tabControl.Controls.Add(this.groupBox3);
             this.tabControl.Controls.Add(this.groupBox4);
-            this.tabControl.Location = new System.Drawing.Point(4, 25);
+            this.tabControl.Location = new System.Drawing.Point(4, 22);
             this.tabControl.Name = "tabControl";
             this.tabControl.Padding = new System.Windows.Forms.Padding(3);
-            this.tabControl.Size = new System.Drawing.Size(1169, 663);
+            this.tabControl.Size = new System.Drawing.Size(1169, 666);
             this.tabControl.TabIndex = 1;
             this.tabControl.Text = "Control Recogida y Reposicion";
             this.tabControl.UseVisualStyleBackColor = true;
@@ -1569,7 +1391,7 @@
             this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1.Location = new System.Drawing.Point(15, 161);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(175, 21);
+            this.checkBox1.Size = new System.Drawing.Size(131, 17);
             this.checkBox1.TabIndex = 9;
             this.checkBox1.Text = "Priorizar lotes antiguos";
             this.checkBox1.UseVisualStyleBackColor = true;
@@ -1591,7 +1413,7 @@
             this.radioButton2.Checked = true;
             this.radioButton2.Location = new System.Drawing.Point(22, 63);
             this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(273, 21);
+            this.radioButton2.Size = new System.Drawing.Size(204, 17);
             this.radioButton2.TabIndex = 1;
             this.radioButton2.TabStop = true;
             this.radioButton2.Text = "Orden alternativo (Campo preferencia)";
@@ -1602,7 +1424,7 @@
             this.radioButton1.AutoSize = true;
             this.radioButton1.Location = new System.Drawing.Point(22, 30);
             this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(229, 21);
+            this.radioButton1.Size = new System.Drawing.Size(172, 17);
             this.radioButton1.TabIndex = 0;
             this.radioButton1.Text = "Orden númerico (modulo 1 a N)";
             this.radioButton1.UseVisualStyleBackColor = true;
@@ -1716,10 +1538,10 @@
             this.tabEtiquetas.Controls.Add(this.guardarConfiguracionBtn);
             this.tabEtiquetas.Controls.Add(this.grupoConfiguracion);
             this.tabEtiquetas.Controls.Add(this.groupBox6);
-            this.tabEtiquetas.Location = new System.Drawing.Point(4, 25);
+            this.tabEtiquetas.Location = new System.Drawing.Point(4, 22);
             this.tabEtiquetas.Name = "tabEtiquetas";
             this.tabEtiquetas.Padding = new System.Windows.Forms.Padding(3);
-            this.tabEtiquetas.Size = new System.Drawing.Size(1169, 663);
+            this.tabEtiquetas.Size = new System.Drawing.Size(1169, 666);
             this.tabEtiquetas.TabIndex = 4;
             this.tabEtiquetas.Text = "Etiquetas";
             this.tabEtiquetas.UseVisualStyleBackColor = true;
@@ -1751,7 +1573,7 @@
             this.impresoraEnviosTxt.AutoSize = true;
             this.impresoraEnviosTxt.Location = new System.Drawing.Point(9, 33);
             this.impresoraEnviosTxt.Name = "impresoraEnviosTxt";
-            this.impresoraEnviosTxt.Size = new System.Drawing.Size(0, 17);
+            this.impresoraEnviosTxt.Size = new System.Drawing.Size(0, 13);
             this.impresoraEnviosTxt.TabIndex = 19;
             // 
             // nombreImpresoraTxt
@@ -1759,7 +1581,7 @@
             this.nombreImpresoraTxt.AutoSize = true;
             this.nombreImpresoraTxt.Location = new System.Drawing.Point(9, 26);
             this.nombreImpresoraTxt.Name = "nombreImpresoraTxt";
-            this.nombreImpresoraTxt.Size = new System.Drawing.Size(0, 17);
+            this.nombreImpresoraTxt.Size = new System.Drawing.Size(0, 13);
             this.nombreImpresoraTxt.TabIndex = 18;
             // 
             // seleccionarImpresoraBtn
@@ -1797,15 +1619,15 @@
             // 
             this.pdfEnvioTxt.Location = new System.Drawing.Point(6, 67);
             this.pdfEnvioTxt.Name = "pdfEnvioTxt";
-            this.pdfEnvioTxt.Size = new System.Drawing.Size(364, 23);
+            this.pdfEnvioTxt.Size = new System.Drawing.Size(364, 20);
             this.pdfEnvioTxt.TabIndex = 32;
             // 
             // tabEventos
             // 
             this.tabEventos.Controls.Add(this.eventosTxt);
-            this.tabEventos.Location = new System.Drawing.Point(4, 25);
+            this.tabEventos.Location = new System.Drawing.Point(4, 22);
             this.tabEventos.Name = "tabEventos";
-            this.tabEventos.Size = new System.Drawing.Size(1169, 663);
+            this.tabEventos.Size = new System.Drawing.Size(1169, 666);
             this.tabEventos.TabIndex = 2;
             this.tabEventos.Text = "Eventos";
             this.tabEventos.UseVisualStyleBackColor = true;
@@ -1822,10 +1644,10 @@
             // tabErrores
             // 
             this.tabErrores.Controls.Add(this.erroresTxt);
-            this.tabErrores.Location = new System.Drawing.Point(4, 25);
+            this.tabErrores.Location = new System.Drawing.Point(4, 22);
             this.tabErrores.Name = "tabErrores";
             this.tabErrores.Padding = new System.Windows.Forms.Padding(3);
-            this.tabErrores.Size = new System.Drawing.Size(1169, 663);
+            this.tabErrores.Size = new System.Drawing.Size(1169, 666);
             this.tabErrores.TabIndex = 3;
             this.tabErrores.Text = "Errores";
             this.tabErrores.UseVisualStyleBackColor = true;
@@ -1844,7 +1666,7 @@
             this.tVersion.AutoSize = true;
             this.tVersion.Location = new System.Drawing.Point(1123, 9);
             this.tVersion.Name = "tVersion";
-            this.tVersion.Size = new System.Drawing.Size(55, 17);
+            this.tVersion.Size = new System.Drawing.Size(43, 13);
             this.tVersion.TabIndex = 11;
             this.tVersion.Text = "v 2.000";
             // 
@@ -1853,9 +1675,9 @@
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.textoEstado});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 716);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 720);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1184, 26);
+            this.statusStrip1.Size = new System.Drawing.Size(1184, 22);
             this.statusStrip1.TabIndex = 12;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -1863,13 +1685,26 @@
             // 
             this.textoEstado.Name = "textoEstado";
             this.textoEstado.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.textoEstado.Size = new System.Drawing.Size(161, 20);
+            this.textoEstado.Size = new System.Drawing.Size(128, 17);
             this.textoEstado.Text = "toolStripStatusLabel1";
             // 
             // temporizador
             // 
             this.temporizador.Interval = 500;
             this.temporizador.Tick += new System.EventHandler(this.temporizador_Tick);
+            // 
+            // buscador
+            // 
+            this.buscador.HelpRequest += new System.EventHandler(this.buscador_HelpRequest);
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(806, 601);
+            this.tabPage1.TabIndex = 5;
+            this.tabPage1.Text = "Nueva version";
             // 
             // Gestor
             // 
@@ -1905,15 +1740,12 @@
             this.datos3.ResumeLayout(false);
             this.datos3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tablaProductos)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tablaEnvases)).EndInit();
             this.datos4.ResumeLayout(false);
             this.datos4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tablaOperarios)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tablaRoles)).EndInit();
             this.datos5.ResumeLayout(false);
             this.datos5.PerformLayout();
-            this.groupBox8.ResumeLayout(false);
-            this.groupBox8.PerformLayout();
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tablaMovimientos)).EndInit();
@@ -1923,7 +1755,6 @@
             this.tabConfiguracion.ResumeLayout(false);
             this.cuadroCargaBBDD.ResumeLayout(false);
             this.cuadroCargaBBDD.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.logo_mme)).EndInit();
             this.tabControl.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
@@ -1967,7 +1798,6 @@
         private System.Windows.Forms.TabPage tabErrores;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.DataGridView tablaAlmacenes;
-        private System.Windows.Forms.PictureBox logo_mme;
         private System.Windows.Forms.Label ledTerminales;
         private System.Windows.Forms.Label ledPLCs;
         private System.Windows.Forms.Button ResetHilos;
@@ -2007,9 +1837,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn15;
         private System.Windows.Forms.TabPage datos3;
         private System.Windows.Forms.Label label24;
-        private System.Windows.Forms.Label label25;
         private System.Windows.Forms.DataGridView tablaProductos;
-        private System.Windows.Forms.DataGridView tablaEnvases;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.DataGridView tablaTareas;
         private System.Windows.Forms.TabPage datos5;
@@ -2028,18 +1856,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn aliasCentralita;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn8;
         private System.Windows.Forms.DataGridViewTextBoxColumn ipCentralita;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn13;
-        private System.Windows.Forms.DataGridViewTextBoxColumn codigo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn16;
-        private System.Windows.Forms.DataGridViewTextBoxColumn envase_id;
-        private System.Windows.Forms.DataGridViewTextBoxColumn stock;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn19;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn20;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ancho;
-        private System.Windows.Forms.DataGridViewTextBoxColumn largo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn alto;
-        private System.Windows.Forms.DataGridViewTextBoxColumn volumen;
-        private System.Windows.Forms.DataGridViewTextBoxColumn peso;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
         private System.Windows.Forms.DataGridViewTextBoxColumn nombre;
         private System.Windows.Forms.DataGridViewTextBoxColumn balda;
@@ -2090,7 +1906,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn envio;
         private System.Windows.Forms.DataGridViewTextBoxColumn transportista;
         private System.Windows.Forms.DataGridViewTextBoxColumn estato_pedido;
-        private System.Windows.Forms.FolderBrowserDialog buscador;
         private System.Windows.Forms.TabPage tabEtiquetas;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.Button guardarConfiguracionBtn;
@@ -2100,15 +1915,16 @@
         private System.Windows.Forms.Label nombreImpresoraTxt;
         private System.Windows.Forms.Button seleccionarImpresoraBtn;
         private System.Windows.Forms.Label impresoraEnviosTxt;
-        private System.Windows.Forms.GroupBox groupBox8;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.DateTimePicker barcelonaHastaPS;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.DateTimePicker barcelonaDesdePS;
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DateTimePicker fechaHastaPS;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn productos_codigo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn productos_nombre;
+        private System.Windows.Forms.DataGridViewTextBoxColumn productos_clasificacion;
+        private System.Windows.Forms.DataGridViewTextBoxColumn productos_almacenamiento;
+        private System.Windows.Forms.FolderBrowserDialog buscador;
+        private System.Windows.Forms.TabPage tabPage1;
     }
 }
 

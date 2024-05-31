@@ -190,35 +190,6 @@ namespace NoCocinoMas
             return pedidos;
         }
 
-        public Pedidos EnPreparacion(Dictionary<string, string> parametros)
-        {
-            Pedidos pedidos = new Pedidos();
-            bool peninsula = parametros.ContainsKey("peninsula");
-            bool barcelona = parametros.ContainsKey("barcelona");
-            if (!peninsula && !barcelona)
-            {
-                return this;
-            }
-            string peninsulaDesde = peninsula ? parametros["peninsulaDesde"] : "";
-            string peninsulaHasta = peninsula ? parametros["peninsulaHasta"] : "";
-            string barcelonaDesde = barcelona ? parametros["barcelonaDesde"] : "";
-            string barcelonaHasta = barcelona ? parametros["barcelonaHasta"] : "";
-            foreach (Pedido pedido in this.listado)
-            {
-                if (peninsula && !pedido.cp.StartsWith("08") &&
-                    peninsulaDesde.CompareTo(pedido.envio) < 1 && pedido.envio.CompareTo(peninsulaHasta) < 1)
-                {
-                    pedidos.Agregar(pedido);
-                }
-                else if (barcelona && pedido.cp.StartsWith("08") &&
-                    barcelonaDesde.CompareTo(pedido.envio) < 1 && pedido.envio.CompareTo(barcelonaHasta) < 1)
-                {
-                    pedidos.Agregar(pedido);
-                }
-            }
-            return pedidos;
-        }
-
         public string ListadoNumeros()
         {
             return string.Join(",", from Pedido pedido in this.listado select pedido.numero);
@@ -460,13 +431,10 @@ namespace NoCocinoMas
         {
             foreach (LineaPedido lineaPedido in this.lineas)
             {
-                if (lineaPedido.producto_codigo == codigo_producto && cantidad <= lineaPedido.CantidadPendiente())
+                if (lineaPedido.producto_codigo == codigo_producto && lineaPedido.ComprobarCantidadRecogida(cantidad))
                 {
                     lineaPedido.recogido += cantidad;
-                    if (lineaPedido.CantidadPendiente() == 0)
-                    {
-                        lineaPedido.estado = 1;
-                    }
+                    lineaPedido.estado = lineaPedido.CantidadPendiente() == 0 ? 1 : 0;
                     //guardamos el movimiento
                     Movimiento m = new Movimiento(lineaPedido, lote, cantidad);
                     ConectorSQL.CrearEntidades(ConectorSQL.insertMovimiento, m.GetValoresInsertSQL());
@@ -479,15 +447,26 @@ namespace NoCocinoMas
                         };
                     ConectorSQL.ActualizarEntidades(ConectorSQL.updateRecogidaLineas, valoresRecogidaLinea);
                     //guardamos el pedido
-                    if (this.ComprobarFinalizacion())
+                    int est = this.estado;
+                    this.ComprobarFinalizacion();
+                    if (est != this.estado)
                     {
                         object[] valoresRecogidaPedido = {
                                 this.id,
-                                1
+                                this.estado
                             };
                         ConectorSQL.ActualizarEntidades(ConectorSQL.updateRecogidaPedido, valoresRecogidaPedido);
+
+                        ///////////////////////////////////
+                        ///////////
+                        /// INSERTAR LOS LOTES EN LA BBDD DE PRESTASHOP
+                        ///
+                        ///////////////////////
+
+
                     }
                     //descontamos las unidades del stock no colocado
+                    /*
                     object[] valoresFabricacion = {
                         lineaPedido.producto.id,
                         lineaPedido.producto.stock - cantidad
@@ -497,6 +476,7 @@ namespace NoCocinoMas
                         lineaPedido.producto.stock -= cantidad;
                         Gestor.gestor.ActualizarTablaProductos(lineaPedido.producto);
                     }
+                    */
                     return null;
                 }
             }
