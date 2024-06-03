@@ -216,6 +216,8 @@ namespace NoCocinoMas
         //[JsonIgnore]
         public LineasPedido lineas { get; set; }
         public Movimientos movimientos { get; set; }
+        public string caja { get; set; }
+        public int indice_modulo { get; set; }
 
         private bool movimientos_completados = false;
 

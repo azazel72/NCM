@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Google.Protobuf.WellKnownTypes;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections;
 using static Common.Logging.Configuration.ArgUtils;
@@ -15,7 +16,6 @@ namespace NoCocinoMas
 
         //Conexion
         static private string cadenaConexion = "datasource=127.0.0.1;port=3306;database=nococinomas;username=root;password=;Allow Zero Datetime=True;Convert Zero Datetime=True;";
-        //static public string cadenaConexionPS = "datasource=www.nococinomas.es;port=3306;database=ncm;username=manelu;password=Canidi%19740503;Allow Zero Datetime=True;Convert Zero Datetime=True;";
         static public string cadenaConexionPS = "datasource=www.nococinomas.es;port=3306;database=nococinomas;username=nokocino;password=123noko456;Allow Zero Datetime=True;Convert Zero Datetime=True;";
 
         //SELECTS
@@ -46,7 +46,7 @@ namespace NoCocinoMas
         static public string obtenerProductosPS = "SELECT pd.id_product AS id, pd.id_product AS codigo, pd.name AS nombre, 1 as envase_id, 0 as stock, ppt.posicion_clasif AS posicionClasificacion, ppt.posicion_almac AS posicionAlmacenamiento FROM ps_product_lang pd join ps_product p on (pd.id_product=p.id_product and active=1) JOIN ps_product_ptl ppt ON pd.id_product = ppt.id_product;";
         static public string vaciarStock = "TRUNCATE ps_stock_web;";
         static public string sobreescribirStock = "INSERT INTO ps_stock_web (products_id, fechaLote, cantidad) VALUES ({0}, '{1}', {2}) ON DUPLICATE KEY UPDATE cantidad=cantidad+{2};";
-        //static public string sobreescribirStock = "INSERT INTO ps_stock_web (products_id, fechaLote, cantidad) VALUES ({0}, '{1}', {2}) ON DUPLICATE KEY UPDATE cantidad=cantidad+{2};";
+        static public string insertarTrazabilidad = "INSERT INTO ps_trazabilidad (id_order, id_product, lote, cantidad) VALUES ({0}, {1}, '{2}', {3});";
 
         //INSERT
         static public string guardarProductos = "INSERT INTO productos (codigo, nombre, envase_id, stock) VALUES {0};";

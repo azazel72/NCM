@@ -40,6 +40,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.contenedorTablas = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
             this.datos1 = new System.Windows.Forms.TabPage();
             this.label8 = new System.Windows.Forms.Label();
             this.tablaModulos = new System.Windows.Forms.DataGridView();
@@ -175,7 +176,6 @@
             this.textoEstado = new System.Windows.Forms.ToolStripStatusLabel();
             this.temporizador = new System.Windows.Forms.Timer(this.components);
             this.buscador = new System.Windows.Forms.FolderBrowserDialog();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.contenedorTablas.SuspendLayout();
@@ -314,6 +314,15 @@
             this.contenedorTablas.SelectedIndex = 0;
             this.contenedorTablas.Size = new System.Drawing.Size(814, 627);
             this.contenedorTablas.TabIndex = 14;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(806, 601);
+            this.tabPage1.TabIndex = 5;
+            this.tabPage1.Text = "Nueva version";
             // 
             // datos1
             // 
@@ -1696,15 +1705,6 @@
             // buscador
             // 
             this.buscador.HelpRequest += new System.EventHandler(this.buscador_HelpRequest);
-            // 
-            // tabPage1
-            // 
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(806, 601);
-            this.tabPage1.TabIndex = 5;
-            this.tabPage1.Text = "Nueva version";
             // 
             // Gestor
             // 
