@@ -11,6 +11,8 @@ namespace NoCocinoMas
 {
     class Servidor
     {
+        private Conexiones.ServidorPermanente servidor;
+
         private Gestor gestor;
         private TcpListener servidorWeb;
         private Socket servidorArduino;
@@ -38,6 +40,8 @@ evento: 192.168.137.18
             this.puertoArduino = pa;
             this.gestor.puertoWebTxt.Text = this.puertoWeb.ToString();
             this.gestor.puertoArduinoTxt.Text = this.puertoArduino.ToString();
+
+            Conexiones.ServidorPermanente.IniciarHilo(7000, this.gestor);
         }
 
         /// <summary>
