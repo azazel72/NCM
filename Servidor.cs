@@ -6,10 +6,16 @@ using System.Threading;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Security.Permissions;
+using Conexiones;
+using Google.Protobuf;
+using Google.Protobuf.Compiler;
+using NoCocinoMas.Objetos;
+using Mysqlx;
+using static Common.Logging.Configuration.ArgUtils;
 
 namespace NoCocinoMas
 {
-    class Servidor
+    class Servidor : ISubscriptorPermanente
     {
         private Conexiones.ServidorPermanente servidor;
 
@@ -41,7 +47,7 @@ evento: 192.168.137.18
             this.gestor.puertoWebTxt.Text = this.puertoWeb.ToString();
             this.gestor.puertoArduinoTxt.Text = this.puertoArduino.ToString();
 
-            Conexiones.ServidorPermanente.IniciarHilo(7000, this.gestor);
+            Conexiones.ServidorPermanente.IniciarHilo(7000, this);
         }
 
         /// <summary>
@@ -653,6 +659,45 @@ evento: 192.168.137.18
                                 return responseOK(JsonSerializer.Serialize<Pedido>(this.gestor.pedidos.BuscarNumero(int.Parse(argumentos["pedido_numero"]))));
                             }
                             break;
+                        case "EncenderLucesProducto":
+                            if (argumentos.ContainsKey("codigo_producto") && argumentos.ContainsKey("color_posicion"))
+                            {
+                                return responseOK(JsonSerializer.Serialize<Producto>(this.gestor.productos.BuscarCodigo(int.Parse(argumentos["codigo_producto"]))));
+                            }
+                            else
+                            {
+                                r.Error("Parametros codigo_producto y color_posicion requeridos");
+                            }
+                            return responseOK(r.Serializar());
+                        case "ConsultarPedidosProducto":
+                            if (argumentos.ContainsKey("codigo_producto"))
+                            {
+                                /*
+                                 */
+                            }
+                            else
+                            {
+                                return responseOK("Parametro codigo_producto debe aparecer");
+                            }
+                            return responseOK(r.Serializar());
+                        case "ApagarLucesProducto":
+                            if (argumentos.ContainsKey("codigo_producto"))
+                            {
+                                
+                            }
+                            else
+                            {
+                                r.Error("Parametros codigo_producto y color_posicion requeridos");
+                            }
+                            return responseOK(r.Serializar());
+                        case "BotonConinuar":
+                            if (argumentos.ContainsKey("boton"))
+                            {
+                                MensajeClienteServidor m = new MensajeClienteServidor();
+                                m.indice_modulo = int.Parse(argumentos["boton"]);
+                                this.gestor.AvanzarPedido(m);
+                            }
+                            return responseOK();
                         default:
                             return responseOK("Comando no encontrado.");
                     }
@@ -668,6 +713,68 @@ evento: 192.168.137.18
         private string responseOK(string datos = "")
         {
             return string.Format("HTTP/1.1 200 OK\nContent - Type: application/json\nContent - Length: {0}\nConnection: close\nAccess-Control-Allow-Origin: *\nAccess-Control-Allow-Methods: GET,POST,OPTIONS\nAccess-Control-Allow-Headers: Content-Type\nAccess-Control-Allow-Credentials: false\n\n{1}", datos.Length, datos);
+        }
+
+        public void NuevaConexion(ConexionPermanente conexion)
+        {
+            try
+            {
+                this.gestor.EscribirError(string.Format("Conexion entrante: {0}, {1}", conexion.id, conexion.descripcion));
+                this.gestor.conexiones[conexion.id] = conexion;
+            }
+            catch (Exception e)
+            {
+                this.gestor.EscribirError("Error (NuevaConexion): " + e.StackTrace);
+            }
+        }
+
+        public void ConexionCerrada(ConexionPermanente conexion)
+        {
+            try
+            {
+                this.gestor.EscribirError(string.Format("Conexion cerrada: {0}, {1}", conexion.id, conexion.descripcion));
+                this.gestor.conexiones.Remove(conexion.id);
+            }
+            catch (Exception e)
+            {
+                this.gestor.EscribirError("Error (ConexionCerrada): " + e.StackTrace);
+            }
+        }
+
+        public void MensajeEntrante(ConexionPermanente conexion, string mensaje)
+        {
+            try {
+                this.gestor.EscribirEvento(string.Format("Mensaje de {0}: {1}", conexion.id, mensaje));
+                MensajeClienteServidor m = JsonSerializer.Deserialize<MensajeClienteServidor>(mensaje);
+                m.id_conexion = conexion.id;
+                m.conexion = conexion;
+                switch(m.accion)
+                {
+                    case "Refrescar":
+                        this.gestor.Refrescar(m);
+                        break;
+                    case "NuevoContenedor":
+                        this.gestor.AvanzarPedido(m);
+                        break;
+                    case "TraerPedidos":
+                        this.gestor.TraerPedidos(m);
+                        break;
+                    case "ObtenerTransportistas":
+                        this.gestor.ObtenerTransportistas(m);
+                        break;
+                    case "AvanzarPedido":
+                        this.gestor.AvanzarPedido(m);
+                        break;
+                    case "ObtenerPosiciones":
+                        m.datos = this.gestor.productos.BuscarCodigo(m.codigo_producto);
+                        _ = m.conexion.Enviar(JsonSerializer.Serialize(m));
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                this.gestor.EscribirError("Error (MensajeEntrante): " + e.StackTrace);
+            }
         }
     }
 

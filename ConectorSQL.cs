@@ -24,10 +24,11 @@ namespace NoCocinoMas
         static public string selectPosiciones = "SELECT * FROM posiciones WHERE modulo_id > 0 AND estado > -1";
         static public string selectProductos = "SELECT * FROM productos";
         static public string selectEnvases = "SELECT * FROM envases";
+        static public string selectUbicaciones = "SELECT * FROM ubicaciones";
         static public string selectCentralitas = "SELECT * FROM centralitas";
         static public string selectOperarios = "SELECT * FROM operarios";
         static public string selectRoles = "SELECT * FROM roles";
-        static public string selectPedidosFiltrado = "SELECT * FROM pedidos WHERE envio > '{0}' ORDER BY numero";
+        static public string selectPedidosFiltrado = "SELECT * FROM pedidos WHERE envio > '{0}' ORDER BY indice_recogida ASC, numero ASC";
         static public string selectLineasPedidoFiltrado = "SELECT * FROM lineas_pedido WHERE pedido_numero IN ({0}) ORDER BY pedido_numero";
         static public string selectBloqueos = "SELECT * FROM bloqueo";
         static public string selectMovimientos = "SELECT * FROM movimientos";
@@ -43,10 +44,11 @@ namespace NoCocinoMas
         static public string obtenerPedidosPS = "SELECT o.id_order as numero, ad.postcode as cp, o.date_upd as fecha, 0 as estado, dd.tramo_date as envio, t.id_reference as transportista FROM ps_orders o join ps_cart dd on (dd.id_cart=o.id_cart) join ps_address ad on o.id_address_delivery=ad.id_address JOIN ps_carrier t on o.id_carrier=t.id_carrier WHERE dd.tramo_date >= '{0}' AND dd.tramo_date <= '{1}' AND current_state in (2,3,4,15,16,20,23) ORDER BY numero ASC";
         static public string obtenerLineasPedidoPS = "SELECT 0 as id, od.id_order AS pedido_numero, od.product_id AS producto_codigo, round(od.product_quantity,2) AS cantidad, 0 as recogido, 0 as estado FROM ps_order_detail od WHERE od.id_order in ({0}) ORDER BY od.id_order ASC";
         static public string obtenerMenusPS = "SELECT id_product_pack AS menu_id, id_product_item AS products_id, quantity AS products_quantity FROM ps_pack";
-        static public string obtenerProductosPS = "SELECT pd.id_product AS id, pd.id_product AS codigo, pd.name AS nombre, 1 as envase_id, 0 as stock, ppt.posicion_clasif AS posicionClasificacion, ppt.posicion_almac AS posicionAlmacenamiento FROM ps_product_lang pd join ps_product p on (pd.id_product=p.id_product and active=1) JOIN ps_product_ptl ppt ON pd.id_product = ppt.id_product;";
+        static public string obtenerProductosPS = "SELECT pd.id_product AS id, pd.id_product AS codigo, pd.name AS nombre, 1 as envase_id, 0 as stock, ppt.posicion_clasif AS posicionRecogida, ppt.posicion_almac AS posicionAlmacenamiento FROM ps_product_lang pd join ps_product p on (pd.id_product=p.id_product and active=1) JOIN ps_product_ptl ppt ON pd.id_product = ppt.id_product;";
         static public string vaciarStock = "TRUNCATE ps_stock_web;";
         static public string sobreescribirStock = "INSERT INTO ps_stock_web (products_id, fechaLote, cantidad) VALUES ({0}, '{1}', {2}) ON DUPLICATE KEY UPDATE cantidad=cantidad+{2};";
         static public string insertarTrazabilidad = "INSERT INTO ps_trazabilidad (id_order, id_product, lote, cantidad) VALUES ({0}, {1}, '{2}', {3});";
+        static public string obtenerTransportistasPS = "SELECT id_carrier, name FROM ps_carrier;";
 
         //INSERT
         static public string guardarProductos = "INSERT INTO productos (codigo, nombre, envase_id, stock) VALUES {0};";
@@ -61,7 +63,8 @@ namespace NoCocinoMas
         static public string insertPosicion = "INSERT INTO posiciones (nombre, balda, modulo_id, centralita_id, linea, led_inicial, led_longitud, producto_codigo, cantidad, lote, capacidad, envase, estado) VALUES {0};";
         static public string insertProducto = "INSERT INTO productos (codigo, nombre, envase_id, stock) VALUES {0};";
         static public string insertEnvase = "INSERT INTO envases (nombre, ancho, largo, alto, volumen, peso) VALUES {0};";
-        static public string insertPedido = "INSERT INTO pedidos (numero, estado, fecha, cp, envio, transportista) VALUES {0};";
+        static public string insertUbicacion = "INSERT INTO ubicaciones (nombre, linea, inicio, ancho) VALUES {0};";
+        static public string insertPedido = "INSERT INTO pedidos (numero, estado, fecha, cp, envio, transportista, caja, indice_modulo, indice_recogida) VALUES {0};";
         static public string insertLineaPedido = "INSERT INTO lineas_pedido (pedido_numero, producto_codigo, cantidad, recogido, estado) VALUES {0};";
         static public string insertMovimiento = "INSERT INTO movimientos (operario_id, producto_codigo, lote, cantidad, posicion_nombre, pedido_numero, linea_pedido_id, accion) VALUES {0};";
 
@@ -74,8 +77,12 @@ namespace NoCocinoMas
         static public string updatePosicion = "UPDATE posiciones SET nombre='{1}', balda={2}, modulo_id={3}, centralita_id={4}, linea={5}, led_inicial={6}, led_longitud={7}, producto_codigo={8}, cantidad={9}, lote='{10}', capacidad={11}, envase={12}, estado='{13}' WHERE id={0};";
         static public string updateProducto = "UPDATE productos SET codigo={1}, nombre='{2}', envase_id={3}, stock={4} WHERE id={0};";
         static public string updateEnvase = "UPDATE envases SET nombre='{1}', ancho={2}, largo={3}, alto={4}, volumen={5}, peso={6} WHERE id={0};";
+        static public string updateUbicacion = "UPDATE ubicaciones SET nombre='{1}', linea={2}, inicio={3}, ancho={4} WHERE id={0};";
         static public string updatePedido = "UPDATE pedidos SET numero={1}, fecha='{2}', estado={3}, cp='{4}', envio='{5}', transportista={6} WHERE id={0};";
         static public string updateLineaPedido = "UPDATE lineas_pedido SET cantidad={1}, recogido={2}, estado={3} WHERE id={0};";
+
+        static public string updateRecogida = "UPDATE pedidos SET caja='{1}', indice_modulo={2}, indice_recogida={3} WHERE id={0};";
+
 
         static public string updateReposicion = "UPDATE posiciones SET producto_codigo={1}, cantidad={2}, lote='{3}' WHERE id={0};";
         static public string updateRecogidaLineas = "UPDATE lineas_pedido SET recogido={1}, estado={2} WHERE id={0};";

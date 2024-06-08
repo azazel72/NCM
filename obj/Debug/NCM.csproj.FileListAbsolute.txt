@@ -107,3 +107,8 @@ C:\Users\Rafa\Documents\GitHub\NCM\obj\Debug\NCM.csproj.Up2Date
 C:\Users\Rafa\Documents\GitHub\NCM\obj\Debug\NoCocinoMas.exe
 C:\Users\Rafa\Documents\GitHub\NCM\obj\Debug\NoCocinoMas.pdb
 C:\Users\Rafa\Documents\GitHub\NCM\bin\Debug\NoCocinoMas.pdb
+C:\Users\Rafa\Documents\GitHub\NCM\bin\Debug\IdentityModel.dll
+C:\Users\Rafa\Documents\GitHub\NCM\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Rafa\Documents\GitHub\NCM\bin\Debug\IdentityModel.pdb
+C:\Users\Rafa\Documents\GitHub\NCM\bin\Debug\IdentityModel.xml
+C:\Users\Rafa\Documents\GitHub\NCM\bin\Debug\Newtonsoft.Json.xml

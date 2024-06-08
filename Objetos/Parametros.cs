@@ -27,6 +27,20 @@ namespace NoCocinoMas
             }
         }
 
+        public long BuscarLong(string nombre)
+        {
+            Parametro par = this.Find(p => p.name == nombre);
+            try
+            {
+                return par.value != null ? long.Parse(par.value) : 0;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+
         public DateTime BuscarFecha(string nombre)
         {
             Parametro par = this.Find(p => p.name == nombre);

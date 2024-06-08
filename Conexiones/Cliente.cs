@@ -1,6 +1,9 @@
 ﻿using Newtonsoft.Json;
+using System;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Conexiones
 {
@@ -10,7 +13,7 @@ namespace Conexiones
         public HttpContent cuerpo { get; set; }
         public string usuario { get; set; }
         public string clave { get; set; }
-        public T? respuesta { get; set; }
+        public T respuesta { get; set; }
         public bool error { get; set; }
         public Exception excepcion { get; set; }
         public string respuestaOriginal { get; set; }
@@ -25,7 +28,7 @@ namespace Conexiones
 
         private void CrearCliente()
         {
-            this.cliente = new();
+            this.cliente = new HttpClient();
 
             this.cliente.DefaultRequestHeaders.Accept.Clear();
             this.cliente.DefaultRequestHeaders.ConnectionClose = true;
@@ -48,7 +51,7 @@ namespace Conexiones
         /// <param name="url"></param>
         /// <param name="cuerpo"></param>
         /// <returns></returns>
-        public async Task ConectarPost(string? cuerpo)
+        public async Task ConectarPost(string cuerpo)
         {
             Encoding iso = Encoding.GetEncoding("ISO-8859-1");
             Encoding utf8 = Encoding.UTF8;
@@ -56,7 +59,7 @@ namespace Conexiones
             try
             {
                 CrearCliente();
-                StringContent? queryString = cuerpo != null ? new StringContent(cuerpo) : null;
+                StringContent queryString = cuerpo != null ? new StringContent(cuerpo) : null;
                 HttpResponseMessage response = await this.cliente.PostAsync(url, queryString);
 
                 string buffer = await response.Content.ReadAsStringAsync();

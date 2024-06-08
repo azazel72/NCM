@@ -36,5 +36,10 @@ namespace NoCocinoMas
             r.objeto = o;
             return r;
         }
+
+        public string Serializar()
+        {
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this);
+        }
     }
 }

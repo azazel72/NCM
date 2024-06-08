@@ -1,14 +1,17 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Sockets;
 using System.Net.WebSockets;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Conexiones
 {
     public class ServidorPermanente
     {
         //como parametro recibo una interfaz que contiene el callback y la lista de sockets
-        public static async Task Iniciar(int puertoServidor = 7000, ISubscriptorPermanente? subscriptor = null)
+        public static async Task Iniciar(int puertoServidor = 7000, ISubscriptorPermanente subscriptor = null)
         {
             HttpListener listener = new HttpListener();
             listener.Prefixes.Add("http://*:" + puertoServidor.ToString() + "/");
@@ -44,12 +47,12 @@ namespace Conexiones
             }
         }
 
-        public static void IniciarHilo(int puertoServidor = 7000, ISubscriptorPermanente? subscriptor = null)
+        public static void IniciarHilo(int puertoServidor = 7000, ISubscriptorPermanente subscriptor = null)
         {
             new Thread(() => _ = Servidor(puertoServidor, subscriptor)).Start();
         }
 
-        private static async Task Servidor(int puertoServidor = 7000, ISubscriptorPermanente? subscriptor = null)
+        private static async Task Servidor(int puertoServidor = 7000, ISubscriptorPermanente subscriptor = null)
         {
             HttpListener listener = new HttpListener();
             listener.Prefixes.Add("http://*:" + puertoServidor.ToString() + "/");

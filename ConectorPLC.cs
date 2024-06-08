@@ -242,5 +242,50 @@ namespace NoCocinoMas
             }
             bloqueoEnviarHttp.Release();
         }
+
+        static private async Task EnviarHttpPost(string url, string postData)
+        {
+            await bloqueoEnviarHttp.WaitAsync();
+            HttpClient cliente = null;
+            try
+            {
+                cliente = new HttpClient();
+                cliente.DefaultRequestHeaders.Accept.Clear();
+                cliente.Timeout = TimeSpan.FromSeconds(5);
+
+                // envío de mensaje
+                HttpContent content = new StringContent(postData, Encoding.UTF8, "application/json");
+                HttpResponseMessage respuesta = await cliente.PostAsync(url, content);
+                respuesta.EnsureSuccessStatusCode();
+                string responseBody = await respuesta.Content.ReadAsStringAsync();
+                Console.WriteLine(responseBody);
+                cliente.Dispose();
+            }
+            catch (Exception e)
+            {
+                Gestor.gestor.EscribirError("(ERROR Envio Http: " + url + "): " + e.Message);
+                if (cliente != null)
+                {
+                    cliente.CancelPendingRequests();
+                    cliente.Dispose();
+                    Gestor.gestor.EscribirError("Liberado con errores");
+                }
+            }
+            bloqueoEnviarHttp.Release();
+        }
+
+        static public void EncenderPedidos(string postData)
+        {
+            try
+            {
+                string uri = String.Format("http://{0}:{1}/actualizar", Gestor.ipControlador, Gestor.puertoCentralita);
+                _ = EnviarHttpPost(uri, postData);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
     }
 }

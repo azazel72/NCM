@@ -1,11 +1,14 @@
-﻿using System.Net.WebSockets;
+﻿using System;
+using System.Net.WebSockets;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Conexiones
 {
     public class ClientePermanente
     {
         //como parametro recibo una interfaz que contiene el callback y la lista de sockets
-        public static async Task Iniciar(string endpoint, string origen, ISubscriptorPermanente? subscriptor = null)
+        public static async Task Iniciar(string endpoint, string origen, ISubscriptorPermanente subscriptor = null)
         {
             try
             {

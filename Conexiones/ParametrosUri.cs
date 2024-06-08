@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -82,10 +83,10 @@ namespace Conexiones
 
         public static Dictionary<string, string> ExtraerParametros(string uri)
         {
-            Dictionary<string, string> parametros = new();
+            Dictionary<string, string> parametros = new Dictionary<string, string>();
             uri = HttpUtility.HtmlDecode(uri);
             
-            foreach (string par in uri.Split("&"))
+            foreach (string par in uri.Split("&".ToCharArray()))
             {
                 string[] p = par.Split('=');
                 if (p.Length == 2)

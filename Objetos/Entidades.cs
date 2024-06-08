@@ -42,6 +42,14 @@ namespace NoCocinoMas
             }
         }
 
+        public void Eliminar(Entidad e)
+        {
+            if (e != null)
+            {
+                this.listado.Remove(e);
+            }
+        }
+
         /// <summary>
         /// Agregamos a la lista la lista pasada como parametro
         /// </summary>
@@ -127,15 +135,6 @@ namespace NoCocinoMas
         public bool ExisteId(object id)
         {
             return this.listado?.Exists(e => e.Comparar(id)) ?? false;
-        }
-
-        /// <summary>
-        /// Elimina el elemento del listado
-        /// </summary>
-        /// <param name="id"></param>
-        public void Eliminar(Entidad e)
-        {
-            this.listado.Remove(e);
         }
 
         /// <summary>

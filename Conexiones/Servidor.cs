@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Text;
 using System.Web;
+using System.Collections.Generic;
 
 namespace Conexiones
 {
@@ -81,15 +82,15 @@ namespace Conexiones
             try
             {
                 //dividimos el mensaje en cabecera y cuerpo
-                string[] mensaje = data.Split("\r\n\r\n");
+                string[] mensaje = data.Split("\r\n\r\n".ToCharArray());
                 if (mensaje.Length > 0)
                 {
                     //dividimos la cabera en lineas
-                    string[] cabeceraHTTP = mensaje[0].Split("\r\n");
+                    string[] cabeceraHTTP = mensaje[0].Split("\r\n".ToCharArray());
                     if (cabeceraHTTP.Length > 0)
                     {
                         //dividimos la primera linea
-                        string[] peticion = cabeceraHTTP[0].Split(" ");
+                        string[] peticion = cabeceraHTTP[0].Split(" ".ToCharArray());
                         if (peticion.Length > 1)
                         {
                             //la peticion debe ser GET
@@ -99,10 +100,10 @@ namespace Conexiones
                                 resultado = true;
 
                                 //separamos la ruta de los parametros
-                                string[] url = peticion[1].Split("?");
+                                string[] url = peticion[1].Split("?".ToCharArray());
 
                                 //obtenemos los comandos
-                                comandos = url[0].Split("/");
+                                comandos = url[0].Split("/".ToCharArray());
                                 this.subscriptor.LogInformation(url[0]);
 
                                 //obtenemos los parametros si los hubiere
@@ -125,7 +126,7 @@ namespace Conexiones
             return resultado;
         }
 
-        private string ResponseOK(string? datos = "")
+        private string ResponseOK(string datos = "")
         {
             return string.Format("HTTP/1.1 200 OK\nContent - Type: application/json\nContent - Length: {0}\nConnection: close\nAccess-Control-Allow-Origin: *\nAccess-Control-Allow-Methods: GET,POST,OPTIONS\nAccess-Control-Allow-Headers: Content-Type\nAccess-Control-Allow-Credentials: false\n\n{1}", datos.Length, datos);
         }

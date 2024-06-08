@@ -1,9 +1,11 @@
-﻿using iText.Kernel.Geom;
+﻿using Conexiones;
+using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Parser;
 using iText.Kernel.Pdf.Canvas.Parser.Listener;
 using iText.Layout;
 using Microsoft.VisualBasic.FileIO;
+using NoCocinoMas.Objetos;
 using Org.BouncyCastle.Utilities;
 using RawPrint;
 using System;
@@ -40,6 +42,8 @@ namespace NoCocinoMas
         public Operarios operarios;
         public Roles roles;
         public Pedidos pedidos;
+        public Pedidos pedidosTransito;
+        public Pedidos pedidosCompletar;
         public Tareas tareas;
         //tener todas las lineas es comodo para saber las cantidades totales de algo, y las pendientes de otros pedidos
         public LineasPedido lineasPedido;
@@ -48,6 +52,8 @@ namespace NoCocinoMas
         public Movimientos movimientos;
         public Menus menus;
         public Producto productoIluminado;
+        public Transportistas transportistas;
+        public Ubicaciones ubicaciones;
 
         public Dictionary<string, Entidades> listados;
         public Dictionary<string, DataGridView> tablas;
@@ -57,14 +63,19 @@ namespace NoCocinoMas
         static private readonly object bloqueoListados = new object();
         static private readonly object bloqueoOK = new object();
         static private readonly object bloqueoObtenerPedidos = new object();
+        static private readonly object bloqueoRecogida = new object();
 
         static public string ipTestModulos = "127.0.0.1";
         //static public string ipTest = "127.0.0.1";
         //static public string ipTest = "192.168.1.175";
         static public string ipTest = "192.168.1.147";
         //static public string ipTest = "";
-        static public int puertoCentralita = 8000;
         static public int puertoModulos = 80;
+
+        static public string ipControlador = "192.168.1.254";
+        static public int puertoCentralita = 8000;
+
+        public Dictionary<string, ConexionPermanente> conexiones;
 
         public Gestor()
         {
@@ -82,6 +93,8 @@ namespace NoCocinoMas
             this.operarios = new Operarios();
             this.roles = new Roles();
             this.pedidos = new Pedidos();
+            this.pedidosTransito = new Pedidos();
+            this.pedidosCompletar = new Pedidos();
             this.lineasPedido = new LineasPedido();
             this.tareas = new Tareas(this);
             this.controlModulos = new ControlModulos();
@@ -134,6 +147,10 @@ namespace NoCocinoMas
             this.versiones.Add("lineas_pedido", 0);
             this.versiones.Add("movimientos", 0);
             this.versiones.Add("menus", 0);
+
+            this.transportistas = new Transportistas();
+            this.ubicaciones = new Ubicaciones();
+            this.conexiones = new Dictionary<string, ConexionPermanente>();
         }
 
         private void Gestor_Load(object sender, EventArgs e)
@@ -206,6 +223,9 @@ namespace NoCocinoMas
                     this.MostrarEntidades(this.tablaProductos, this.productos);
                     ValorProgreso(this.progresoProductos, 100);
 
+                    //Ubicaciones
+                    ConectorSQL.CargarEntidades(ConectorSQL.selectUbicaciones, this.ubicaciones);
+
                     //Actualizar productos
                     ActualizarProductos();
 
@@ -240,6 +260,10 @@ namespace NoCocinoMas
                         //Movimientos
                         string consultaMovimientos = string.Format(ConectorSQL.selectMovimientosFiltrado, this.pedidos.ListadoNumeros());
                         ConectorSQL.CargarEntidades(consultaMovimientos, this.movimientos);
+
+                        //Pedidos en transito
+                        this.pedidosTransito.Agregar(this.pedidos.PedidosTransito());
+                        this.pedidosCompletar.Agregar(this.pedidos.PedidosCompletar());
                     }
 
                     //Menus
@@ -260,6 +284,7 @@ namespace NoCocinoMas
 
                     // agregamos los envases a los productos
                     this.productos.VincularEnvases(this.envases);
+                    this.productos.VincularUbicaciones(this.ubicaciones);
 
                     // agregamos los roles a los operarios
                     this.operarios.VincularRoles(this.roles);
@@ -690,9 +715,8 @@ namespace NoCocinoMas
                                 //verificamos si es posible el cambio de estado
                                 Pedido p = (Pedido)e;
 
-                                
+
                                 r = e.UpdateSQL(parametros);
-                                break;
                                 break;
                             default:
                                 e = (IEntidad)this.listados[entidad].BuscarId(id);
@@ -759,7 +783,7 @@ namespace NoCocinoMas
                     switch (entidad)
                     {
                         case "lineas_pedido":
-                            LineaPedido l = (LineaPedido) this.lineasPedido.BuscarId(id);
+                            LineaPedido l = (LineaPedido)this.lineasPedido.BuscarId(id);
                             l.pedido.lineas.Eliminar(l);
                             this.lineasPedido.Eliminar(l);
                             break;
@@ -1169,7 +1193,8 @@ namespace NoCocinoMas
                         {
                             if (row.Cells[0].Value == posicion.id)
                             {
-                                if (posicion.producto != null) {
+                                if (posicion.producto != null)
+                                {
                                     row.Cells[8].Value = posicion.producto.codigo;
                                     row.Cells[9].Value = posicion.cantidad;
                                     row.Cells[10].Value = posicion.lote;
@@ -1650,6 +1675,9 @@ namespace NoCocinoMas
                 nuevosProductos.VincularEnvases(this.envases);
                 //es necesario volver a vincular los productos a las lineas de pedido
                 this.lineasPedido.VincularProductosNuevos(nuevosProductos);
+
+                //vincular ubicaciones
+                nuevosProductos.VincularUbicaciones(this.ubicaciones);
             }
             ConectorJSON.GuardarObjeto("./productos.json", this.productos);
             Estado("Actualizacion completada");
@@ -1680,7 +1708,7 @@ namespace NoCocinoMas
                     string posicion_id = parametros.Buscar("posicion_extraccion");
                     int producto_id = parametros.BuscarInt("codigo_extraccion");
                     int cantidad = parametros.BuscarInt("cantidad_extraccion");
-                    Operario operario = (Operario) this.operarios.BuscarId(operario_id);
+                    Operario operario = (Operario)this.operarios.BuscarId(operario_id);
                     string lote = parametros.Buscar("lote_extraccion");
 
                     if (operario == null)
@@ -2022,7 +2050,7 @@ namespace NoCocinoMas
                 string fechaDesde = fechaDesdePS.Value.ToString("yyyy-MM-dd");
                 string fechaHasta = fechaHastaPS.Value.ToString("yyyy-MM-dd");
                 //Obtenemos los ultimos pedidos
-                
+
                 string cadena = string.Format(ConectorSQL.obtenerPedidosPS, fechaDesde, fechaHasta);
                 ConectorSQL.CargarEntidades(cadena, nuevosPedidos, false, ConectorSQL.cadenaConexionPS);
                 if (nuevosPedidos.Contador() == 0)
@@ -2231,7 +2259,7 @@ namespace NoCocinoMas
 
                         Imprimir.Imprime(archivo_etiqueta, impresoraEnviosTxt.Text, sufijo);
                         //Imprimir.Imprime(archivo_etiqueta, impresoraEnviosTxt.Text, sufijo);
-                        
+
                         //Console.WriteLine(archivo_etiqueta);
                         //FileSystem.DeleteFile(archivo_etiqueta);
 
@@ -2299,6 +2327,83 @@ namespace NoCocinoMas
 
         private void buscador_HelpRequest(object sender, EventArgs e)
         {
+
+        }
+
+        public void AvanzarPedido(MensajeClienteServidor mensaje)
+        {
+            lock(bloqueoRecogida)
+            {
+                //se avanza el pedido que este en el modulo uno y se toma el siguiente de la lista
+                Pedido p = this.pedidosTransito.AvanzarPedido(mensaje.indice_modulo);
+                if (p != null && p.indice_modulo == 5)
+                {
+                    this.pedidosTransito.Eliminar(p);
+                    this.pedidosCompletar.Agregar(p);
+                }
+
+                if (mensaje.indice_modulo == 1 && !string.IsNullOrEmpty(mensaje.caja))
+                {
+                    //se recupera el siguiente pedido de la lista (de la mensajeria), y pasa al modulo 1
+                    p = this.pedidos.NuevaCaja(mensaje.transportista, mensaje.caja);
+                    this.pedidosTransito.Agregar(p);
+                }
+
+                mensaje.accion = "Refrescar";
+                mensaje.datos = this.pedidosTransito;
+                string m = JsonSerializer.Serialize(mensaje); ;
+                _ = mensaje.conexion.Enviar(m);
+
+                IluminarModulos();
+            }
+        }
+
+        public void Refrescar(MensajeClienteServidor mensaje)
+        {
+            mensaje.datos = this.pedidosTransito;
+            string m = JsonSerializer.Serialize(mensaje); ;
+            _ = mensaje.conexion.Enviar(m);
+        }
+
+        public void TraerPedidos(MensajeClienteServidor mensaje)
+        {
+            lock(bloqueoRecogida)
+            {
+                mensaje.datos = this.pedidos.PedidosPendientes();
+                string m = JsonSerializer.Serialize(mensaje);
+                _ = mensaje.conexion.Enviar(m);
+            }
+        }
+
+        public void ObtenerTransportistas(MensajeClienteServidor mensaje)
+        {
+            ConectorSQL.CargarEntidades(ConectorSQL.obtenerTransportistasPS, this.transportistas, false, ConectorSQL.cadenaConexionPS);
+            mensaje.datos = this.transportistas;
+            string m = JsonSerializer.Serialize(mensaje);
+            _ = mensaje.conexion.Enviar(m);
+        }
+
+        public void IluminarModulos()
+        {
+            try
+            {
+                List<string> csv = new List<string>();
+                for (int i = 1; i < 5; i++)
+                {
+                    Pedido pedido = this.pedidosTransito.FiltrarPedidoModulo(i);
+                    if (pedido != null)
+                    {
+                        pedido.ObtenerUbicacionesModulo(i).ConvertAll<string>(ubicacion => ubicacion.ToCSV()).ForEach(csv.Add);
+                    }
+                }
+
+                string postData = string.Join(";", csv);
+                ConectorPLC.EncenderPedidos(postData);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
 
         }
     }

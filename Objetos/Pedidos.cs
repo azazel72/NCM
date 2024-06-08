@@ -5,6 +5,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Text.Json.Serialization;
 using System.Text;
+using static iText.Svg.SvgConstants;
 
 namespace NoCocinoMas
 {
@@ -202,6 +203,37 @@ namespace NoCocinoMas
             return string.Join(",", numeros);
             */
         }
+
+        public Pedido AvanzarPedido(int indice_modulo)
+        {
+            Pedido pedidoAvanzado = (Pedido)this.listado.Find(pedido => ((Pedido)pedido).indice_modulo == indice_modulo);
+            pedidoAvanzado?.AvanzarPedido();
+            return pedidoAvanzado;
+        }
+        public Pedido NuevaCaja(int transportista, string caja)
+        {
+            Pedido pedidoEntrante = (Pedido)this.listado.Find(pedido => ((Pedido)pedido).DisponibleRecogida(transportista));
+            pedidoEntrante?.AvanzarPedido(caja);
+            return pedidoEntrante;
+        }
+        
+        public List<Pedido> PedidosCompletar()
+        {
+            return this.listado.ConvertAll(pedido => (Pedido)pedido).FindAll(pedido => pedido.estado == 0 && pedido.indice_modulo == 5);
+        }
+        public List<Pedido> PedidosTransito()
+        {
+            return this.listado.ConvertAll(pedido => (Pedido)pedido).FindAll(pedido => pedido.estado == 0 && pedido.indice_modulo > 0 && pedido.indice_modulo < 5 && !string.IsNullOrEmpty(pedido.caja));
+        }
+        public List<Pedido> PedidosPendientes()
+        {
+            return this.listado.ConvertAll(pedido => (Pedido)pedido).FindAll(pedido => pedido.estado == 0);
+        }
+
+        public Pedido FiltrarPedidoModulo(int indice_modulo)
+        {
+            return (Pedido)this.listado.Find(pedido => ((Pedido)pedido).indice_modulo == indice_modulo);
+        }
     }
 
     public class Pedido : Entidad, IEntidad
@@ -217,6 +249,7 @@ namespace NoCocinoMas
         public LineasPedido lineas { get; set; }
         public Movimientos movimientos { get; set; }
         public string caja { get; set; }
+        public long indice_recogida { get; set; }
         public int indice_modulo { get; set; }
 
         private bool movimientos_completados = false;
@@ -230,8 +263,11 @@ namespace NoCocinoMas
             this.cp = parametros.Buscar("cp");
             this.envio = parametros.Buscar("envio");
             this.transportista = parametros.BuscarInt("transportista");
+            this.caja = parametros.Buscar("caja");
+            this.indice_modulo = parametros.BuscarInt("indice_modulo");
+            this.indice_recogida = parametros.BuscarLong("indice_recogida");
         }
-        public Pedido(int id, int numero, int estado, DateTime fecha, string cp, string envio, int transportista)
+        public Pedido(int id, int numero, int estado, DateTime fecha, string cp, string envio, int transportista, string caja, int indice_modulo, long indice_recogida)
         {
             this.id = id;
             this.numero = numero;
@@ -240,6 +276,9 @@ namespace NoCocinoMas
             this.cp = cp;
             this.envio = envio;
             this.transportista = transportista;
+            this.caja = caja;
+            this.indice_modulo = indice_modulo;
+            this.indice_recogida = indice_recogida;
             this.lineas = new LineasPedido();
             this.movimientos = new Movimientos();
         }
@@ -253,6 +292,9 @@ namespace NoCocinoMas
             //this.envio = datos.GetString("envio").Substring(0, 10); //formato dd/mm/aaaa
             this.envio = !datos.IsDBNull(4) ? datos.GetDateTime("envio").ToString("yyyy-MM-dd") : "";
             this.transportista = datos.GetInt32("transportista");
+            this.caja = datos.GetString("caja");
+            this.indice_modulo = datos.GetInt32("indice_modulo");
+            this.indice_recogida = datos.GetInt64("indice_recogida");
             this.lineas = new LineasPedido();
             this.movimientos = new Movimientos();
         }
@@ -270,7 +312,21 @@ namespace NoCocinoMas
                 this.estado,
                 this.cp,
                 this.envio,
-                this.transportista
+                this.transportista,
+                this.caja,
+                this.indice_modulo,
+                this.indice_recogida
+            };
+            return valores;
+        }
+
+        public object[] GetValoresRecogida()
+        {
+            object[] valores = {
+                this.id,
+                this.caja,
+                this.indice_modulo,
+                this.indice_recogida
             };
             return valores;
         }
@@ -289,6 +345,9 @@ namespace NoCocinoMas
                 this.envio,
                 this.transportista,
                 this.estado,
+                this.caja,
+                this.indice_modulo,
+                this.indice_recogida,
             };
             return valores;
         }
@@ -300,14 +359,17 @@ namespace NoCocinoMas
         /// <returns></returns>
         public string GetValoresInsertSQL()
         {
-            return string.Format("({0}, {1},'{2}',{3},'{4}','{5}',{6})",
+            return string.Format("({0}, {1},'{2}',{3},'{4}','{5}',{6},'{7}',{8},{9})",
                 this.id,
                 this.numero,
                 this.fecha.ToString("yyyy-MM-dd HH:mm:ss"),
                 this.estado,
                 this.cp,
                 this.envio,
-                this.transportista
+                this.transportista,
+                this.caja,
+                this.indice_modulo,
+                this.indice_recogida
                 );
         }
 
@@ -327,6 +389,9 @@ namespace NoCocinoMas
             string cp = parametros.Buscar("cp");
             string envio = parametros.Buscar("envio");
             int transportista = parametros.BuscarInt("transportista");
+            string caja = parametros.Buscar("caja");
+            int indice_modulo = parametros.BuscarInt("indice_modulo");
+            long indice_recogida = parametros.BuscarLong("indice_recogida");
             //Comprobamos la correccion del estado
             if (estado != 2)
             {
@@ -340,7 +405,10 @@ namespace NoCocinoMas
                 this.estado,
                 this.cp,
                 this.envio,
-                this.transportista
+                this.transportista,
+                this.caja,
+                this.indice_modulo,
+                this.indice_recogida
         };
             if (!this.Comparar(id))
             {
@@ -357,6 +425,9 @@ namespace NoCocinoMas
                     this.cp = cp;
                     this.envio = envio;
                     this.transportista = transportista;
+                    this.caja = caja;
+                    this.indice_modulo = indice_modulo;
+                    this.indice_recogida = indice_recogida;
                 }
                 else
                 {
@@ -571,5 +642,47 @@ namespace NoCocinoMas
             }
             this.lineas = lineasAgrupadas;
         }
+
+        public void AvanzarPedido(string caja = null)
+        {
+            int indiceActual = this.indice_modulo;
+            string cajaActual = this.caja;
+            this.indice_modulo = indiceActual + 1;
+            if (!string.IsNullOrEmpty(caja) && caja != this.caja)
+            {
+                this.caja = caja;
+                this.indice_recogida = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeMilliseconds();
+            }
+            if (indiceActual != this.indice_modulo || cajaActual != this.caja)
+            {
+                //actualizamos BBDD
+                ConectorSQL.ActualizarEntidades(ConectorSQL.updateRecogida, this.GetValoresRecogida());
+            }
+        }
+
+        public bool DisponibleRecogida(int transportista)
+        {
+            return this.estado == 0 && this.transportista == transportista && this.indice_modulo == 0 && string.IsNullOrEmpty(this.caja);
+        }
+
+        public List<Ubicacion> ObtenerUbicacionesModulo(int indice = -1)
+        {
+            if (indice == -1) indice = this.indice_modulo;
+            List<Ubicacion> ubicaciones = new List<Ubicacion>();
+            if (indice > 0)
+            {
+                string letra = indice == 1 ? "A" : indice == 2 ? "B" : indice == 3 ? "C" : "D";
+                foreach (LineaPedido linea in this.lineas)
+                {
+                    if (linea.producto.posicionRecogida.StartsWith(letra))
+                    {
+                        linea.producto.ubicacionRecogida.ancho = linea.cantidad;
+                        ubicaciones.Add(linea.producto.ubicacionRecogida);
+                    }
+                }
+            }
+            return ubicaciones;
+        }
+
     }
 }

@@ -3,46 +3,47 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Conexiones
 {
     public class ConexionPermanente
     {
-        public static void NuevaConexion(ISubscriptorPermanente? subscriptor, WebSocket socket, string origen)
+        public static void NuevaConexion(ISubscriptorPermanente subscriptor, WebSocket socket, string origen)
         {
             ConexionPermanente nuevaConexion = new ConexionPermanente(subscriptor, socket, origen);
             _ = nuevaConexion.AtenderSocket();
         }
 
-        private ISubscriptorPermanente? subscriptor;
+        private ISubscriptorPermanente subscriptor;
         private WebSocket socket;
         public string id { get; set; }
         public string descripcion { get; set; }
         public Dictionary<string, object> atributos { get; set; }
         
-        public object? Get(string atributo)
+        public object Get(string atributo)
         {
-            this.atributos.TryGetValue(atributo, out object? retorno);
+            this.atributos.TryGetValue(atributo, out object retorno);
             return retorno;
         }
-        public T? Get<T>(string atributo)
+        public T Get<T>(string atributo)
         {
-            this.atributos.TryGetValue(atributo, out object? retorno);
-            return (T?)retorno;
+            this.atributos.TryGetValue(atributo, out object retorno);
+            return (T)retorno;
         }
         public void Set(string atributo, object valor)
         {
             this.atributos[atributo] = valor;
         }
 
-        private ConexionPermanente(ISubscriptorPermanente? subscriptor, WebSocket socket, string origen)
+        private ConexionPermanente(ISubscriptorPermanente subscriptor, WebSocket socket, string origen)
         {
             this.subscriptor = subscriptor;
             this.socket = socket;
             id = origen;
             descripcion = origen;
-            this.atributos = new();
+            this.atributos = new Dictionary<string, object>();
         }
 
         private async Task AtenderSocket()
