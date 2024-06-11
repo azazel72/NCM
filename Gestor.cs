@@ -2352,7 +2352,7 @@ namespace NoCocinoMas
                 mensaje.accion = "Refrescar";
                 mensaje.datos = this.pedidosTransito;
                 string m = JsonSerializer.Serialize(mensaje); ;
-                _ = mensaje.conexion.Enviar(m);
+                _ = mensaje.conexion?.Enviar(m);
 
                 IluminarModulos();
             }
@@ -2390,7 +2390,9 @@ namespace NoCocinoMas
                 List<string> csv = new List<string>();
                 for (int i = 1; i < 5; i++)
                 {
-                    Pedido pedido = this.pedidosTransito.FiltrarPedidoModulo(i);
+                    Pedido pedido = this.pedidosTransito.FiltrarPedidoMinModulo(i);
+                    csv.Add("<Modulo " + i + ">");
+                    csv.Add("#Pedido " + pedido?.numero ?? "0");
                     if (pedido != null)
                     {
                         pedido.ObtenerUbicacionesModulo(i).ConvertAll<string>(ubicacion => ubicacion.ToCSV()).ForEach(csv.Add);
@@ -2398,7 +2400,7 @@ namespace NoCocinoMas
                 }
 
                 string postData = string.Join(";", csv);
-                ConectorPLC.EncenderPedidos(postData);
+                ConectorPLC.EncenderPedidos("Actualizar " + postData);
             }
             catch (Exception e)
             {

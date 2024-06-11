@@ -223,6 +223,10 @@ namespace NoCocinoMas
         {
             this.ubicacionAlmacenamiento = (Ubicacion)ubicaciones.listado.Find(ubicacion => ((Ubicacion) ubicacion).nombre == this.posicionAlmacenamiento);
             this.ubicacionRecogida = (Ubicacion)ubicaciones.listado.Find(ubicacion => ((Ubicacion)ubicacion).nombre == this.posicionRecogida);
+            if (this.ubicacionRecogida == null)
+            {
+                Console.WriteLine("Ubicacion de recogida no encontrada: " + this.posicionRecogida);
+            }
         }
 
         /// <summary>

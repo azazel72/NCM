@@ -316,46 +316,20 @@ evento: 192.168.137.18
                 string origen = ((IPEndPoint)conexion.RemoteEndPoint).Address.ToString();
                 try
                 {
-                    mensaje = new Mensaje(m);
-                    mensaje.ip = origen;
-                    //cliente.println(String("reconexion_wifi: 0\r\n") + "reconexion_servidor: " + String(reconexion_servidor) + "\r\n" + "identificador: c01\r\n" + "cantidad: 0\r\n" + "evento: Conexion controlador de luces, IP" + Ethernet.localIP() + "\r\n");
+                    int.TryParse(m, out int id_modulo);
+                    //Procesar evento
+                    lock (Servidor.bloqueoAccion)
+                    {
+                        MensajeClienteServidor retorno = new MensajeClienteServidor();
+                        retorno.accion = "BotonContinuar";
+                        retorno.indice_modulo = id_modulo;
+                        this.gestor.AvanzarPedido(retorno);
+                    }
                 }
                 catch (Exception e)
                 {
                     this.gestor.EscribirError("Error (Crear Servidor Controladores, mensaje no válido): " + origen + " -> " + e.Message);
                     return;
-                }
-                //Procesar evento
-                lock (Servidor.bloqueoAccion)
-                {
-                    //comprobar si es un modulo o un controlador
-                    Modulo modulo = this.gestor.modulos.BuscarAlias(mensaje.identificador);
-                    if (modulo != null)
-                    {
-                        this.gestor.ActualizarIpModulo(modulo, origen);
-                    }
-                    else
-                    {
-                        Centralita centralita = this.gestor.centralitas.BuscarAlias(mensaje.identificador);
-                        if (centralita != null)
-                        {
-                            this.gestor.ActualizarIpCentralita(centralita, origen);
-                        }
-                    }
-                    switch (mensaje.evento)
-                    {
-                        //comando del display
-                        case "OK":
-                            this.gestor.PulsarOk(mensaje);
-                            break;
-                        case "mas":
-                        case "menos":
-
-                            break;
-                        //ip de conexion
-                        default:
-                            break;
-                    }
                 }
                 conexion.Close();
             }
@@ -690,7 +664,7 @@ evento: 192.168.137.18
                                 r.Error("Parametros codigo_producto y color_posicion requeridos");
                             }
                             return responseOK(r.Serializar());
-                        case "BotonConinuar":
+                        case "BotonContinuar":
                             if (argumentos.ContainsKey("boton"))
                             {
                                 MensajeClienteServidor m = new MensajeClienteServidor();

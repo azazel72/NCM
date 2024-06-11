@@ -234,6 +234,12 @@ namespace NoCocinoMas
         {
             return (Pedido)this.listado.Find(pedido => ((Pedido)pedido).indice_modulo == indice_modulo);
         }
+
+        public Pedido FiltrarPedidoMinModulo(int indice_modulo)
+        {
+            return (Pedido)this.listado.Find(pedido => ((Pedido)pedido).indice_modulo <= indice_modulo);
+        }
+
     }
 
     public class Pedido : Entidad, IEntidad
@@ -674,7 +680,7 @@ namespace NoCocinoMas
                 string letra = indice == 1 ? "A" : indice == 2 ? "B" : indice == 3 ? "C" : "D";
                 foreach (LineaPedido linea in this.lineas)
                 {
-                    if (linea.producto.posicionRecogida.StartsWith(letra))
+                    if (linea.producto?.posicionRecogida?.StartsWith(letra) ?? false)
                     {
                         linea.producto.ubicacionRecogida.ancho = linea.cantidad;
                         ubicaciones.Add(linea.producto.ubicacionRecogida);

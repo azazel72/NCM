@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Conexiones;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -243,33 +244,43 @@ namespace NoCocinoMas
             bloqueoEnviarHttp.Release();
         }
 
-        static private async Task EnviarHttpPost(string url, string postData)
+        static private async Task EnviarSocket(string ip, int puerto, string postData)
         {
             await bloqueoEnviarHttp.WaitAsync();
-            HttpClient cliente = null;
+
+            // Parsear la URL
+            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
             try
             {
-                cliente = new HttpClient();
-                cliente.DefaultRequestHeaders.Accept.Clear();
-                cliente.Timeout = TimeSpan.FromSeconds(5);
+                // Conectar al servidor
+                socket.Connect(new IPEndPoint(IPAddress.Parse(ip), puerto));
+                Console.WriteLine("Conectado al servidor");
 
-                // envío de mensaje
-                HttpContent content = new StringContent(postData, Encoding.UTF8, "application/json");
-                HttpResponseMessage respuesta = await cliente.PostAsync(url, content);
-                respuesta.EnsureSuccessStatusCode();
-                string responseBody = await respuesta.Content.ReadAsStringAsync();
-                Console.WriteLine(responseBody);
-                cliente.Dispose();
+                // Crear el mensaje HTTP POST
+                StringBuilder request = new StringBuilder(postData);
+
+                // Convertir el mensaje a bytes y enviar al servidor
+                byte[] requestBytes = Encoding.UTF8.GetBytes(request.ToString());
+                socket.Send(requestBytes);
+
+                // Recibir la respuesta del servidor
+                byte[] buffer = new byte[1024];
+                int received = socket.Receive(buffer);
+                string response = Encoding.UTF8.GetString(buffer, 0, received);
+                Console.WriteLine("Respuesta del servidor:");
+                Console.WriteLine(response);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Gestor.gestor.EscribirError("(ERROR Envio Http: " + url + "): " + e.Message);
-                if (cliente != null)
-                {
-                    cliente.CancelPendingRequests();
-                    cliente.Dispose();
-                    Gestor.gestor.EscribirError("Liberado con errores");
-                }
+                Gestor.gestor.EscribirError("(ERROR Envio Http: " + ip + ":" + puerto.ToString() + "): " + ex.Message);
+            }
+            finally
+            {
+                // Cerrar el socket
+                socket.Shutdown(SocketShutdown.Both);
+                socket.Close();
+                Console.WriteLine("Conexión cerrada");
             }
             bloqueoEnviarHttp.Release();
         }
@@ -278,8 +289,7 @@ namespace NoCocinoMas
         {
             try
             {
-                string uri = String.Format("http://{0}:{1}/actualizar", Gestor.ipControlador, Gestor.puertoCentralita);
-                _ = EnviarHttpPost(uri, postData);
+                _ = EnviarSocket(Gestor.ipControlador, Gestor.puertoCentralita, postData);
             }
             catch (Exception e)
             {
