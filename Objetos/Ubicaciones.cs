@@ -173,8 +173,7 @@ namespace NoCocinoMas
 
         public string ToCSV()
         {
-            return string.Format("{0}:{1},{2},{3}",
-                this.nombre,
+            return string.Format("{0},{1},{2}",
                 this.linea,
                 this.inicio,
                 this.ancho

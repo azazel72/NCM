@@ -1540,15 +1540,14 @@ namespace NoCocinoMas
                 Pedido pedido = this.pedidos.BuscarNumero(numeroPedido);
                 if (pedido == null)
                 {
+                    pedido = this.pedidos.BuscarCaja(argumentos["pedido"]);
+                }
+                if (pedido == null)
+                {
                     r.Error("No se encontró el pedido");
                     return r;
                 }
-                Tarea tarea = this.tareas.BuscarPedido(numeroPedido);
-                if (tarea != null)
-                {
-                    r.Error("El pedido está activo en una tarea.");
-                    return r;
-                }
+
                 pedido.VincularMovimientos();
                 r.objeto = pedido;
             }
@@ -2336,7 +2335,7 @@ namespace NoCocinoMas
             {
                 //se avanza el pedido que este en el modulo uno y se toma el siguiente de la lista
                 Pedido p = this.pedidosTransito.AvanzarPedido(mensaje.indice_modulo);
-                if (p != null && p.indice_modulo == 5)
+                if (p?.indice_modulo == 5)
                 {
                     this.pedidosTransito.Eliminar(p);
                     this.pedidosCompletar.Agregar(p);
@@ -2391,8 +2390,8 @@ namespace NoCocinoMas
                 for (int i = 1; i < 5; i++)
                 {
                     Pedido pedido = this.pedidosTransito.FiltrarPedidoMinModulo(i);
-                    csv.Add("<Modulo " + i + ">");
-                    csv.Add("#Pedido " + pedido?.numero ?? "0");
+                    //csv.Add("<Modulo " + i + ">");
+                    //csv.Add("#Pedido " + pedido?.numero ?? "0");
                     if (pedido != null)
                     {
                         pedido.ObtenerUbicacionesModulo(i).ConvertAll<string>(ubicacion => ubicacion.ToCSV()).ForEach(csv.Add);
@@ -2400,6 +2399,7 @@ namespace NoCocinoMas
                 }
 
                 string postData = string.Join(";", csv);
+                EscribirError("EncenderPedidos: " + postData);
                 ConectorPLC.EncenderPedidos("Actualizar " + postData);
             }
             catch (Exception e)

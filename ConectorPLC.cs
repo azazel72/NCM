@@ -265,11 +265,13 @@ namespace NoCocinoMas
                 socket.Send(requestBytes);
 
                 // Recibir la respuesta del servidor
+                /*
                 byte[] buffer = new byte[1024];
                 int received = socket.Receive(buffer);
                 string response = Encoding.UTF8.GetString(buffer, 0, received);
                 Console.WriteLine("Respuesta del servidor:");
                 Console.WriteLine(response);
+                */
             }
             catch (Exception ex)
             {

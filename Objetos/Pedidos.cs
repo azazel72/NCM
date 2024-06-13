@@ -131,6 +131,18 @@ namespace NoCocinoMas
             return null;
         }
 
+        public Pedido BuscarCaja(string caja)
+        {
+            foreach (Pedido p in this.listado)
+            {
+                if (p.caja == caja)
+                {
+                    return p;
+                }
+            }
+            return null;
+        }
+
         public int mayorPedido()
         {
             int i = 0;
@@ -535,27 +547,19 @@ namespace NoCocinoMas
                                 this.estado
                             };
                         ConectorSQL.ActualizarEntidades(ConectorSQL.updateRecogidaPedido, valoresRecogidaPedido);
-
-                        ///////////////////////////////////
-                        ///////////
-                        /// INSERTAR LOS LOTES EN LA BBDD DE PRESTASHOP
-                        ///
-                        ///////////////////////
-
-
                     }
-                    //descontamos las unidades del stock no colocado
-                    /*
-                    object[] valoresFabricacion = {
-                        lineaPedido.producto.id,
-                        lineaPedido.producto.stock - cantidad
-                    };
-                    if (ConectorSQL.ActualizarEntidades(ConectorSQL.updateFabricacion, valoresFabricacion))
-                    {
-                        lineaPedido.producto.stock -= cantidad;
-                        Gestor.gestor.ActualizarTablaProductos(lineaPedido.producto);
-                    }
-                    */
+
+                    ///////////////////////////////////
+                    ///////////
+                    /// INSERTAR LOS LOTES EN LA BBDD DE PRESTASHOP
+                    ///
+                    ///////////////////////
+                    string query = string.Format(ConectorSQL.sobreescribirStock, m.producto_codigo, m.lote, (m.cantidad < 0 ? ("("+m.cantidad.ToString()+")") : m.cantidad.ToString()));
+                    ConectorSQL.EjecutarComando(ConectorSQL.cadenaConexionPS, query);
+
+                    query = string.Format(ConectorSQL.insertarTrazabilidad, this.numero, m.producto_codigo, m.lote, m.cantidad);
+                    ConectorSQL.EjecutarComando(ConectorSQL.cadenaConexionPS, query);
+
                     return null;
                 }
             }
