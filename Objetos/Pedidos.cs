@@ -310,9 +310,16 @@ namespace NoCocinoMas
             //this.envio = datos.GetString("envio").Substring(0, 10); //formato dd/mm/aaaa
             this.envio = !datos.IsDBNull(4) ? datos.GetDateTime("envio").ToString("yyyy-MM-dd") : "";
             this.transportista = datos.GetInt32("transportista");
-            this.caja = datos.GetString("caja");
-            this.indice_modulo = datos.GetInt32("indice_modulo");
-            this.indice_recogida = datos.GetInt64("indice_recogida");
+            try {
+                this.caja = datos.GetString("caja");
+                this.indice_modulo = datos.GetInt32("indice_modulo");
+                this.indice_recogida = datos.GetInt64("indice_recogida");
+            } catch (Exception e)
+            {
+                this.caja = "";
+                this.indice_modulo = 0;
+                this.indice_recogida = 0;
+            }
             this.lineas = new LineasPedido();
             this.movimientos = new Movimientos();
         }

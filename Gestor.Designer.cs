@@ -1677,7 +1677,7 @@
             this.tVersion.Name = "tVersion";
             this.tVersion.Size = new System.Drawing.Size(43, 13);
             this.tVersion.TabIndex = 11;
-            this.tVersion.Text = "v 2.000";
+            this.tVersion.Text = "v 2.001";
             // 
             // statusStrip1
             // 
