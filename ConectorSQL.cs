@@ -495,6 +495,7 @@ namespace NoCocinoMas
                     //Console.WriteLine("Datos insertados con éxito en la base de datos de destino.");
                 }
 
+
                 using (MySqlConnection conn = new MySqlConnection(ConectorSQL.cadenaConexion))
                 {
                     conn.Open();
