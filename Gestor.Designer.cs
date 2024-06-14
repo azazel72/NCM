@@ -176,6 +176,7 @@
             this.textoEstado = new System.Windows.Forms.ToolStripStatusLabel();
             this.temporizador = new System.Windows.Forms.Timer(this.components);
             this.buscador = new System.Windows.Forms.FolderBrowserDialog();
+            this.ActualizarStockBtn = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.contenedorTablas.SuspendLayout();
@@ -911,6 +912,7 @@
             // 
             // datos5
             // 
+            this.datos5.Controls.Add(this.ActualizarStockBtn);
             this.datos5.Controls.Add(this.groupBox7);
             this.datos5.Controls.Add(this.tablaMovimientos);
             this.datos5.Controls.Add(this.obtenerPedidosBtn);
@@ -1706,6 +1708,17 @@
             // 
             this.buscador.HelpRequest += new System.EventHandler(this.buscador_HelpRequest);
             // 
+            // ActualizarStockBtn
+            // 
+            this.ActualizarStockBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ActualizarStockBtn.Location = new System.Drawing.Point(477, 293);
+            this.ActualizarStockBtn.Name = "ActualizarStockBtn";
+            this.ActualizarStockBtn.Size = new System.Drawing.Size(319, 93);
+            this.ActualizarStockBtn.TabIndex = 31;
+            this.ActualizarStockBtn.Text = "Actualizar Stock";
+            this.ActualizarStockBtn.UseVisualStyleBackColor = true;
+            this.ActualizarStockBtn.Click += new System.EventHandler(this.ActualizarStockBtn_Click);
+            // 
             // Gestor
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -1925,6 +1938,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn productos_almacenamiento;
         private System.Windows.Forms.FolderBrowserDialog buscador;
         private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.Button ActualizarStockBtn;
     }
 }
 

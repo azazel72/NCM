@@ -2,6 +2,7 @@
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using static Common.Logging.Configuration.ArgUtils;
 
 namespace NoCocinoMas
@@ -398,7 +399,145 @@ namespace NoCocinoMas
             }
         }
 
-        static public string FiltrarConsultaLineasPedido(DateTime hoy)
+        public static string GetFecha(string lote)
+        {
+            if (lote.Length != 7)
+            {
+                return lote;
+            }
+
+            //1260319
+
+            char[] charArray = lote.ToCharArray();
+            Array.Reverse(charArray);
+            string fecha = new string(charArray);
+            fecha = "20" + fecha.Substring(5, 2) + "-" + fecha.Substring(3, 2) + "-" + fecha.Substring(1, 2);
+            return fecha;
+        }
+
+
+        static public bool TrazabilidadPS()
+        {
+            try
+            {
+                // Crear una lista para almacenar los resultados
+                var movimientos = new List<(int pedidoNumero, int productoCodigo, string lote, int totalCantidad)>();
+
+                using (MySqlConnection conn = new MySqlConnection(ConectorSQL.cadenaConexion))
+                {
+                    try
+                    {
+                        conn.Open();
+
+                        // Inicia la transacción
+                        MySqlCommand startTransactionCmd = new MySqlCommand("START TRANSACTION;", conn);
+                        startTransactionCmd.ExecuteNonQuery();
+
+                        // Selecciona y bloquea los registros no leídos
+                        string selectQuery = @"
+                            SELECT m.pedido_numero, m.producto_codigo, m.lote, SUM(m.cantidad) AS total_cantidad
+                            FROM movimientos m
+                            WHERE m.leido = FALSE
+                            GROUP BY m.pedido_numero, m.producto_codigo, m.lote
+                            FOR UPDATE;";
+
+                        MySqlCommand selectCmd = new MySqlCommand(selectQuery, conn);
+
+                        using (MySqlDataReader reader = selectCmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                int pedidoNumero = reader.GetInt32("pedido_numero");
+                                int productoCodigo = reader.GetInt32("producto_codigo");
+                                string fecha_lote = GetFecha(reader.GetString("lote"));
+                                string lote = fecha_lote.CompareTo("2024-06-13") < 0 ? "0000-00-00" : fecha_lote;
+                                int totalCantidad = reader.GetInt32("total_cantidad");
+
+                                movimientos.Add((pedidoNumero, productoCodigo, lote, totalCantidad));
+                            }
+                        }
+
+                        // Marca los registros como leídos
+                        string updateQuery = "UPDATE movimientos SET leido = FALSE WHERE leido = FALSE;";
+                        MySqlCommand updateCmd = new MySqlCommand(updateQuery, conn);
+                        updateCmd.ExecuteNonQuery();
+
+                        // Confirma la transacción
+                        MySqlCommand commitCmd = new MySqlCommand("COMMIT;", conn);
+                        commitCmd.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error: " + ex.Message);
+                        // En caso de error, revertir la transacción
+                        MySqlCommand rollbackCmd = new MySqlCommand("ROLLBACK;", conn);
+                        rollbackCmd.ExecuteNonQuery();
+                    }
+                }
+
+                using (MySqlConnection destinationConn = new MySqlConnection(ConectorSQL.cadenaConexion))
+                {
+                    destinationConn.Open();
+                    foreach (var movimiento in movimientos)
+                    {
+                        string insertQuery = "INSERT INTO ps_trazabilidad (id_order, id_product, lote, cantidad) VALUES (@id_order, @id_product, @lote, @cantidad)";
+                        using (MySqlCommand insertCmd = new MySqlCommand(insertQuery, destinationConn))
+                        {
+                            insertCmd.Parameters.AddWithValue("@id_order", movimiento.pedidoNumero);
+                            insertCmd.Parameters.AddWithValue("@id_product", movimiento.productoCodigo);
+                            insertCmd.Parameters.AddWithValue("@lote", movimiento.lote);
+                            insertCmd.Parameters.AddWithValue("@cantidad", movimiento.totalCantidad);
+
+                            insertCmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    //Console.WriteLine("Datos insertados con éxito en la base de datos de destino.");
+                }
+
+                using (MySqlConnection conn = new MySqlConnection(ConectorSQL.cadenaConexion))
+                {
+                    conn.Open();
+
+                    // Crear la sentencia SQL
+                    string sql = @"
+                        START TRANSACTION;
+
+                        INSERT INTO ps_stock_web (products_id, fechaLote, cantidad)
+                        SELECT subquery.id_product, subquery.lote, subquery.total
+                        FROM (
+                            SELECT t.id_product, t.lote, SUM(t.cantidad) AS total
+                            FROM ps_trazabilidad t
+                            WHERE t.leido = FALSE
+                            GROUP BY t.id_product, t.lote
+                            FOR UPDATE
+                        ) AS subquery
+                        ON DUPLICATE KEY UPDATE cantidad = cantidad - subquery.total;
+
+                        UPDATE ps_trazabilidad
+                        SET leido = TRUE
+                        WHERE leido = FALSE;
+
+                        COMMIT;";
+
+                    // Crear el comando para ejecutar la sentencia SQL
+                    MySqlCommand cmd = new MySqlCommand(sql, conn);
+
+                    // Ejecutar el comando
+                    cmd.ExecuteNonQuery();
+
+                    Console.WriteLine("Operación completada con éxito.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                return false;
+            }
+            return true;
+        }
+
+    static public string FiltrarConsultaLineasPedido(DateTime hoy)
         {
             DateTime semanaPasada = hoy.AddDays(-7);
             DateTime semanaProxima = hoy.AddDays(7);

@@ -27,3 +27,5 @@
 /bin/Debug/productos.json
 /.vs/NoCocinoMas/v17/.suo
 /.vs/NoCocinoMas/v17/DocumentLayout.json
+*.json
+/.gitignore

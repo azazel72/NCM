@@ -2408,5 +2408,15 @@ namespace NoCocinoMas
             }
 
         }
+
+        private void ActualizarStockBtn_Click(object sender, EventArgs e)
+        {
+            if (ConectorSQL.TrazabilidadPS()) {
+                EscribirEvento("Actualizacion completada");
+            } else
+            {
+                EscribirError("Error durante la actualizacion");
+            }
+        }
     }
 }
