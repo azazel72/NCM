@@ -2,30 +2,7 @@
 # Este archivo .gitignore ha sido creado automáticamente por Microsoft(R) Visual Studio.
 ################################################################################
 
-/.vs/NoCocinoMas/FileContentIndex
-/.vs/NCM/v17
-/Conexiones/bin/Debug
-/Conexiones/obj/Debug
-/Conexiones/obj/Release/net8.0
-/Conexiones/obj
-/.vs/NCM/FileContentIndex
-/.vs/NoCocinoMas/v17/.suo
-/.vs/NoCocinoMas/v17/DocumentLayout.json
-/bin/Debug/NoCocinoMas.exe
-/bin/Debug/NoCocinoMas.pdb
-/obj/Debug/build.force
-/obj/Debug/NCM.csproj.AssemblyReference.cache
-/obj/Debug/NCM.csproj.GenerateResource.cache
-/obj/Debug/NoCocinoMas.exe
-/obj/Debug/NoCocinoMas.pdb
-/obj/Debug/NCM.csproj.AssemblyReference.cache
-/obj/Debug/NCM.csproj.GenerateResource.cache
-/obj/Debug/NoCocinoMas.exe
-/obj/Debug/NoCocinoMas.pdb
-/bin/Debug/NoCocinoMas.exe
-/bin/Debug/NoCocinoMas.pdb
-/bin/Debug/productos.json
-/.vs/NoCocinoMas/v17/.suo
-/.vs/NoCocinoMas/v17/DocumentLayout.json
-*.json
+/.vs
+/bin
+/obj
 /.gitignore
