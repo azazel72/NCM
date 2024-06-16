@@ -580,9 +580,8 @@ evento: 192.168.137.18
                             string resultadoApagarProducto = JsonSerializer.Serialize<Respuesta>(r);
                             return responseOK(resultadoApagarProducto);
                         case "ActualizarStock":
-                            r = ConectorSQL.ActualizarStock();
-                            string resultadoActualizarStock = JsonSerializer.Serialize<Respuesta>(r);
-                            return responseOK(resultadoActualizarStock);
+                            ConectorSQL.ActualizarStock();
+                            return responseOK();
                         case "ListadoPedidos":
                             string pedidos = "[]";
                             if (argumentos.ContainsKey("incompletos"))
@@ -719,6 +718,7 @@ evento: 192.168.137.18
         {
             try {
                 this.gestor.EscribirEvento(string.Format("Mensaje de {0}: {1}", conexion.id, mensaje));
+                if (string.IsNullOrEmpty(mensaje)) return;
                 MensajeClienteServidor m = JsonSerializer.Deserialize<MensajeClienteServidor>(mensaje);
                 m.id_conexion = conexion.id;
                 m.conexion = conexion;
@@ -747,6 +747,7 @@ evento: 192.168.137.18
             }
             catch (Exception e)
             {
+                this.gestor.EscribirError(mensaje);
                 this.gestor.EscribirError("Error (MensajeEntrante): " + e.StackTrace);
             }
         }

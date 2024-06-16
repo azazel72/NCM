@@ -269,6 +269,8 @@ namespace NoCocinoMas
         public string caja { get; set; }
         public long indice_recogida { get; set; }
         public int indice_modulo { get; set; }
+        public int totalItems { get; set; }
+        public int totalLineas { get; set; }
 
         private bool movimientos_completados = false;
 
@@ -281,7 +283,7 @@ namespace NoCocinoMas
             this.cp = parametros.Buscar("cp");
             this.envio = parametros.Buscar("envio");
             this.transportista = parametros.BuscarInt("transportista");
-            this.caja = parametros.Buscar("caja");
+            this.caja = parametros.Buscar("caja") ?? "";
             this.indice_modulo = parametros.BuscarInt("indice_modulo");
             this.indice_recogida = parametros.BuscarLong("indice_recogida");
         }
@@ -693,7 +695,7 @@ namespace NoCocinoMas
                 string letra = indice == 1 ? "A" : indice == 2 ? "B" : indice == 3 ? "C" : "D";
                 foreach (LineaPedido linea in this.lineas)
                 {
-                    if (linea.producto?.posicionRecogida?.StartsWith(letra) ?? false)
+                    if (linea.producto != null && linea.producto.ubicacionRecogida != null && (linea.producto.posicionRecogida?.StartsWith(letra) ?? false))
                     {
                         linea.producto.ubicacionRecogida.ancho = linea.cantidad;
                         ubicaciones.Add(linea.producto.ubicacionRecogida);

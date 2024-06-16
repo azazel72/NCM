@@ -97,6 +97,7 @@
             this.dataGridViewTextBoxColumn14 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn15 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.datos5 = new System.Windows.Forms.TabPage();
+            this.ActualizarStockBtn = new System.Windows.Forms.Button();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.fechaHastaPS = new System.Windows.Forms.DateTimePicker();
@@ -176,7 +177,6 @@
             this.textoEstado = new System.Windows.Forms.ToolStripStatusLabel();
             this.temporizador = new System.Windows.Forms.Timer(this.components);
             this.buscador = new System.Windows.Forms.FolderBrowserDialog();
-            this.ActualizarStockBtn = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.contenedorTablas.SuspendLayout();
@@ -926,6 +926,18 @@
             this.datos5.TabIndex = 4;
             this.datos5.Text = "Pedidos y Contenido";
             this.datos5.UseVisualStyleBackColor = true;
+            // 
+            // ActualizarStockBtn
+            // 
+            this.ActualizarStockBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ActualizarStockBtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.ActualizarStockBtn.Location = new System.Drawing.Point(477, 293);
+            this.ActualizarStockBtn.Name = "ActualizarStockBtn";
+            this.ActualizarStockBtn.Size = new System.Drawing.Size(319, 93);
+            this.ActualizarStockBtn.TabIndex = 31;
+            this.ActualizarStockBtn.Text = "Actualizar Stock";
+            this.ActualizarStockBtn.UseVisualStyleBackColor = true;
+            this.ActualizarStockBtn.Click += new System.EventHandler(this.ActualizarStockBtn_Click);
             // 
             // groupBox7
             // 
@@ -1679,7 +1691,7 @@
             this.tVersion.Name = "tVersion";
             this.tVersion.Size = new System.Drawing.Size(43, 13);
             this.tVersion.TabIndex = 11;
-            this.tVersion.Text = "v 2.001";
+            this.tVersion.Text = "v 2.002";
             // 
             // statusStrip1
             // 
@@ -1707,17 +1719,6 @@
             // buscador
             // 
             this.buscador.HelpRequest += new System.EventHandler(this.buscador_HelpRequest);
-            // 
-            // ActualizarStockBtn
-            // 
-            this.ActualizarStockBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ActualizarStockBtn.Location = new System.Drawing.Point(477, 293);
-            this.ActualizarStockBtn.Name = "ActualizarStockBtn";
-            this.ActualizarStockBtn.Size = new System.Drawing.Size(319, 93);
-            this.ActualizarStockBtn.TabIndex = 31;
-            this.ActualizarStockBtn.Text = "Actualizar Stock";
-            this.ActualizarStockBtn.UseVisualStyleBackColor = true;
-            this.ActualizarStockBtn.Click += new System.EventHandler(this.ActualizarStockBtn_Click);
             // 
             // Gestor
             // 

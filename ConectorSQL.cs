@@ -43,7 +43,7 @@ namespace NoCocinoMas
         //CONSULTAS PS
         static public string obtenerPedidoPS = "SELECT o.id_order as numero, ad.postcode as cp, o.date_upd as fecha, 0 as estado, dd.tramo_date as envio, t.id_reference as transportista FROM ps_orders o join ps_cart dd on (dd.id_cart=o.id_cart) join ps_address ad on o.id_address_delivery=ad.id_address JOIN ps_carrier t on o.id_carrier=t.id_carrier WHERE o.id_order = {0} AND current_state in (2,3,4,15,16,20,23) ORDER BY numero ASC";
         static public string obtenerPedidosPS = "SELECT o.id_order as numero, ad.postcode as cp, o.date_upd as fecha, 0 as estado, dd.tramo_date as envio, t.id_reference as transportista FROM ps_orders o join ps_cart dd on (dd.id_cart=o.id_cart) join ps_address ad on o.id_address_delivery=ad.id_address JOIN ps_carrier t on o.id_carrier=t.id_carrier WHERE dd.tramo_date >= '{0}' AND dd.tramo_date <= '{1}' AND current_state in (2,3,4,15,16,20,23) ORDER BY numero ASC";
-        static public string obtenerLineasPedidoPS = "SELECT 0 as id, od.id_order AS pedido_numero, od.product_id AS producto_codigo, round(od.product_quantity,2) AS cantidad, 0 as recogido, 0 as estado FROM ps_order_detail od WHERE od.id_order in ({0}) ORDER BY od.id_order ASC";
+        static public string obtenerLineasPedidoPS = "SELECT 0 as id, od.id_order AS pedido_numero, od.product_id AS producto_codigo, round(od.product_quantity,2) AS cantidad, 0 as recogido, 0 as estado FROM ps_order_detail od WHERE od.product_id < 999999999 AND od.id_order in ({0}) ORDER BY od.id_order ASC";
         static public string obtenerMenusPS = "SELECT id_product_pack AS menu_id, id_product_item AS products_id, quantity AS products_quantity FROM ps_pack";
         static public string obtenerProductosPS = "SELECT pd.id_product AS id, pd.id_product AS codigo, pd.name AS nombre, 1 as envase_id, 0 as stock, ppt.posicion_clasif AS posicionRecogida, ppt.posicion_almac AS posicionAlmacenamiento FROM ps_product_lang pd join ps_product p on (pd.id_product=p.id_product and active=1) JOIN ps_product_ptl ppt ON pd.id_product = ppt.id_product;";
         static public string vaciarStock = "TRUNCATE ps_stock_web;";
@@ -53,7 +53,7 @@ namespace NoCocinoMas
 
         //INSERT
         static public string guardarProductos = "INSERT INTO productos (codigo, nombre, envase_id, stock) VALUES {0};";
-        static public string guardarPedidos = "INSERT INTO pedidos (id, numero, fecha, estado, cp, envio, transportista) VALUES {0};";
+        static public string guardarPedidos = "INSERT INTO pedidos (id, numero, fecha, estado, cp, envio, transportista, caja, indice_modulo, indice_recogida) VALUES {0};";
         static public string guardarLineasPedido = "INSERT INTO lineas_pedido (pedido_numero, producto_codigo, cantidad, recogido, estado) VALUES {0};";
 
         static public string insertOperario = "INSERT INTO operarios (nombre, rol_id, pin) VALUES {0};";
@@ -403,7 +403,7 @@ namespace NoCocinoMas
         {
             if (lote.Length != 7)
             {
-                return lote;
+                return "0000-00-00";
             }
 
             //1260319
@@ -415,8 +415,7 @@ namespace NoCocinoMas
             return fecha;
         }
 
-
-        static public bool TrazabilidadPS()
+        static public bool ActualizarStock()
         {
             try
             {
@@ -450,21 +449,41 @@ namespace NoCocinoMas
                                 int pedidoNumero = reader.GetInt32("pedido_numero");
                                 int productoCodigo = reader.GetInt32("producto_codigo");
                                 string fecha_lote = GetFecha(reader.GetString("lote"));
-                                string lote = fecha_lote.CompareTo("2024-06-13") < 0 ? "0000-00-00" : fecha_lote;
+                                string lote = fecha_lote;
                                 int totalCantidad = reader.GetInt32("total_cantidad");
 
                                 movimientos.Add((pedidoNumero, productoCodigo, lote, totalCantidad));
                             }
                         }
 
+                        using (MySqlConnection destinationConn = new MySqlConnection(ConectorSQL.cadenaConexionPS))
+                        {
+                            destinationConn.Open();
+                            foreach (var movimiento in movimientos)
+                            {
+                                string insertQuery = "INSERT INTO ps_trazabilidad (id_order, id_product, lote, cantidad) VALUES (@id_order, @id_product, @lote, @cantidad)";
+                                using (MySqlCommand insertCmd = new MySqlCommand(insertQuery, destinationConn))
+                                {
+                                    insertCmd.Parameters.AddWithValue("@id_order", movimiento.pedidoNumero);
+                                    insertCmd.Parameters.AddWithValue("@id_product", movimiento.productoCodigo);
+                                    insertCmd.Parameters.AddWithValue("@lote", movimiento.lote);
+                                    insertCmd.Parameters.AddWithValue("@cantidad", movimiento.totalCantidad);
+
+                                    insertCmd.ExecuteNonQuery();
+                                }
+                            }
+                        }
+
                         // Marca los registros como leídos
-                        string updateQuery = "UPDATE movimientos SET leido = FALSE WHERE leido = FALSE;";
+                        string updateQuery = "UPDATE movimientos SET leido = TRUE WHERE leido = FALSE;";
                         MySqlCommand updateCmd = new MySqlCommand(updateQuery, conn);
                         updateCmd.ExecuteNonQuery();
 
                         // Confirma la transacción
                         MySqlCommand commitCmd = new MySqlCommand("COMMIT;", conn);
                         commitCmd.ExecuteNonQuery();
+
+
                     }
                     catch (Exception ex)
                     {
@@ -474,40 +493,24 @@ namespace NoCocinoMas
                         rollbackCmd.ExecuteNonQuery();
                     }
                 }
-
-                using (MySqlConnection destinationConn = new MySqlConnection(ConectorSQL.cadenaConexion))
-                {
-                    destinationConn.Open();
-                    foreach (var movimiento in movimientos)
-                    {
-                        string insertQuery = "INSERT INTO ps_trazabilidad (id_order, id_product, lote, cantidad) VALUES (@id_order, @id_product, @lote, @cantidad)";
-                        using (MySqlCommand insertCmd = new MySqlCommand(insertQuery, destinationConn))
-                        {
-                            insertCmd.Parameters.AddWithValue("@id_order", movimiento.pedidoNumero);
-                            insertCmd.Parameters.AddWithValue("@id_product", movimiento.productoCodigo);
-                            insertCmd.Parameters.AddWithValue("@lote", movimiento.lote);
-                            insertCmd.Parameters.AddWithValue("@cantidad", movimiento.totalCantidad);
-
-                            insertCmd.ExecuteNonQuery();
-                        }
-                    }
-
-                    //Console.WriteLine("Datos insertados con éxito en la base de datos de destino.");
-                }
-
-
-                using (MySqlConnection conn = new MySqlConnection(ConectorSQL.cadenaConexion))
+                
+                using (MySqlConnection conn = new MySqlConnection(ConectorSQL.cadenaConexionPS))
                 {
                     conn.Open();
 
+                    //.CompareTo("2024-06-13") < 0 ? "0000-00-00" : fecha_lote;
                     // Crear la sentencia SQL
                     string sql = @"
                         START TRANSACTION;
-
                         INSERT INTO ps_stock_web (products_id, fechaLote, cantidad)
-                        SELECT subquery.id_product, subquery.lote, subquery.total
+                        SELECT subquery.id_product, subquery.fecha_lote, subquery.total
                         FROM (
-                            SELECT t.id_product, t.lote, SUM(t.cantidad) AS total
+                            SELECT t.id_product,
+                            CASE 
+                               WHEN t.lote < '2024-06-13' THEN '0000-00-00' 
+                               ELSE t.lote 
+                            END AS fecha_lote, 
+                            SUM(t.cantidad) AS total
                             FROM ps_trazabilidad t
                             WHERE t.leido = FALSE
                             GROUP BY t.id_product, t.lote
@@ -529,6 +532,7 @@ namespace NoCocinoMas
 
                     Console.WriteLine("Operación completada con éxito.");
                 }
+                
             }
             catch (Exception ex)
             {
@@ -538,7 +542,7 @@ namespace NoCocinoMas
             return true;
         }
 
-    static public string FiltrarConsultaLineasPedido(DateTime hoy)
+        static public string FiltrarConsultaLineasPedido(DateTime hoy)
         {
             DateTime semanaPasada = hoy.AddDays(-7);
             DateTime semanaProxima = hoy.AddDays(7);
@@ -546,6 +550,7 @@ namespace NoCocinoMas
             return resultado;
         }
 
+        /*
         static public Respuesta ActualizarStock() {
             Respuesta r = new Respuesta();
             try
@@ -576,6 +581,6 @@ namespace NoCocinoMas
             }
             return r;
         }
-
+        */
     }
 }

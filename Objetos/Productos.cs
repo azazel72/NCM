@@ -222,7 +222,7 @@ namespace NoCocinoMas
         public void VincularUbicacion(Ubicaciones ubicaciones)
         {
             this.ubicacionAlmacenamiento = (Ubicacion)ubicaciones.listado.Find(ubicacion => ((Ubicacion) ubicacion).nombre == this.posicionAlmacenamiento);
-            this.ubicacionRecogida = (Ubicacion)ubicaciones.listado.Find(ubicacion => ((Ubicacion)ubicacion).nombre == this.posicionRecogida);
+            this.ubicacionRecogida = (Ubicacion)ubicaciones.listado.Find(ubicacion => ((Ubicacion)ubicacion).nombre == (this.posicionRecogida.Length > 4 ? this.posicionRecogida.Substring(0, 4) : this.posicionRecogida));
             if (this.ubicacionRecogida == null)
             {
                 Console.WriteLine("Ubicacion de recogida no encontrada: " + this.posicionRecogida);

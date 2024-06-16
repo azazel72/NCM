@@ -2411,7 +2411,7 @@ namespace NoCocinoMas
 
         private void ActualizarStockBtn_Click(object sender, EventArgs e)
         {
-            if (ConectorSQL.TrazabilidadPS()) {
+            if (ConectorSQL.ActualizarStock()) {
                 EscribirEvento("Actualizacion completada");
             } else
             {
