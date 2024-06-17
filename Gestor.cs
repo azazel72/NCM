@@ -1601,7 +1601,7 @@ namespace NoCocinoMas
         {
             lock (bloqueoObtenerPedidos)
             {
-                CambiarBoton("Actualizando", false);
+                CambiarBoton(this.obtenerPedidosBtn, "Actualizando", false);
                 Estado("Actualizando pedidos...");
                 int cantidad = 0;
                 if (ConectorSQL.Comprobar(ConectorSQL.cadenaConexionPS))
@@ -1609,28 +1609,28 @@ namespace NoCocinoMas
                     cantidad = ObtenerPedidosPS();
                 }
                 Estado("Actualizacion completada, " + cantidad.ToString() + " pedidos añadidos");
-                CambiarBoton("Obtener Nuevos Pedidos", true);
+                CambiarBoton(this.obtenerPedidosBtn, "Obtener Nuevos Pedidos", true);
             }
         }
-        private void CambiarBoton(string titulo, bool enabled)
+        private void CambiarBoton(Button boton, string titulo, bool enabled)
         {
             try
             {
                 //ConectorSQL.InsertarError(texto);
-                if (this.obtenerPedidosBtn.InvokeRequired)
+                if (boton.InvokeRequired)
                 {
-                    this.obtenerPedidosBtn.BeginInvoke(
+                    boton.BeginInvoke(
                         (System.Windows.Forms.MethodInvoker)delegate ()
                         {
-                            obtenerPedidosBtn.Text = titulo;
-                            obtenerPedidosBtn.Enabled = enabled;
+                            boton.Text = titulo;
+                            boton.Enabled = enabled;
                         }
                     );
                 }
                 else
                 {
-                    obtenerPedidosBtn.Text = titulo;
-                    obtenerPedidosBtn.Enabled = enabled;
+                    boton.Text = titulo;
+                    boton.Enabled = enabled;
                 }
             }
             catch
@@ -2399,7 +2399,7 @@ namespace NoCocinoMas
                 }
 
                 string postData = string.Join(";", csv);
-                EscribirError("EncenderPedidos: " + postData);
+                EscribirEvento("EncenderPedidos: " + postData);
                 ConectorPLC.EncenderPedidos("Actualizar " + postData);
             }
             catch (Exception e)
@@ -2411,11 +2411,14 @@ namespace NoCocinoMas
 
         private void ActualizarStockBtn_Click(object sender, EventArgs e)
         {
-            if (ConectorSQL.ActualizarStock()) {
-                EscribirEvento("Actualizacion completada");
-            } else
+            lock (bloqueoObtenerPedidos)
             {
-                EscribirError("Error durante la actualizacion");
+                CambiarBoton(this.ActualizarStockBtn, "Actualizando", false);
+                Estado("Actualizando trazabilidad y stocks...");
+
+                Estado(ConectorSQL.ActualizarStock() ? "Actualizacion completada" : "Error durante la actualizacion");
+
+                CambiarBoton(this.ActualizarStockBtn, "Actualizar Stock", true);
             }
         }
     }

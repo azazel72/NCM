@@ -66,7 +66,7 @@ namespace NoCocinoMas
                 for (int index = 0; index < Productos.posicionesVerProducto.Count(); index++) {
                     string ip = Productos.posicionesVerProducto[index].Key;
                     int tarea = Productos.posicionesVerProducto[index].Value;
-                    new Thread(new ThreadStart(() => Enviar(ip, Gestor.puertoCentralita, String.Format("GET /apagar/{0}\n", tarea)))).Start();
+                    new Thread(new ThreadStart(() => Enviar(ip, Gestor.puertoCentralita, String.Format("GET /Apagar/{0}\n", tarea)))).Start();
                 }
                 Productos.posicionesVerProducto.Clear();
             }
@@ -133,7 +133,7 @@ namespace NoCocinoMas
                 if (ip_c != null && ip_c != "")
                 {
                     //notificar luces
-                    new Thread(new ThreadStart(() => Enviar(ip_c, Gestor.puertoCentralita, String.Format("GET /apagar/{0}\n", tarea.getNumero())))).Start();
+                    new Thread(new ThreadStart(() => Enviar(ip_c, Gestor.puertoCentralita, String.Format("GET /Apagar/{0}\n", tarea.getNumero())))).Start();
                 }
                 if (ip_m != "" && ip_m != null)
                 {
@@ -177,7 +177,7 @@ namespace NoCocinoMas
 
         static private void Enviar(string ip, int puerto, string mensaje)
         {
-            Console.Write("LEDS: " + ip + "//" + mensaje);
+            //Console.Write("LEDS: " + ip + "//" + mensaje);
 
             lock (bloqueoEnviarPlc)
             {
@@ -255,7 +255,7 @@ namespace NoCocinoMas
             {
                 // Conectar al servidor
                 socket.Connect(new IPEndPoint(IPAddress.Parse(ip), puerto));
-                Console.WriteLine("Conectado al servidor");
+                //Gestor.gestor.EscribirEvento("Conectado al controlador");
 
                 // Crear el mensaje HTTP POST
                 StringBuilder request = new StringBuilder(postData);
@@ -265,13 +265,12 @@ namespace NoCocinoMas
                 socket.Send(requestBytes);
 
                 // Recibir la respuesta del servidor
-                /*
+                
                 byte[] buffer = new byte[1024];
                 int received = socket.Receive(buffer);
                 string response = Encoding.UTF8.GetString(buffer, 0, received);
-                Console.WriteLine("Respuesta del servidor:");
-                Console.WriteLine(response);
-                */
+                Gestor.gestor.EscribirEvento("Respuesta del controlador:" + response);
+                
             }
             catch (Exception ex)
             {
@@ -282,7 +281,7 @@ namespace NoCocinoMas
                 // Cerrar el socket
                 socket.Shutdown(SocketShutdown.Both);
                 socket.Close();
-                Console.WriteLine("Conexión cerrada");
+                //Gestor.gestor.EscribirEvento("Conexión cerrada");
             }
             bloqueoEnviarHttp.Release();
         }

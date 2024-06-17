@@ -564,13 +564,13 @@ namespace NoCocinoMas
                     ///
                     ///////////////////////
                     ///
-                    
+                    /*
                     string query = string.Format(ConectorSQL.sobreescribirStock, m.producto_codigo, m.lote, (m.cantidad < 0 ? ("("+m.cantidad.ToString()+")") : m.cantidad.ToString()));
                     ConectorSQL.EjecutarComando(ConectorSQL.cadenaConexionPS, query);
 
                     query = string.Format(ConectorSQL.insertarTrazabilidad, this.numero, m.producto_codigo, m.lote, m.cantidad);
                     ConectorSQL.EjecutarComando(ConectorSQL.cadenaConexionPS, query);
-                    
+                    */
                     return null;
                 }
             }
