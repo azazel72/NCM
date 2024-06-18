@@ -253,6 +253,7 @@
     <Compile Include="Conexiones\Servidor.cs" />
     <Compile Include="Conexiones\ServidorPermanente.cs" />
     <Compile Include="Imprimir.cs" />
+    <Compile Include="Objetos\Cajas.cs" />
     <Compile Include="Objetos\Ubicaciones.cs" />
     <Compile Include="Objetos\Transportistas.cs" />
     <Compile Include="Objetos\MensajeClienteServidor.cs" />
