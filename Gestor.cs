@@ -37,6 +37,7 @@ namespace NoCocinoMas
         public Modulos modulos;
         public Posiciones posiciones;
         public Productos productos;
+        public Cajas cajas;
         public Envases envases;
         public Centralitas centralitas;
         public Operarios operarios;
@@ -222,6 +223,9 @@ namespace NoCocinoMas
                     this.productos = ConectorJSON.CargarObjeto<Productos>("./productos.json") ?? new Productos();
                     this.MostrarEntidades(this.tablaProductos, this.productos);
                     ValorProgreso(this.progresoProductos, 100);
+
+                    //Cajas
+                    this.cajas = ConectorJSON.CargarObjeto<Cajas>("./cajas.json") ?? new Cajas();
 
                     //Ubicaciones
                     ConectorSQL.CargarEntidades(ConectorSQL.selectUbicaciones, this.ubicaciones);
@@ -2396,6 +2400,8 @@ namespace NoCocinoMas
                     {
                         pedido.ObtenerUbicacionesModulo(i).ConvertAll<string>(ubicacion => ubicacion.ToCSV()).ForEach(csv.Add);
                     }
+                    //agregamos el color de la caja
+                    csv.Add(String.Format("{0},{1},{2}", 4, ((i-1)*3) + 1, this.cajas.BuscarCodigo(pedido.caja)?.color ?? 4)); //se suma 1 hasta que se arregle la entrada DI por la BI de la tira de leds
                 }
 
                 string postData = string.Join(";", csv);
