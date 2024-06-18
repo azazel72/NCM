@@ -246,44 +246,44 @@ namespace NoCocinoMas
 
         static private async Task EnviarSocket(string ip, int puerto, string postData)
         {
-            await bloqueoEnviarHttp.WaitAsync();
-
-            // Parsear la URL
-            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
-            try
+            lock (bloqueoEnviarPlc)
             {
-                // Conectar al servidor
-                socket.Connect(new IPEndPoint(IPAddress.Parse(ip), puerto));
-                //Gestor.gestor.EscribirEvento("Conectado al controlador");
+                // Parsear la URL
+                Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-                // Crear el mensaje HTTP POST
-                StringBuilder request = new StringBuilder(postData);
+                try
+                {
+                    // Conectar al servidor
+                    socket.Connect(new IPEndPoint(IPAddress.Parse(ip), puerto));
+                    //Gestor.gestor.EscribirEvento("Conectado al controlador");
 
-                // Convertir el mensaje a bytes y enviar al servidor
-                byte[] requestBytes = Encoding.UTF8.GetBytes(request.ToString());
-                socket.Send(requestBytes);
+                    // Crear el mensaje HTTP POST
+                    StringBuilder request = new StringBuilder(postData);
 
-                // Recibir la respuesta del servidor
-                
-                byte[] buffer = new byte[1024];
-                int received = socket.Receive(buffer);
-                string response = Encoding.UTF8.GetString(buffer, 0, received);
-                Gestor.gestor.EscribirEvento("Respuesta del controlador:" + response);
-                
+                    // Convertir el mensaje a bytes y enviar al servidor
+                    byte[] requestBytes = Encoding.UTF8.GetBytes(request.ToString());
+                    socket.Send(requestBytes);
+
+                    // Recibir la respuesta del servidor
+
+                    byte[] buffer = new byte[1024];
+                    int received = socket.Receive(buffer);
+                    string response = Encoding.UTF8.GetString(buffer, 0, received);
+                    Gestor.gestor.EscribirEvento("Respuesta del controlador:" + response);
+
+                }
+                catch (Exception ex)
+                {
+                    Gestor.gestor.EscribirError("(ERROR Envio Http: " + ip + ":" + puerto.ToString() + "): " + ex.Message);
+                }
+                finally
+                {
+                    // Cerrar el socket
+                    socket.Shutdown(SocketShutdown.Both);
+                    socket.Close();
+                    //Gestor.gestor.EscribirEvento("Conexión cerrada");
+                }
             }
-            catch (Exception ex)
-            {
-                Gestor.gestor.EscribirError("(ERROR Envio Http: " + ip + ":" + puerto.ToString() + "): " + ex.Message);
-            }
-            finally
-            {
-                // Cerrar el socket
-                socket.Shutdown(SocketShutdown.Both);
-                socket.Close();
-                //Gestor.gestor.EscribirEvento("Conexión cerrada");
-            }
-            bloqueoEnviarHttp.Release();
         }
 
         static public void EncenderPedidos(string postData)
