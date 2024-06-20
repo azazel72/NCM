@@ -74,8 +74,8 @@ namespace NoCocinoMas
         //static public string ipTest = "";
         static public int puertoModulos = 80;
 
-        static public string ipControlador = "192.168.1.254";
-        static public int puertoCentralita = 8000;
+        static public string ipControlador = "192.168.0.254";
+        static public int puertoCentralita = 80;
 
         public Dictionary<string, ConexionPermanente> conexiones;
 
@@ -2438,12 +2438,12 @@ namespace NoCocinoMas
                 }
 
                 string postData = string.Join(";", csv);
-                EscribirEvento("EncenderPedidos: " + postData);
                 ConectorPLC.EncenderPedidos("Actualizar " + postData);
+                EscribirEvento("EncenderPedidos: " + postData);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                EscribirError(e.Message);
             }
 
         }
