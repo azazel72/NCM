@@ -114,8 +114,15 @@ namespace NoCocinoMas
             this.nombre = datos.GetString("nombre");
             this.envase_id = datos.GetInt32("envase_id");
             this.stock = datos.GetInt32("stock");
-            this.posicionRecogida = datos.GetString("posicionRecogida");
-            this.posicionAlmacenamiento = datos.GetString("posicionAlmacenamiento");
+            try {
+                this.posicionRecogida = datos.GetString("posicionRecogida");
+                this.posicionAlmacenamiento = datos.GetString("posicionAlmacenamiento");
+            }
+            catch
+            {
+                this.posicionRecogida = "";
+                this.posicionAlmacenamiento = "";
+            }
             this.envase = new Envase();
             this.posiciones = new Posiciones();
         }

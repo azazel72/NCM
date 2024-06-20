@@ -55,6 +55,7 @@ namespace NoCocinoMas
         public Producto productoIluminado;
         public Transportistas transportistas;
         public Ubicaciones ubicaciones;
+        public static Producto productoNoEncontrado;
 
         public Dictionary<string, Entidades> listados;
         public Dictionary<string, DataGridView> tablas;
@@ -103,6 +104,11 @@ namespace NoCocinoMas
             this.movimientos = new Movimientos();
             this.menus = new Menus();
             this.productoIluminado = null;
+            productoNoEncontrado = new Producto() {
+                nombre = "Producto no encontrado",
+                posicionRecogida = "",
+                posicionAlmacenamiento = ""
+            };
 
             this.configuracion = new Configuracion();
 
@@ -2347,9 +2353,35 @@ namespace NoCocinoMas
 
                 if (mensaje.indice_modulo == 1 && !string.IsNullOrEmpty(mensaje.caja))
                 {
-                    //se recupera el siguiente pedido de la lista (de la mensajeria), y pasa al modulo 1
-                    p = this.pedidos.NuevaCaja(mensaje.transportista, mensaje.caja);
-                    this.pedidosTransito.Agregar(p);
+                    if (mensaje.numero_pedido > 0)
+                    {
+                        if (this.pedidosTransito.BuscarNumero(mensaje.numero_pedido) != null){
+                            mensaje.mensajeError = "Pedido ya en transito";
+                        }
+                        else if (this.pedidosCompletar.BuscarNumero(mensaje.numero_pedido) != null)
+                        {
+                            mensaje.mensajeError = "Pedido ya completado";
+                        }
+                        else
+                        {
+                            p = this.pedidos.BuscarNumero(mensaje.numero_pedido);
+                            if (p == null)
+                            {
+                                mensaje.mensajeError = "Pedido no encontrado";
+                            }
+                            else
+                            {
+                                p.AvanzarPedido(mensaje.caja);
+                                this.pedidosTransito.Agregar(p);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //se recupera el siguiente pedido de la lista (de la mensajeria), y pasa al modulo 1
+                        p = this.pedidos.NuevaCaja(mensaje.transportista, mensaje.caja);
+                        this.pedidosTransito.Agregar(p);
+                    }
                 }
 
                 mensaje.accion = "Refrescar";
@@ -2399,9 +2431,10 @@ namespace NoCocinoMas
                     if (pedido != null)
                     {
                         pedido.ObtenerUbicacionesModulo(i).ConvertAll<string>(ubicacion => ubicacion.ToCSV()).ForEach(csv.Add);
+                        //agregamos el color de la caja
+                        //se suma 1 hasta que se arregle la entrada DI por la BI de la tira de leds
+                        csv.Add(String.Format("{0},{1},{2}", 4, ((i - 1) * 3) + 1, this.cajas.BuscarCodigo(pedido.caja)?.color ?? 4));
                     }
-                    //agregamos el color de la caja
-                    csv.Add(String.Format("{0},{1},{2}", 4, ((i-1)*3) + 1, this.cajas.BuscarCodigo(pedido.caja)?.color ?? 4)); //se suma 1 hasta que se arregle la entrada DI por la BI de la tira de leds
                 }
 
                 string postData = string.Join(";", csv);
