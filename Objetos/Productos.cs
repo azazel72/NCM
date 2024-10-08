@@ -225,7 +225,7 @@ namespace NoCocinoMas
             this.ubicacionRecogida = (Ubicacion)ubicaciones.listado.Find(ubicacion => ((Ubicacion)ubicacion).nombre == (this.posicionRecogida.Length > 4 ? this.posicionRecogida.Substring(0, 4) : this.posicionRecogida));
             if (this.ubicacionRecogida == null)
             {
-                Console.WriteLine("Ubicacion de recogida no encontrada: " + this.posicionRecogida);
+                Console.WriteLine("Ubicacion de recogida no encontrada: " + this.posicionRecogida + ", producto: " + this.id);
             }
         }
 

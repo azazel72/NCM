@@ -297,6 +297,17 @@ namespace NoCocinoMas
                 Console.WriteLine(e.Message);
             }
         }
+        static public void EncenderPedidosBack(string postData)
+        {
+            try
+            {
+                _ = EnviarSocket(Gestor.ipControlador2, Gestor.puertoCentralita, postData);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
 
     }
 }

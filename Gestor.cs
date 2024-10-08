@@ -74,6 +74,7 @@ namespace NoCocinoMas
         static public int puertoModulos = 80;
 
         static public string ipControlador = "192.168.0.254";
+        static public string ipControlador2 = "192.168.0.239";
         static public int puertoCentralita = 80;
 
         public Dictionary<string, ConexionPermanente> conexiones;
@@ -2391,6 +2392,7 @@ namespace NoCocinoMas
             try
             {
                 List<string> csv = new List<string>();
+                List<string> csvBack = new List<string>();
                 for (int i = 1; i < 5; i++)
                 {
                     Pedido pedido = this.pedidosTransito.FiltrarPedidoMinModulo(i);
@@ -2398,15 +2400,28 @@ namespace NoCocinoMas
                     //csv.Add("#Pedido " + pedido?.numero ?? "0");
                     if (pedido != null)
                     {
-                        pedido.ObtenerUbicacionesModulo(i).ConvertAll<string>(ubicacion => ubicacion.ToCSV()).ForEach(csv.Add);
+                        pedido.ObtenerUbicacionesModulo(i).ConvertAll<string>(ubicacion => ubicacion.ToCSV()).ForEach( c =>
+                        {
+                            if (c.First() > 4) {
+                                csvBack.Add(c);
+                            }
+                            else
+                            {
+                                csv.Add(c);
+                            }
+                        }                            
+                        );
                     }
                     //agregamos el color de la caja
-                    csv.Add(String.Format("{0},{1},{2}", 4, ((i-1)*3) + 1, this.cajas.BuscarCodigo(pedido.caja)?.color ?? 4)); //se suma 1 hasta que se arregle la entrada DI por la BI de la tira de leds
+                    csv.Add(String.Format("{0},{1},{2}", 8, ((i-1)*3) + 1, this.cajas.BuscarCodigo(pedido.caja)?.color ?? 4)); //se suma 1 hasta que se arregle la entrada DI por la BI de la tira de leds
                 }
 
                 string postData = string.Join(";", csv);
+                string postData2 = string.Join(";", csvBack);
                 ConectorPLC.EncenderPedidos("Actualizar " + postData);
+                ConectorPLC.EncenderPedidosBack("Actualizar " + postData2);
                 EscribirEvento("EncenderPedidos: " + postData);
+                EscribirEvento("EncenderPedidos2: " + postData2);
             }
             catch (Exception e)
             {
