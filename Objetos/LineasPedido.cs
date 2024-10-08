@@ -168,6 +168,16 @@ namespace NoCocinoMas
             }
             return null;
         }
+
+        public int contarProductos()
+        {
+            int total = 0;
+            foreach (LineaPedido linea in this.listado)
+            {
+                total += linea.cantidad * (linea.producto != null && linea.producto.grande ? 2 : 1);
+            }
+            return total;
+        }
     }
 
     public class LineaPedido : Entidad, IEntidad

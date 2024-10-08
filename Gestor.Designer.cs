@@ -145,6 +145,8 @@
             this.label10 = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.parejasChk = new System.Windows.Forms.CheckBox();
+            this.button2 = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
@@ -1397,6 +1399,8 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.parejasChk);
+            this.groupBox3.Controls.Add(this.button2);
             this.groupBox3.Controls.Add(this.checkBox1);
             this.groupBox3.Controls.Add(this.groupBox5);
             this.groupBox3.Controls.Add(this.button1);
@@ -1406,6 +1410,28 @@
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Control Recogida";
+            // 
+            // parejasChk
+            // 
+            this.parejasChk.AutoSize = true;
+            this.parejasChk.Checked = true;
+            this.parejasChk.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.parejasChk.Location = new System.Drawing.Point(15, 207);
+            this.parejasChk.Name = "parejasChk";
+            this.parejasChk.Size = new System.Drawing.Size(138, 17);
+            this.parejasChk.TabIndex = 11;
+            this.parejasChk.Text = "Agrupar 2 modulos en 1";
+            this.parejasChk.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(241, 580);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(172, 55);
+            this.button2.TabIndex = 10;
+            this.button2.Text = "Encender Ubicaciones";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // checkBox1
             // 
@@ -1691,7 +1717,7 @@
             this.tVersion.Name = "tVersion";
             this.tVersion.Size = new System.Drawing.Size(43, 13);
             this.tVersion.TabIndex = 11;
-            this.tVersion.Text = "v 2.004";
+            this.tVersion.Text = "v 2.006";
             // 
             // statusStrip1
             // 
@@ -1940,6 +1966,8 @@
         private System.Windows.Forms.FolderBrowserDialog buscador;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.Button ActualizarStockBtn;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.CheckBox parejasChk;
     }
 }
 

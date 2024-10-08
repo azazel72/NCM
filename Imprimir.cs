@@ -21,7 +21,7 @@ namespace NoCocinoMas
                 doc.PrintSettings.PrinterName = impresora;
 
                 //SEUR
-                if (sufijo == "2")
+                if (sufijo == "2" || sufijo == "17")
                 {
 
                     Image img = doc.SaveAsImage(0);

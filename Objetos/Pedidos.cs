@@ -52,6 +52,16 @@ namespace NoCocinoMas
                     Gestor.gestor.EscribirError("Linea " + l.id.ToString() + " no encuentra pedido " + l.pedido_numero.ToString());
                 }
             }
+
+            //calculamos el tamaño del pedido
+            if (this.listado.Count > 0)
+            {
+                foreach (Pedido p in this.listado)
+                {
+                    p.totalItems = p.lineas.contarProductos();
+                    p.totalLineas = p.lineas.listado.Count;
+                }
+            }
         }
 
         /// <summary>
@@ -668,7 +678,14 @@ namespace NoCocinoMas
         {
             int indiceActual = this.indice_modulo;
             string cajaActual = this.caja;
-            this.indice_modulo = indiceActual + 1;
+            if (Gestor.gestor.modulosDobles)
+            {
+                this.indice_modulo = indiceActual == 0 ? 1 : (indiceActual < 3 ? 3 : 5);
+            }
+            else
+            {
+                this.indice_modulo = indiceActual + 1;
+            }            
             if (!string.IsNullOrEmpty(caja) && caja != this.caja)
             {
                 this.caja = caja;
@@ -695,7 +712,7 @@ namespace NoCocinoMas
                 string letra = indice == 1 ? "A" : indice == 2 ? "B" : indice == 3 ? "C" : "D";
                 foreach (LineaPedido linea in this.lineas)
                 {
-                    if (linea.producto != null && linea.producto.ubicacionRecogida != null && (linea.producto.posicionRecogida?.StartsWith(letra) ?? false))
+                    if (linea.producto != null && linea.producto.ubicacionRecogida != null && linea.producto.activo && (linea.producto.posicionRecogida?.StartsWith(letra) ?? false))
                     {
                         linea.producto.ubicacionRecogida.ancho = linea.cantidad;
                         ubicaciones.Add(linea.producto.ubicacionRecogida);

@@ -4,6 +4,7 @@ using System.Collections;
 using MySql.Data.MySqlClient;
 using System.Text.Json.Serialization;
 using System;
+using System.Security.RightsManagement;
 
 namespace NoCocinoMas
 {
@@ -81,7 +82,19 @@ namespace NoCocinoMas
     public class Producto : Entidad, IEntidad
     {
         public int codigo { get; set; }
-        public string nombre { get; set; }
+        private string _nombre;
+        public string nombre {
+            get { return this._nombre; }
+            set { 
+                this._nombre = value;
+                if (value.Length > 0)
+                {
+                    string nombre = value.ToLower();
+                    this.dieta = nombre.Contains("semana");
+                    this.grande = nombre.Contains("grande") || nombre.Contains("familiar");
+                }
+            }
+        }
         public int envase_id { get; set; }
         public int stock { get; set; }
         //objetos
@@ -90,9 +103,13 @@ namespace NoCocinoMas
         [JsonIgnore]
         public Posiciones posiciones { get; set; }
         public string posicionRecogida { get; set; }
+        public int numeroPosiciones { get; set; }
         public string posicionAlmacenamiento { get; set; }
         public Ubicacion ubicacionRecogida { get; set; }
         public Ubicacion ubicacionAlmacenamiento { get; set; }
+        public bool dieta { get; set; }
+        public bool grande { get; set; }
+        public bool activo { get; set; }
 
         public Producto(Parametros parametros)
         {
@@ -229,7 +246,10 @@ namespace NoCocinoMas
         public void VincularUbicacion(Ubicaciones ubicaciones)
         {
             this.ubicacionAlmacenamiento = (Ubicacion)ubicaciones.listado.Find(ubicacion => ((Ubicacion) ubicacion).nombre == this.posicionAlmacenamiento);
-            this.ubicacionRecogida = (Ubicacion)ubicaciones.listado.Find(ubicacion => ((Ubicacion)ubicacion).nombre == (this.posicionRecogida.Length > 4 ? this.posicionRecogida.Substring(0, 4) : this.posicionRecogida));
+            string recogida = this.posicionRecogida ?? "";
+            this.numeroPosiciones = (int) recogida.Length / 4;
+            recogida = recogida.Length > 4 ? recogida.Substring(0, 4) : recogida;
+            this.ubicacionRecogida = (Ubicacion)ubicaciones.listado.Find(ubicacion => ((Ubicacion)ubicacion).nombre == recogida);
             if (this.ubicacionRecogida == null)
             {
                 Console.WriteLine("Ubicacion de recogida no encontrada: " + this.posicionRecogida);

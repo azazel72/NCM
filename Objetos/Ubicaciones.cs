@@ -171,6 +171,18 @@ namespace NoCocinoMas
             return r;
         }
 
+        public string ToCSVCalculate()
+        {
+            //calculamos el inicio segun el valor a encender
+            int offset = (8 - ((this.ancho / 5) + (this.ancho % 5))) / 2;
+            if (offset < 0) offset = 0;
+            // Sumar los grupos completos y el residuo para obtener el resultado
+            return string.Format("{0},{1},{2}",
+                this.linea,
+                this.inicio - offset,
+                this.ancho
+                );
+        }
         public string ToCSV()
         {
             return string.Format("{0},{1},{2}",
@@ -179,5 +191,14 @@ namespace NoCocinoMas
                 this.ancho
                 );
         }
+        public string ToCSV(int i)
+        {
+            return string.Format("{0},{1},{2}",
+                this.linea,
+                this.inicio-1,
+                i
+                );
+        }
+
     }
 }

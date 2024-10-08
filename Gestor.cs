@@ -70,7 +70,7 @@ namespace NoCocinoMas
         static public string ipTestModulos = "127.0.0.1";
         //static public string ipTest = "127.0.0.1";
         //static public string ipTest = "192.168.1.175";
-        static public string ipTest = "192.168.1.147";
+        static public string ipTest = "192.168.0.254";
         //static public string ipTest = "";
         static public int puertoModulos = 80;
 
@@ -78,6 +78,8 @@ namespace NoCocinoMas
         static public int puertoCentralita = 80;
 
         public Dictionary<string, ConexionPermanente> conexiones;
+
+        public bool modulosDobles = false;
 
         public Gestor()
         {
@@ -104,7 +106,8 @@ namespace NoCocinoMas
             this.movimientos = new Movimientos();
             this.menus = new Menus();
             this.productoIluminado = null;
-            productoNoEncontrado = new Producto() {
+            productoNoEncontrado = new Producto()
+            {
                 nombre = "Producto no encontrado",
                 posicionRecogida = "",
                 posicionAlmacenamiento = ""
@@ -158,6 +161,8 @@ namespace NoCocinoMas
             this.transportistas = new Transportistas();
             this.ubicaciones = new Ubicaciones();
             this.conexiones = new Dictionary<string, ConexionPermanente>();
+
+            this.modulosDobles = this.parejasChk.Checked;
         }
 
         private void Gestor_Load(object sender, EventArgs e)
@@ -280,7 +285,7 @@ namespace NoCocinoMas
                     ConectorSQL.CargarEntidades(ConectorSQL.obtenerMenusPS, this.menus, false, ConectorSQL.cadenaConexionPS);
 
                     /////////////// AGRUPACIONES //////////////
-                    Estado("Vinculando Objetos.");
+                    //Estado("Vinculando Objetos.");
 
                     // agregamos los modulos a los almacenes
                     this.almacenes.VincularModulos(this.modulos);
@@ -1966,6 +1971,28 @@ namespace NoCocinoMas
             return r;
         }
 
+        public Respuesta ActivarProducto(Dictionary<string, string> argumentos)
+        {
+            Respuesta r = new Respuesta();
+            try
+            {
+                int codigoProducto = int.Parse(argumentos["producto_codigo"]);
+                Producto producto = this.productos.BuscarCodigo(codigoProducto);
+                if (producto == null)
+                {
+                    r.Error("No se encontró el producto");
+                    return r;
+                }
+                producto.activo = !producto.activo;
+                r.entidad = producto;
+            }
+            catch (Exception e)
+            {
+                r.Error("Ocurrió un error (EncenderProducto): " + e.Message);
+            }
+            return r;
+        }
+
         public Respuesta ApagarProducto()
         {
             Respuesta r = new Respuesta();
@@ -2209,8 +2236,9 @@ namespace NoCocinoMas
                         numero_pedido = string.Format("Ref.Exp:9{0}9", pedido.numero.ToString().PadLeft(10, '0'));
                         sufijo = "2";
                         break;
-                    case 17: //TIPSA
-                        numero_pedido = string.Format("{0}-", pedido.numero.ToString());
+                    case 17: //SEUR Viernes //TIPSA Eliminado
+                        //numero_pedido = string.Format("{0}-", pedido.numero.ToString());
+                        numero_pedido = string.Format("Ref.Exp:9{0}9", pedido.numero.ToString().PadLeft(10, '0'));
                         sufijo = "17";
                         break;
                     case 67: //PAACK
@@ -2343,6 +2371,10 @@ namespace NoCocinoMas
         {
             lock(bloqueoRecogida)
             {
+                if (this.modulosDobles)
+                {
+                    mensaje.indice_modulo = mensaje.indice_modulo < 3 ? 1 : 3;
+                }
                 //se avanza el pedido que este en el modulo uno y se toma el siguiente de la lista
                 Pedido p = this.pedidosTransito.AvanzarPedido(mensaje.indice_modulo);
                 if (p?.indice_modulo == 5)
@@ -2355,7 +2387,8 @@ namespace NoCocinoMas
                 {
                     if (mensaje.numero_pedido > 0)
                     {
-                        if (this.pedidosTransito.BuscarNumero(mensaje.numero_pedido) != null){
+                        if (this.pedidosTransito.BuscarNumero(mensaje.numero_pedido) != null)
+                        {
                             mensaje.mensajeError = "Pedido ya en transito";
                         }
                         else if (this.pedidosCompletar.BuscarNumero(mensaje.numero_pedido) != null)
@@ -2386,7 +2419,7 @@ namespace NoCocinoMas
 
                 mensaje.accion = "Refrescar";
                 mensaje.datos = this.pedidosTransito;
-                string m = JsonSerializer.Serialize(mensaje); ;
+                string m = JsonSerializer.Serialize(mensaje);
                 _ = mensaje.conexion?.Enviar(m);
 
                 IluminarModulos();
@@ -2396,13 +2429,13 @@ namespace NoCocinoMas
         public void Refrescar(MensajeClienteServidor mensaje)
         {
             mensaje.datos = this.pedidosTransito;
-            string m = JsonSerializer.Serialize(mensaje); ;
+            string m = JsonSerializer.Serialize(mensaje);
             _ = mensaje.conexion.Enviar(m);
         }
 
         public void TraerPedidos(MensajeClienteServidor mensaje)
         {
-            lock(bloqueoRecogida)
+            lock(bloqueoObtenerPedidos)
             {
                 mensaje.datos = this.pedidos.PedidosPendientes();
                 string m = JsonSerializer.Serialize(mensaje);
@@ -2430,11 +2463,12 @@ namespace NoCocinoMas
                     //csv.Add("#Pedido " + pedido?.numero ?? "0");
                     if (pedido != null)
                     {
-                        pedido.ObtenerUbicacionesModulo(i).ConvertAll<string>(ubicacion => ubicacion.ToCSV()).ForEach(csv.Add);
-                        //agregamos el color de la caja
-                        //se suma 1 hasta que se arregle la entrada DI por la BI de la tira de leds
-                        csv.Add(String.Format("{0},{1},{2}", 4, ((i - 1) * 3) + 1, this.cajas.BuscarCodigo(pedido.caja)?.color ?? 4));
+                        pedido.ObtenerUbicacionesModulo(i).ConvertAll<string>(ubicacion => ubicacion.ToCSVCalculate()).ForEach(csv.Add);
                     }
+                    //agregamos el color de la caja
+                    //se suma 1 hasta que se arregle la entrada DI por la BI de la tira de leds
+                    //csv.Add(String.Format("{0},{1},{2}", 5, 12 - ((i-1)*3), this.cajas.BuscarCodigo(pedido?.caja)?.color ?? 0));
+                    csv.Add(String.Format("{0},{1},{2}", 5, 12 - ((i - 1) * 3), 1));
                 }
 
                 string postData = string.Join(";", csv);
@@ -2458,6 +2492,26 @@ namespace NoCocinoMas
                 Estado(ConectorSQL.ActualizarStock() ? "Actualizacion completada" : "Error durante la actualizacion");
 
                 CambiarBoton(this.ActualizarStockBtn, "Actualizar Stock", true);
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                List<string> csv = new List<string>();
+                foreach (Ubicacion u in this.ubicaciones)
+                {
+                    csv.Add(u.ToCSV(11));
+                }
+
+                string postData = string.Join(";", csv);
+                ConectorPLC.EncenderPedidos("Actualizar " + postData);
+                EscribirEvento("EncenderPedidos: " + postData);
+            }
+            catch (Exception ex)
+            {
+                EscribirError(ex.Message);
             }
         }
     }

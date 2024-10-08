@@ -311,9 +311,8 @@ evento: 192.168.137.18
                 byte[] b = new Byte[1000];
                 int length = conexion.Receive(b);
                 string m = Encoding.UTF8.GetString(b, 0, length);
-                this.gestor.EscribirEvento(m);
-                Mensaje mensaje;
                 string origen = ((IPEndPoint)conexion.RemoteEndPoint).Address.ToString();
+                conexion.Close();
                 try
                 {
                     int.TryParse(m, out int id_modulo);
@@ -321,7 +320,7 @@ evento: 192.168.137.18
                     lock (Servidor.bloqueoAccion)
                     {
                         MensajeClienteServidor retorno = new MensajeClienteServidor();
-                        retorno.accion = "BotonContinuar";
+                        retorno.accion = "AvanzarPedido";
                         retorno.indice_modulo = id_modulo;
                         this.gestor.AvanzarPedido(retorno);
                     }
@@ -329,9 +328,8 @@ evento: 192.168.137.18
                 catch (Exception e)
                 {
                     this.gestor.EscribirError("Error (Crear Servidor Controladores, mensaje no válido): " + origen + " -> " + e.Message);
-                    return;
                 }
-                conexion.Close();
+                this.gestor.EscribirEvento(m);
             }
             catch (Exception e)
             {
@@ -640,6 +638,17 @@ evento: 192.168.137.18
                             else
                             {
                                 r.Error("Parametros codigo_producto y color_posicion requeridos");
+                            }
+                            return responseOK(r.Serializar());
+                        case "ActivarProducto":
+                            if (argumentos.ContainsKey("producto_codigo"))
+                            {
+                                r = this.gestor.ActivarProducto(argumentos);
+                                return responseOK(JsonSerializer.Serialize<Producto>((Producto) r.entidad));
+                            }
+                            else
+                            {
+                                r.Error("Parametro producto_codigo debe aparecer");
                             }
                             return responseOK(r.Serializar());
                         case "ConsultarPedidosProducto":

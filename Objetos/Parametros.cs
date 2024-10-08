@@ -19,7 +19,7 @@ namespace NoCocinoMas
             Parametro par = this.Find(p => p.name == nombre);
             try
             {
-                return par.value != null ? int.Parse(par.value) : 0;
+                return par?.value != null ? int.Parse(par.value) : 0;
             }
             catch
             {
@@ -32,7 +32,7 @@ namespace NoCocinoMas
             Parametro par = this.Find(p => p.name == nombre);
             try
             {
-                return par.value != null ? long.Parse(par.value) : 0;
+                return par?.value != null ? long.Parse(par.value) : 0;
             }
             catch
             {
