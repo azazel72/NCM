@@ -51,7 +51,7 @@ namespace NoCocinoMas
             {
                 if (l.producto == null)
                 {
-                    l.producto = nuevosProductos.BuscarCodigo(l.producto_codigo);
+                    l.producto = nuevosProductos.BuscarCodigo(l.producto_codigo) ?? Gestor.productoNoEncontrado;
                 }
             }
         }
@@ -327,12 +327,12 @@ namespace NoCocinoMas
         public void VincularProducto(Dictionary<int, Producto> listadoProductos)
         {
             listadoProductos.TryGetValue(this.producto_codigo, out Producto p);
-            this.producto = p;
+            this.producto = p ?? Gestor.productoNoEncontrado;
         }
         public void VincularProducto(Productos productos)
         {
             Producto p = (Producto)productos.BuscarCodigo(this.producto_codigo);
-            this.producto = p;
+            this.producto = p ?? Gestor.productoNoEncontrado;
         }
 
         public int CantidadPendiente()

@@ -228,7 +228,7 @@ namespace NoCocinoMas
             pedidoEntrante?.AvanzarPedido(caja);
             return pedidoEntrante;
         }
-        
+
         public List<Pedido> PedidosCompletar()
         {
             return this.listado.ConvertAll(pedido => (Pedido)pedido).FindAll(pedido => pedido.estado == 0 && pedido.indice_modulo == 5);
@@ -495,7 +495,7 @@ namespace NoCocinoMas
                 Console.WriteLine("Busqueda con bloqueo");
                 foreach (LineaPedido linea in this.lineas)
                 {
-                    Console.WriteLine(linea.producto.nombre);
+                    Console.WriteLine(linea.producto?.nombre);
                     if (linea.estado == 0)
                     {
                         Posicion p = linea.producto.ProximaPosicionRecogida(tarea, true);

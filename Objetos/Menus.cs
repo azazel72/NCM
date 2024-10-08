@@ -45,7 +45,8 @@ namespace NoCocinoMas
             foreach (Menu menu in this.listado)
             {
                 listadoProductos.TryGetValue(menu.products_id, out Producto p);
-                menu.producto = p;
+                //if (p == null) Console.WriteLine("Producto no encontrado: " + menu.products_id);
+                menu.producto = p ?? Gestor.productoNoEncontrado;
             }
         }
     }

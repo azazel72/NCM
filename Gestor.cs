@@ -55,6 +55,7 @@ namespace NoCocinoMas
         public Producto productoIluminado;
         public Transportistas transportistas;
         public Ubicaciones ubicaciones;
+        public static Producto productoNoEncontrado;
 
         public Dictionary<string, Entidades> listados;
         public Dictionary<string, DataGridView> tablas;
@@ -104,6 +105,11 @@ namespace NoCocinoMas
             this.movimientos = new Movimientos();
             this.menus = new Menus();
             this.productoIluminado = null;
+            productoNoEncontrado = new Producto() {
+                nombre = "Producto no encontrado",
+                posicionRecogida = "",
+                posicionAlmacenamiento = ""
+            };
 
             this.configuracion = new Configuracion();
 
@@ -2348,9 +2354,35 @@ namespace NoCocinoMas
 
                 if (mensaje.indice_modulo == 1 && !string.IsNullOrEmpty(mensaje.caja))
                 {
-                    //se recupera el siguiente pedido de la lista (de la mensajeria), y pasa al modulo 1
-                    p = this.pedidos.NuevaCaja(mensaje.transportista, mensaje.caja);
-                    this.pedidosTransito.Agregar(p);
+                    if (mensaje.numero_pedido > 0)
+                    {
+                        if (this.pedidosTransito.BuscarNumero(mensaje.numero_pedido) != null){
+                            mensaje.mensajeError = "Pedido ya en transito";
+                        }
+                        else if (this.pedidosCompletar.BuscarNumero(mensaje.numero_pedido) != null)
+                        {
+                            mensaje.mensajeError = "Pedido ya completado";
+                        }
+                        else
+                        {
+                            p = this.pedidos.BuscarNumero(mensaje.numero_pedido);
+                            if (p == null)
+                            {
+                                mensaje.mensajeError = "Pedido no encontrado";
+                            }
+                            else
+                            {
+                                p.AvanzarPedido(mensaje.caja);
+                                this.pedidosTransito.Agregar(p);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //se recupera el siguiente pedido de la lista (de la mensajeria), y pasa al modulo 1
+                        p = this.pedidos.NuevaCaja(mensaje.transportista, mensaje.caja);
+                        this.pedidosTransito.Agregar(p);
+                    }
                 }
 
                 mensaje.accion = "Refrescar";

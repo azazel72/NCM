@@ -151,7 +151,7 @@ namespace NoCocinoMas
         {
             foreach (Centralita c in Gestor.gestor.centralitas)
             {
-                new Thread(new ThreadStart(() => Enviar(c.ip, Gestor.puertoCentralita, "GET /reset\n"))).Start();
+                new Thread(new ThreadStart(() => Enviar(Gestor.ipControlador, Gestor.puertoCentralita, "GET /Apagar/\n"))).Start();
             }
         }
 
@@ -286,11 +286,44 @@ namespace NoCocinoMas
             }
         }
 
+        static private async Task EnviarYRespuesta(string ip, int puerto, string mensaje)
+        {
+            //Console.Write("LEDS: " + ip + "//" + mensaje);
+
+            lock (bloqueoEnviarPlc)
+            {
+                try
+                {
+                    IPAddress IP = IPAddress.Parse(ip);
+                    TcpClient client = new TcpClient();
+                    client.Connect(IP, puerto);
+                    Stream conexion = client.GetStream();
+
+                    ASCIIEncoding msg = new ASCIIEncoding();
+                    byte[] ba = msg.GetBytes(mensaje);
+                    conexion.Write(ba, 0, ba.Length);
+
+                    byte[] buffer = new byte[1024];
+                    int bytesRead = conexion.Read(buffer, 0, buffer.Length);
+                    string respuesta = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+
+                    Gestor.gestor.EscribirEvento("Recibido: " + mensaje);
+
+                    client.Close();
+                }
+                catch (Exception e)
+                {
+                    Gestor.gestor.EscribirError("(Enviar " + mensaje + "): " + e.Message);
+                }
+            }
+        }
+
+
         static public void EncenderPedidos(string postData)
         {
             try
             {
-                _ = EnviarSocket(Gestor.ipControlador, Gestor.puertoCentralita, postData);
+                _ = EnviarSocket(Gestor.ipControlador, Gestor.puertoCentralita, postData + "\n");
             }
             catch (Exception e)
             {
