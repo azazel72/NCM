@@ -709,10 +709,9 @@ namespace NoCocinoMas
             List<Ubicacion> ubicaciones = new List<Ubicacion>();
             if (indice > 0)
             {
-                string letra = indice == 1 ? "A" : indice == 2 ? "B" : indice == 3 ? "C" : "D";
                 foreach (LineaPedido linea in this.lineas)
                 {
-                    if (linea.producto != null && linea.producto.ubicacionRecogida != null && linea.producto.activo && (linea.producto.posicionRecogida?.StartsWith(letra) ?? false))
+                    if (linea.producto?.ubicacionRecogida != null && linea.producto.activo && (linea.producto.posicionRecogida?.StartsWith(letra) ?? false))
                     {
                         linea.producto.ubicacionRecogida.ancho = linea.cantidad;
                         ubicaciones.Add(linea.producto.ubicacionRecogida);
@@ -720,6 +719,19 @@ namespace NoCocinoMas
                 }
             }
             return ubicaciones;
+        }
+
+        private bool FiltrarPosicionProducto(string posicion, int indice)
+        {
+            if (String.IsNullOrWhiteSpace(posicion)) return false;
+            switch (indice)
+            {
+                case 1: return posicion.StartsWith("A") || posicion.StartsWith("E");
+                case 2: return posicion.StartsWith("B");
+                case 3: return posicion.StartsWith("C") || posicion.StartsWith("F");
+                case 4: return posicion.StartsWith("D");
+                default: return false;
+            }
         }
 
     }
