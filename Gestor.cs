@@ -1,4 +1,5 @@
 ﻿using Conexiones;
+using iText.Kernel.Colors;
 using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Parser;
@@ -2465,14 +2466,6 @@ namespace NoCocinoMas
                     //csv.Add("#Pedido " + pedido?.numero ?? "0");
                     if (pedido != null)
                     {
-<<<<<<< HEAD
-                        pedido.ObtenerUbicacionesModulo(i).ConvertAll<string>(ubicacion => ubicacion.ToCSVCalculate()).ForEach(csv.Add);
-                    }
-                    //agregamos el color de la caja
-                    //se suma 1 hasta que se arregle la entrada DI por la BI de la tira de leds
-                    //csv.Add(String.Format("{0},{1},{2}", 5, 12 - ((i-1)*3), this.cajas.BuscarCodigo(pedido?.caja)?.color ?? 0));
-                    csv.Add(String.Format("{0},{1},{2}", 5, 12 - ((i - 1) * 3), 1));
-=======
                         pedido.ObtenerUbicacionesModulo(i).ConvertAll<string>(ubicacion => ubicacion.ToCSV()).ForEach( c =>
                         {
                             if (c.First() > 4) {
@@ -2486,8 +2479,16 @@ namespace NoCocinoMas
                         );
                     }
                     //agregamos el color de la caja
+                    //0 Negro.
+                    //1 Rojo
+                    //2 Verde
+                    //3 Azul
+                    //4 Amarillo
+                    //5 Purpura
+                    //6 Cian
+                    //7 Azul cobalto
+                    //8 Gris
                     csv.Add(String.Format("{0},{1},{2}", 8, ((i-1)*3) + 1, this.cajas.BuscarCodigo(pedido.caja)?.color ?? 4)); //se suma 1 hasta que se arregle la entrada DI por la BI de la tira de leds
->>>>>>> fbf722cfbd2e04a1686b32db91f712ebec774c29
                 }
 
                 string postData = string.Join(";", csv);

@@ -711,7 +711,7 @@ namespace NoCocinoMas
             {
                 foreach (LineaPedido linea in this.lineas)
                 {
-                    if (linea.producto?.ubicacionRecogida != null && linea.producto.activo && (linea.producto.posicionRecogida?.StartsWith(letra) ?? false))
+                    if (linea.producto?.ubicacionRecogida != null && linea.producto.activo && FiltrarPosicionProducto(linea.producto.posicionRecogida, indice))
                     {
                         linea.producto.ubicacionRecogida.ancho = linea.cantidad;
                         ubicaciones.Add(linea.producto.ubicacionRecogida);
