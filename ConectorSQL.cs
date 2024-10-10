@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf.WellKnownTypes;
+using iText.StyledXmlParser.Jsoup.Select;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections;
@@ -46,6 +47,7 @@ namespace NoCocinoMas
         static public string obtenerLineasPedidoPS = "SELECT 0 as id, od.id_order AS pedido_numero, od.product_id AS producto_codigo, round(od.product_quantity,2) AS cantidad, 0 as recogido, 0 as estado FROM ps_order_detail od WHERE od.product_id < 999999999 AND od.id_order in ({0}) ORDER BY od.id_order ASC";
         static public string obtenerMenusPS = "SELECT id_product_pack AS menu_id, id_product_item AS products_id, quantity AS products_quantity FROM ps_pack";
         static public string obtenerProductosPS = "SELECT pd.id_product AS id, pd.id_product AS codigo, pd.name AS nombre, 1 as envase_id, 0 as stock, ppt.posicion_clasif AS posicionRecogida, ppt.posicion_almac AS posicionAlmacenamiento FROM ps_product_lang pd join ps_product p on (pd.id_product=p.id_product and active=1) LEFT JOIN ps_product_ptl ppt ON pd.id_product = ppt.id_product;";
+
         static public string vaciarStock = "TRUNCATE ps_stock_web;";
         static public string sobreescribirStock = "INSERT INTO ps_stock_web (products_id, fechaLote, cantidad) VALUES ({0}, '{1}', {2}) ON DUPLICATE KEY UPDATE cantidad=cantidad-{2};";
         static public string insertarTrazabilidad = "INSERT INTO ps_trazabilidad (id_order, id_product, lote, cantidad) VALUES ({0}, {1}, '{2}', {3});";

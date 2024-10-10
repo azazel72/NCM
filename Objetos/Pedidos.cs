@@ -711,7 +711,8 @@ namespace NoCocinoMas
             {
                 foreach (LineaPedido linea in this.lineas)
                 {
-                    if (linea.producto?.ubicacionRecogida != null && linea.producto.activo && FiltrarPosicionProducto(linea.producto.posicionRecogida, indice))
+                    //producto activo no implementado && linea.producto.activo 
+                    if (linea.producto?.ubicacionRecogida != null && FiltrarPosicionProducto(linea.producto.posicionRecogida, indice))
                     {
                         linea.producto.ubicacionRecogida.ancho = linea.cantidad;
                         ubicaciones.Add(linea.producto.ubicacionRecogida);
@@ -724,6 +725,7 @@ namespace NoCocinoMas
         private bool FiltrarPosicionProducto(string posicion, int indice)
         {
             if (String.IsNullOrWhiteSpace(posicion)) return false;
+            if (indice == 1 && posicion.StartsWith("E")) Console.WriteLine(posicion);
             switch (indice)
             {
                 case 1: return posicion.StartsWith("A") || posicion.StartsWith("E");

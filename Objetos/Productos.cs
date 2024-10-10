@@ -5,12 +5,32 @@ using MySql.Data.MySqlClient;
 using System.Text.Json.Serialization;
 using System;
 using System.Security.RightsManagement;
+using System.Text.Json;
 
 namespace NoCocinoMas
 {
     public class Productos : Entidades, IEntidades
     {
         static public List<KeyValuePair<string, int>> posicionesVerProducto = new List<KeyValuePair<string, int>>();
+
+        public Productos() { }
+
+        public Productos(List<Producto> productos)
+        {
+            productos.ForEach(this.listado.Add);
+            // Convertir el JsonElement a entero y asignarlo como object a la propiedad id
+            productos.ForEach(p =>
+            {
+                if (((JsonElement)p.id).ValueKind == JsonValueKind.Number && ((JsonElement)p.id).TryGetInt32(out int codigoInt))
+                {
+                    p.id = (object)codigoInt; // Guardar el código como object, pero de tipo int
+                }
+                else
+                {
+                    Console.WriteLine($"El código '{p.codigo}' no es un número válido.");
+                }
+            });
+        }
 
         public void VincularEnvases(Envases envases)
         {
@@ -174,8 +194,12 @@ namespace NoCocinoMas
                 this.codigo,
                 this.nombre,
                 this.posicionRecogida,
-                this.posicionAlmacenamiento
+                this.ubicacionRecogida?.GetValoresInsertSQL() ?? "Sin ubicacion"
             };
+            if (this.ubicacionRecogida == null)
+            {
+                Console.WriteLine("CABRON");
+            }
             return valores;
         }
 
@@ -245,14 +269,14 @@ namespace NoCocinoMas
 
         public void VincularUbicacion(Ubicaciones ubicaciones)
         {
-            this.ubicacionAlmacenamiento = (Ubicacion)ubicaciones.listado.Find(ubicacion => ((Ubicacion) ubicacion).nombre == this.posicionAlmacenamiento);
+            //this.ubicacionAlmacenamiento = (Ubicacion)ubicaciones.listado.Find(ubicacion => ((Ubicacion) ubicacion).nombre == this.posicionAlmacenamiento);
             string recogida = this.posicionRecogida ?? "";
-            this.numeroPosiciones = (int) recogida.Length / 4;
+            //this.numeroPosiciones = (int) recogida.Length / 4;
             recogida = recogida.Length > 4 ? recogida.Substring(0, 4) : recogida;
             this.ubicacionRecogida = (Ubicacion)ubicaciones.listado.Find(ubicacion => ((Ubicacion)ubicacion).nombre == recogida);
             if (this.ubicacionRecogida == null)
             {
-                Console.WriteLine("Ubicacion de recogida no encontrada: " + this.posicionRecogida + ", producto: " + this.id);
+                Console.WriteLine("Ubicacion de recogida no encontrada: " + this.posicionRecogida + ", producto: " + this.id + " " + this.nombre);
             }
         }
 
@@ -264,7 +288,7 @@ namespace NoCocinoMas
         /// <param name="posicion"></param>
         public void AgregarPosicion(Posicion posicion)
         {
-            this.posiciones.AgregarUnico(posicion);
+            this.posiciones?.AgregarUnico(posicion);
         }
 
         /// <summary>

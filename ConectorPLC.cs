@@ -323,6 +323,7 @@ namespace NoCocinoMas
         {
             try
             {
+                //Console.WriteLine(postData);
                 _ = EnviarSocket(Gestor.ipControlador, Gestor.puertoCentralita, postData + "\n");
             }
             catch (Exception e)
@@ -334,6 +335,7 @@ namespace NoCocinoMas
         {
             try
             {
+                //Console.WriteLine(postData);
                 _ = EnviarSocket(Gestor.ipControlador2, Gestor.puertoCentralita, postData);
             }
             catch (Exception e)

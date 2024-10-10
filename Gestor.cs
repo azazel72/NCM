@@ -233,9 +233,7 @@ namespace NoCocinoMas
                     ValorProgreso(this.progresoPosiciones, 100);
 
                     //Productos
-                    this.productos = ConectorJSON.CargarObjeto<Productos>("./productos.json") ?? new Productos();
-                    this.MostrarEntidades(this.tablaProductos, this.productos);
-                    ValorProgreso(this.progresoProductos, 100);
+                    this.productos = new Productos(ConectorJSON.CargarObjeto<List<Producto>>("./productos.json") ?? new List<Producto>());
 
                     //Cajas
                     this.cajas = ConectorJSON.CargarObjeto<Cajas>("./cajas.json") ?? new Cajas();
@@ -243,12 +241,14 @@ namespace NoCocinoMas
                     //Ubicaciones
                     ConectorSQL.CargarEntidades(ConectorSQL.selectUbicaciones, this.ubicaciones);
 
-                    //Actualizar productos
-                    ActualizarProductos();
-
                     //Envases
                     ConectorSQL.CargarEntidades(ConectorSQL.selectEnvases, this.envases);
                     ValorProgreso(this.progresoEnvases, 100);
+
+                    //Actualizar productos
+                    ActualizarProductos();
+                    //this.MostrarEntidades(this.tablaProductos, this.productos);
+                    ValorProgreso(this.progresoProductos, 100);
 
                     //Operarios
                     ConectorSQL.CargarEntidades(ConectorSQL.selectOperarios, this.operarios);
@@ -1362,16 +1362,8 @@ namespace NoCocinoMas
         {
             Dictionary<int, Producto> ps = new Dictionary<int, Producto>();
             foreach (Producto p in this.productos)
-            {
-                try
-                {
-                    ps.Add(p.codigo, p);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                }
-            }
+                if (!ps.ContainsKey(p.codigo)) ps.Add(p.codigo, p);
+                else Console.WriteLine($"El producto con código {p.codigo} ya existe en el diccionario.");
             return ps;
         }
 
@@ -1685,15 +1677,14 @@ namespace NoCocinoMas
             {
                 //agregamos los nuevos a la lista que tenemos
                 this.productos.Agregar(nuevosProductos);
-                //actualizamos la tabla
-                this.MostrarEntidades(this.tablaProductos, nuevosProductos);
                 //se vinculan los envases
                 nuevosProductos.VincularEnvases(this.envases);
                 //es necesario volver a vincular los productos a las lineas de pedido
                 this.lineasPedido.VincularProductosNuevos(nuevosProductos);
-
                 //vincular ubicaciones
                 nuevosProductos.VincularUbicaciones(this.ubicaciones);
+                //actualizamos la tabla
+                this.MostrarEntidades(this.tablaProductos, nuevosProductos);
             }
             ConectorJSON.GuardarObjeto("./productos.json", this.productos);
             Estado("Actualizacion completada");
@@ -2466,9 +2457,11 @@ namespace NoCocinoMas
                     //csv.Add("#Pedido " + pedido?.numero ?? "0");
                     if (pedido != null)
                     {
-                        pedido.ObtenerUbicacionesModulo(i).ConvertAll<string>(ubicacion => ubicacion.ToCSV()).ForEach( c =>
+                        pedido.ObtenerUbicacionesModulo(i).ForEach( u =>
                         {
-                            if (c.First() > 4) {
+                            String c = u.ToCSV();
+                            if (u.nombre.StartsWith("E") || u.nombre.StartsWith("F"))
+                            {
                                 csvBack.Add(c);
                             }
                             else
@@ -2488,7 +2481,7 @@ namespace NoCocinoMas
                     //6 Cian
                     //7 Azul cobalto
                     //8 Gris
-                    csv.Add(String.Format("{0},{1},{2}", 8, ((i-1)*3) + 1, this.cajas.BuscarCodigo(pedido.caja)?.color ?? 4)); //se suma 1 hasta que se arregle la entrada DI por la BI de la tira de leds
+                    csv.Add(String.Format("{0},{1},{2}", 8, ((i-1)*3) + 1, this.cajas.BuscarCodigo(pedido?.caja ?? "")?.color ?? 5)); //se suma 1 hasta que se arregle la entrada DI por la BI de la tira de leds
                 }
 
                 string postData = string.Join(";", csv);
@@ -2523,14 +2516,28 @@ namespace NoCocinoMas
             try
             {
                 List<string> csv = new List<string>();
+                List<string> csvBack = new List<string>();
                 foreach (Ubicacion u in this.ubicaciones)
                 {
-                    csv.Add(u.ToCSV(11));
+                    string c = u.ToCSV(2);
+                    if (u.nombre.StartsWith("E") || u.nombre.StartsWith("F"))
+                    {
+                        csvBack.Add(c);
+                    }
+                    else
+                    {
+                        Console.WriteLine(c);
+                        csv.Add(c);
+                    }
                 }
 
                 string postData = string.Join(";", csv);
+                string postData2 = string.Join(";", csvBack);
                 ConectorPLC.EncenderPedidos("Actualizar " + postData);
+                ConectorPLC.EncenderPedidosBack("Actualizar " + postData2);
                 EscribirEvento("EncenderPedidos: " + postData);
+                EscribirEvento("EncenderPedidos2: " + postData2);
+
             }
             catch (Exception ex)
             {
