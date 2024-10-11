@@ -152,6 +152,7 @@ namespace NoCocinoMas
             foreach (Centralita c in Gestor.gestor.centralitas)
             {
                 new Thread(new ThreadStart(() => Enviar(Gestor.ipControlador, Gestor.puertoCentralita, "GET /Apagar/\n"))).Start();
+                new Thread(new ThreadStart(() => Enviar(Gestor.ipControlador2, Gestor.puertoCentralita, "GET /Apagar/\n"))).Start();
             }
         }
 

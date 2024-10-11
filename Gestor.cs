@@ -1683,9 +1683,10 @@ namespace NoCocinoMas
                 this.lineasPedido.VincularProductosNuevos(nuevosProductos);
                 //vincular ubicaciones
                 nuevosProductos.VincularUbicaciones(this.ubicaciones);
-                //actualizamos la tabla
-                this.MostrarEntidades(this.tablaProductos, nuevosProductos);
             }
+            //actualizamos la tabla
+            this.MostrarEntidades(this.tablaProductos, this.productos);
+
             ConectorJSON.GuardarObjeto("./productos.json", this.productos);
             Estado("Actualizacion completada");
         }
@@ -2519,7 +2520,7 @@ namespace NoCocinoMas
                 List<string> csvBack = new List<string>();
                 foreach (Ubicacion u in this.ubicaciones)
                 {
-                    string c = u.ToCSV(2);
+                    string c = u.ToCSV(1);
                     if (u.nombre.StartsWith("E") || u.nombre.StartsWith("F"))
                     {
                         csvBack.Add(c);

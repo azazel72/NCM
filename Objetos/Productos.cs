@@ -196,10 +196,6 @@ namespace NoCocinoMas
                 this.posicionRecogida,
                 this.ubicacionRecogida?.GetValoresInsertSQL() ?? "Sin ubicacion"
             };
-            if (this.ubicacionRecogida == null)
-            {
-                Console.WriteLine("CABRON");
-            }
             return valores;
         }
 
