@@ -2531,6 +2531,9 @@ namespace NoCocinoMas
                         csv.Add(c);
                     }
                 }
+                for(int i = 0; i < 4; i++) {
+                    csv.Add(String.Format("{0},{1},{2}", 8, (i * 3) + 3, i+1));
+                }
 
                 string postData = string.Join(";", csv);
                 string postData2 = string.Join(";", csvBack);
