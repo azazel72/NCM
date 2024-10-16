@@ -16,8 +16,10 @@ namespace NoCocinoMas
     class ConectorPLC
     {
         static private readonly object bloqueoEnviarPlc = new object();
-        //static private readonly object bloqueoEnviarHttp = new object();
+
         static private readonly SemaphoreSlim bloqueoEnviarHttp = new SemaphoreSlim(1, 1);
+
+        static public bool notificarLeds = true;
 
         static private string CrearMensaje(int linea, int posicion, int longitud, string rgb = "127000127", string tipo = "500", int tarea = 4)
         {
@@ -247,6 +249,10 @@ namespace NoCocinoMas
 
         static private async Task EnviarSocket(string ip, int puerto, string postData)
         {
+            if (!notificarLeds)
+            {
+                return;
+            }
             lock (bloqueoEnviarPlc)
             {
                 // Parsear la URL

@@ -116,6 +116,7 @@
             this.envio = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.transportista = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.estato_pedido = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.caja = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label5 = new System.Windows.Forms.Label();
             this.tablaLineasPedido = new System.Windows.Forms.DataGridView();
             this.codigo_producto = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -179,6 +180,7 @@
             this.textoEstado = new System.Windows.Forms.ToolStripStatusLabel();
             this.temporizador = new System.Windows.Forms.Timer(this.components);
             this.buscador = new System.Windows.Forms.FolderBrowserDialog();
+            this.notificarLeds = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.contenedorTablas.SuspendLayout();
@@ -1061,7 +1063,8 @@
             this.CP,
             this.envio,
             this.transportista,
-            this.estato_pedido});
+            this.estato_pedido,
+            this.caja});
             this.tablaPedidos.Location = new System.Drawing.Point(9, 27);
             this.tablaPedidos.MultiSelect = false;
             this.tablaPedidos.Name = "tablaPedidos";
@@ -1123,6 +1126,12 @@
             this.estato_pedido.Name = "estato_pedido";
             this.estato_pedido.ReadOnly = true;
             this.estato_pedido.Width = 50;
+            // 
+            // caja
+            // 
+            this.caja.HeaderText = "Caja";
+            this.caja.Name = "caja";
+            this.caja.ReadOnly = true;
             // 
             // label5
             // 
@@ -1399,6 +1408,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.notificarLeds);
             this.groupBox3.Controls.Add(this.parejasChk);
             this.groupBox3.Controls.Add(this.button2);
             this.groupBox3.Controls.Add(this.checkBox1);
@@ -1746,6 +1756,19 @@
             // 
             this.buscador.HelpRequest += new System.EventHandler(this.buscador_HelpRequest);
             // 
+            // notificarLeds
+            // 
+            this.notificarLeds.AutoSize = true;
+            this.notificarLeds.Checked = true;
+            this.notificarLeds.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.notificarLeds.Location = new System.Drawing.Point(258, 546);
+            this.notificarLeds.Name = "notificarLeds";
+            this.notificarLeds.Size = new System.Drawing.Size(108, 17);
+            this.notificarLeds.TabIndex = 12;
+            this.notificarLeds.Text = "No notificar luces";
+            this.notificarLeds.UseVisualStyleBackColor = true;
+            this.notificarLeds.CheckedChanged += new System.EventHandler(this.notificarLeds_CheckedChanged);
+            // 
             // Gestor
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -1940,12 +1963,6 @@
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn id;
-        private System.Windows.Forms.DataGridViewTextBoxColumn numero;
-        private System.Windows.Forms.DataGridViewTextBoxColumn CP;
-        private System.Windows.Forms.DataGridViewTextBoxColumn envio;
-        private System.Windows.Forms.DataGridViewTextBoxColumn transportista;
-        private System.Windows.Forms.DataGridViewTextBoxColumn estato_pedido;
         private System.Windows.Forms.TabPage tabEtiquetas;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.Button guardarConfiguracionBtn;
@@ -1968,6 +1985,14 @@
         private System.Windows.Forms.Button ActualizarStockBtn;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.CheckBox parejasChk;
+        private System.Windows.Forms.DataGridViewTextBoxColumn id;
+        private System.Windows.Forms.DataGridViewTextBoxColumn numero;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CP;
+        private System.Windows.Forms.DataGridViewTextBoxColumn envio;
+        private System.Windows.Forms.DataGridViewTextBoxColumn transportista;
+        private System.Windows.Forms.DataGridViewTextBoxColumn estato_pedido;
+        private System.Windows.Forms.DataGridViewTextBoxColumn caja;
+        private System.Windows.Forms.CheckBox notificarLeds;
     }
 }
 

@@ -71,12 +71,12 @@ namespace NoCocinoMas
         static public string ipTestModulos = "127.0.0.1";
         //static public string ipTest = "127.0.0.1";
         //static public string ipTest = "192.168.1.175";
-        static public string ipTest = "192.168.0.254";
+        static public string ipTest = "192.168.0.252";
         //static public string ipTest = "";
         static public int puertoModulos = 80;
 
-        static public string ipControlador = "192.168.0.254";
-        static public string ipControlador2 = "192.168.0.239";
+        static public string ipControlador = "192.168.0.252";
+        static public string ipControlador2 = "192.168.0.253";
         static public int puertoCentralita = 80;
 
         public Dictionary<string, ConexionPermanente> conexiones;
@@ -2544,6 +2544,11 @@ namespace NoCocinoMas
             {
                 EscribirError(ex.Message);
             }
+        }
+
+        private void notificarLeds_CheckedChanged(object sender, EventArgs e)
+        {
+            ConectorPLC.notificarLeds = notificarLeds.Checked;
         }
     }
 }
