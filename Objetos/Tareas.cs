@@ -409,10 +409,9 @@ namespace NoCocinoMas
                         if (this.pedido.ComprobarFinalizacion())
                         {
                             object[] valoresRecogidaPedido = {
-                                this.pedido.id,
-                                1
+                                this.pedido.id
                             };
-                            ConectorSQL.ActualizarEntidades(ConectorSQL.updateRecogidaPedido, valoresRecogidaPedido);
+                            ConectorSQL.ActualizarEntidades(ConectorSQL.updateRecogidaPedidoFinalizado, valoresRecogidaPedido);
                         }
                         object[] valoresRecogida = {
                             this.posicion.id,

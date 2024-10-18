@@ -90,6 +90,7 @@ namespace NoCocinoMas
         static public string updateReposicion = "UPDATE posiciones SET producto_codigo={1}, cantidad={2}, lote='{3}' WHERE id={0};";
         static public string updateRecogidaLineas = "UPDATE lineas_pedido SET recogido={1}, estado={2} WHERE id={0};";
         static public string updateRecogidaPedido = "UPDATE pedidos SET estado={1} WHERE id={0};";
+        static public string updateRecogidaPedidoFinalizado = "UPDATE pedidos SET estado=1, caja='' WHERE id={0};";
 
         static public string updateFabricacion = "UPDATE productos SET stock={1} WHERE id={0};";
 
@@ -419,6 +420,10 @@ namespace NoCocinoMas
 
         static public bool ActualizarStock()
         {
+            if (!ConectorPLC.notificarWeb)
+            {
+                return true;
+            }
             try
             {
                 // Crear una lista para almacenar los resultados

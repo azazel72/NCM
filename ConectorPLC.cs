@@ -20,6 +20,7 @@ namespace NoCocinoMas
         static private readonly SemaphoreSlim bloqueoEnviarHttp = new SemaphoreSlim(1, 1);
 
         static public bool notificarLeds = true;
+        static public bool notificarWeb = true;
 
         static private string CrearMensaje(int linea, int posicion, int longitud, string rgb = "127000127", string tipo = "500", int tarea = 4)
         {
@@ -180,7 +181,10 @@ namespace NoCocinoMas
 
         static private void Enviar(string ip, int puerto, string mensaje)
         {
-            //Console.Write("LEDS: " + ip + "//" + mensaje);
+            if (!notificarLeds)
+            {
+                return;
+            }
 
             lock (bloqueoEnviarPlc)
             {
@@ -206,6 +210,10 @@ namespace NoCocinoMas
 
         static private async Task EnviarHttp(string url, string demora = null)
         {
+            if (!notificarLeds)
+            {
+                return;
+            }
             //bloqueo peticion
             await bloqueoEnviarHttp.WaitAsync();
 

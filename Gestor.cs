@@ -2553,5 +2553,10 @@ namespace NoCocinoMas
         {
             ConectorPLC.notificarLeds = notificarLeds.Checked;
         }
+
+        private void notificarWeb_CheckedChanged(object sender, EventArgs e)
+        {
+            ConectorPLC.notificarWeb = notificarWeb.Checked;
+        }
     }
 }

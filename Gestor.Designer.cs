@@ -146,6 +146,7 @@
             this.label10 = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.notificarLeds = new System.Windows.Forms.CheckBox();
             this.parejasChk = new System.Windows.Forms.CheckBox();
             this.button2 = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
@@ -180,7 +181,7 @@
             this.textoEstado = new System.Windows.Forms.ToolStripStatusLabel();
             this.temporizador = new System.Windows.Forms.Timer(this.components);
             this.buscador = new System.Windows.Forms.FolderBrowserDialog();
-            this.notificarLeds = new System.Windows.Forms.CheckBox();
+            this.notificarWeb = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.contenedorTablas.SuspendLayout();
@@ -1408,6 +1409,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.notificarWeb);
             this.groupBox3.Controls.Add(this.notificarLeds);
             this.groupBox3.Controls.Add(this.parejasChk);
             this.groupBox3.Controls.Add(this.button2);
@@ -1420,6 +1422,19 @@
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Control Recogida";
+            // 
+            // notificarLeds
+            // 
+            this.notificarLeds.AutoSize = true;
+            this.notificarLeds.Checked = true;
+            this.notificarLeds.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.notificarLeds.Location = new System.Drawing.Point(258, 546);
+            this.notificarLeds.Name = "notificarLeds";
+            this.notificarLeds.Size = new System.Drawing.Size(93, 17);
+            this.notificarLeds.TabIndex = 12;
+            this.notificarLeds.Text = "Notificar luces";
+            this.notificarLeds.UseVisualStyleBackColor = true;
+            this.notificarLeds.CheckedChanged += new System.EventHandler(this.notificarLeds_CheckedChanged);
             // 
             // parejasChk
             // 
@@ -1727,7 +1742,7 @@
             this.tVersion.Name = "tVersion";
             this.tVersion.Size = new System.Drawing.Size(43, 13);
             this.tVersion.TabIndex = 11;
-            this.tVersion.Text = "v 2.007";
+            this.tVersion.Text = "v 2.008";
             // 
             // statusStrip1
             // 
@@ -1756,18 +1771,18 @@
             // 
             this.buscador.HelpRequest += new System.EventHandler(this.buscador_HelpRequest);
             // 
-            // notificarLeds
+            // notificarWeb
             // 
-            this.notificarLeds.AutoSize = true;
-            this.notificarLeds.Checked = true;
-            this.notificarLeds.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.notificarLeds.Location = new System.Drawing.Point(258, 546);
-            this.notificarLeds.Name = "notificarLeds";
-            this.notificarLeds.Size = new System.Drawing.Size(108, 17);
-            this.notificarLeds.TabIndex = 12;
-            this.notificarLeds.Text = "No notificar luces";
-            this.notificarLeds.UseVisualStyleBackColor = true;
-            this.notificarLeds.CheckedChanged += new System.EventHandler(this.notificarLeds_CheckedChanged);
+            this.notificarWeb.AutoSize = true;
+            this.notificarWeb.Checked = true;
+            this.notificarWeb.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.notificarWeb.Location = new System.Drawing.Point(37, 546);
+            this.notificarWeb.Name = "notificarWeb";
+            this.notificarWeb.Size = new System.Drawing.Size(93, 17);
+            this.notificarWeb.TabIndex = 13;
+            this.notificarWeb.Text = "Notificar WEB";
+            this.notificarWeb.UseVisualStyleBackColor = true;
+            this.notificarWeb.CheckedChanged += new System.EventHandler(this.notificarWeb_CheckedChanged);
             // 
             // Gestor
             // 
@@ -1993,6 +2008,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn estato_pedido;
         private System.Windows.Forms.DataGridViewTextBoxColumn caja;
         private System.Windows.Forms.CheckBox notificarLeds;
+        private System.Windows.Forms.CheckBox notificarWeb;
     }
 }
 

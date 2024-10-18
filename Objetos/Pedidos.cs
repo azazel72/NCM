@@ -565,7 +565,7 @@ namespace NoCocinoMas
                                 this.id,
                                 this.estado
                             };
-                        ConectorSQL.ActualizarEntidades(ConectorSQL.updateRecogidaPedido, valoresRecogidaPedido);
+                        ConectorSQL.ActualizarEntidades(this.estado == 1 ? ConectorSQL.updateRecogidaPedidoFinalizado : ConectorSQL.updateRecogidaPedido, valoresRecogidaPedido);
                     }
 
                     ///////////////////////////////////
@@ -634,10 +634,9 @@ namespace NoCocinoMas
             if (this.ComprobarFinalizacion())
             {
                 object[] valoresRecogidaPedido = {
-                            this.id,
-                            1
+                            this.id
                         };
-                ConectorSQL.ActualizarEntidades(ConectorSQL.updateRecogidaPedido, valoresRecogidaPedido);
+                ConectorSQL.ActualizarEntidades(ConectorSQL.updateRecogidaPedidoFinalizado, valoresRecogidaPedido);
             }
             return null;
         }
