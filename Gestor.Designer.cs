@@ -146,6 +146,7 @@
             this.label10 = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.notificarWeb = new System.Windows.Forms.CheckBox();
             this.notificarLeds = new System.Windows.Forms.CheckBox();
             this.parejasChk = new System.Windows.Forms.CheckBox();
             this.button2 = new System.Windows.Forms.Button();
@@ -181,10 +182,13 @@
             this.textoEstado = new System.Windows.Forms.ToolStripStatusLabel();
             this.temporizador = new System.Windows.Forms.Timer(this.components);
             this.buscador = new System.Windows.Forms.FolderBrowserDialog();
-            this.notificarWeb = new System.Windows.Forms.CheckBox();
+            this.tablaCajas = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.contenedorTablas.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.datos1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tablaModulos)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tablaCentralitas)).BeginInit();
@@ -215,6 +219,7 @@
             this.tabEventos.SuspendLayout();
             this.tabErrores.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tablaCajas)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -323,6 +328,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.tablaCajas);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -1423,6 +1429,19 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Control Recogida";
             // 
+            // notificarWeb
+            // 
+            this.notificarWeb.AutoSize = true;
+            this.notificarWeb.Checked = true;
+            this.notificarWeb.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.notificarWeb.Location = new System.Drawing.Point(37, 546);
+            this.notificarWeb.Name = "notificarWeb";
+            this.notificarWeb.Size = new System.Drawing.Size(93, 17);
+            this.notificarWeb.TabIndex = 13;
+            this.notificarWeb.Text = "Notificar WEB";
+            this.notificarWeb.UseVisualStyleBackColor = true;
+            this.notificarWeb.CheckedChanged += new System.EventHandler(this.notificarWeb_CheckedChanged);
+            // 
             // notificarLeds
             // 
             this.notificarLeds.AutoSize = true;
@@ -1771,18 +1790,39 @@
             // 
             this.buscador.HelpRequest += new System.EventHandler(this.buscador_HelpRequest);
             // 
-            // notificarWeb
+            // tablaCajas
             // 
-            this.notificarWeb.AutoSize = true;
-            this.notificarWeb.Checked = true;
-            this.notificarWeb.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.notificarWeb.Location = new System.Drawing.Point(37, 546);
-            this.notificarWeb.Name = "notificarWeb";
-            this.notificarWeb.Size = new System.Drawing.Size(93, 17);
-            this.notificarWeb.TabIndex = 13;
-            this.notificarWeb.Text = "Notificar WEB";
-            this.notificarWeb.UseVisualStyleBackColor = true;
-            this.notificarWeb.CheckedChanged += new System.EventHandler(this.notificarWeb_CheckedChanged);
+            this.tablaCajas.AllowUserToAddRows = false;
+            this.tablaCajas.AllowUserToDeleteRows = false;
+            this.tablaCajas.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.tablaCajas.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn1,
+            this.dataGridViewTextBoxColumn2});
+            this.tablaCajas.Location = new System.Drawing.Point(580, 6);
+            this.tablaCajas.MultiSelect = false;
+            this.tablaCajas.Name = "tablaCajas";
+            this.tablaCajas.ReadOnly = true;
+            this.tablaCajas.RowHeadersWidth = 51;
+            this.tablaCajas.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.tablaCajas.Size = new System.Drawing.Size(220, 589);
+            this.tablaCajas.TabIndex = 15;
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.HeaderText = "Codigo";
+            this.dataGridViewTextBoxColumn1.MinimumWidth = 6;
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            this.dataGridViewTextBoxColumn1.Width = 75;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.HeaderText = "Color";
+            this.dataGridViewTextBoxColumn2.MaxInputLength = 6;
+            this.dataGridViewTextBoxColumn2.MinimumWidth = 6;
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.ReadOnly = true;
+            this.dataGridViewTextBoxColumn2.Width = 75;
             // 
             // Gestor
             // 
@@ -1807,6 +1847,7 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.contenedorTablas.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
             this.datos1.ResumeLayout(false);
             this.datos1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tablaModulos)).EndInit();
@@ -1851,6 +1892,7 @@
             this.tabErrores.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tablaCajas)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2009,6 +2051,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn caja;
         private System.Windows.Forms.CheckBox notificarLeds;
         private System.Windows.Forms.CheckBox notificarWeb;
+        private System.Windows.Forms.DataGridView tablaCajas;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
     }
 }
 

@@ -412,6 +412,7 @@ namespace NoCocinoMas
                                 this.pedido.id
                             };
                             ConectorSQL.ActualizarEntidades(ConectorSQL.updateRecogidaPedidoFinalizado, valoresRecogidaPedido);
+                            this.pedido.c = null;
                         }
                         object[] valoresRecogida = {
                             this.posicion.id,

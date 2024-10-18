@@ -232,10 +232,10 @@ namespace NoCocinoMas
             pedidoAvanzado?.AvanzarPedido();
             return pedidoAvanzado;
         }
-        public Pedido NuevaCaja(int transportista, string caja)
+        public Pedido NuevaCaja(int transportista, Caja c)
         {
             Pedido pedidoEntrante = (Pedido)this.listado.Find(pedido => ((Pedido)pedido).DisponibleRecogida(transportista));
-            pedidoEntrante?.AvanzarPedido(caja);
+            pedidoEntrante?.AvanzarPedido(c);
             return pedidoEntrante;
         }
 
@@ -262,6 +262,24 @@ namespace NoCocinoMas
             return (Pedido)this.listado.Find(pedido => ((Pedido)pedido).indice_modulo <= indice_modulo);
         }
 
+        public void vincularCajas(Cajas cajas)
+        {
+            if (this.listado.Count > 0 && cajas.Count > 0)
+            {
+                foreach (Pedido pedido in this.listado)
+                {
+                    if (pedido.caja == "005926")
+                    {
+                        Console.WriteLine("/");
+                    }
+                    String codigo = pedido.caja;
+                    if (!string.IsNullOrEmpty(codigo))
+                    {
+                        pedido.c = cajas.BuscarCodigo(codigo);
+                    }
+                }
+            }
+        }
     }
 
     public class Pedido : Entidad, IEntidad
@@ -277,6 +295,7 @@ namespace NoCocinoMas
         public LineasPedido lineas { get; set; }
         public Movimientos movimientos { get; set; }
         public string caja { get; set; }
+        public Caja c {  get; set; }
         public long indice_recogida { get; set; }
         public int indice_modulo { get; set; }
         public int totalItems { get; set; }
@@ -326,7 +345,8 @@ namespace NoCocinoMas
                 this.caja = datos.GetString("caja");
                 this.indice_modulo = datos.GetInt32("indice_modulo");
                 this.indice_recogida = datos.GetInt64("indice_recogida");
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 this.caja = "";
                 this.indice_modulo = 0;
@@ -565,7 +585,15 @@ namespace NoCocinoMas
                                 this.id,
                                 this.estado
                             };
-                        ConectorSQL.ActualizarEntidades(this.estado == 1 ? ConectorSQL.updateRecogidaPedidoFinalizado : ConectorSQL.updateRecogidaPedido, valoresRecogidaPedido);
+                        if (this.estado == 1)
+                        {
+                            ConectorSQL.ActualizarEntidades(ConectorSQL.updateRecogidaPedidoFinalizado, valoresRecogidaPedido);
+                            this.c = null;
+                        }
+                        else
+                        {
+                            ConectorSQL.ActualizarEntidades(ConectorSQL.updateRecogidaPedido, valoresRecogidaPedido);
+                        }
                     }
 
                     ///////////////////////////////////
@@ -637,6 +665,7 @@ namespace NoCocinoMas
                             this.id
                         };
                 ConectorSQL.ActualizarEntidades(ConectorSQL.updateRecogidaPedidoFinalizado, valoresRecogidaPedido);
+                this.c = null;
             }
             return null;
         }
@@ -673,10 +702,11 @@ namespace NoCocinoMas
             this.lineas = lineasAgrupadas;
         }
 
-        public void AvanzarPedido(string caja = null)
+        public void AvanzarPedido(Caja c = null)
         {
             int indiceActual = this.indice_modulo;
             string cajaActual = this.caja;
+            string caja = c?.codigo ?? null;
             if (Gestor.gestor.modulosDobles)
             {
                 this.indice_modulo = indiceActual == 0 ? 1 : (indiceActual < 3 ? 3 : 5);
@@ -688,6 +718,7 @@ namespace NoCocinoMas
             if (!string.IsNullOrEmpty(caja) && caja != this.caja)
             {
                 this.caja = caja;
+                this.c = c;
                 this.indice_recogida = ((DateTimeOffset)DateTime.UtcNow).ToUnixTimeMilliseconds();
             }
             if (indiceActual != this.indice_modulo || cajaActual != this.caja)

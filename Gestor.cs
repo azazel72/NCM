@@ -232,11 +232,9 @@ namespace NoCocinoMas
                     this.MostrarEntidades(this.tablaPosiciones, this.posiciones);
                     ValorProgreso(this.progresoPosiciones, 100);
 
-                    //Productos
-                    this.productos = new Productos(ConectorJSON.CargarObjeto<List<Producto>>("./productos.json") ?? new List<Producto>());
-
                     //Cajas
                     this.cajas = ConectorJSON.CargarObjeto<Cajas>("./cajas.json") ?? new Cajas();
+                    this.MostrarEntidades(this.tablaCajas, this.cajas);
 
                     //Ubicaciones
                     ConectorSQL.CargarEntidades(ConectorSQL.selectUbicaciones, this.ubicaciones);
@@ -247,6 +245,13 @@ namespace NoCocinoMas
 
                     //Actualizar productos
                     ActualizarProductos();
+
+                    if (this.productos.Contador() == 0)
+                    {
+                        this.productos = new Productos(ConectorJSON.CargarObjeto<List<Producto>>("./productos.json") ?? new List<Producto>());
+                        this.MostrarEntidades(this.tablaProductos, this.productos, true);
+                    }
+
                     //this.MostrarEntidades(this.tablaProductos, this.productos);
                     ValorProgreso(this.progresoProductos, 100);
 
@@ -281,6 +286,9 @@ namespace NoCocinoMas
                         //Pedidos en transito
                         this.pedidosTransito.Agregar(this.pedidos.PedidosTransito());
                         this.pedidosCompletar.Agregar(this.pedidos.PedidosCompletar());
+
+                        //vincular cajas
+                        this.pedidos.vincularCajas(this.cajas);
                     }
 
                     //Menus
@@ -1683,10 +1691,9 @@ namespace NoCocinoMas
                 this.lineasPedido.VincularProductosNuevos(nuevosProductos);
                 //vincular ubicaciones
                 nuevosProductos.VincularUbicaciones(this.ubicaciones);
+                //actualizamos la tabla
+                this.MostrarEntidades(this.tablaProductos, this.productos);
             }
-            //actualizamos la tabla
-            this.MostrarEntidades(this.tablaProductos, this.productos);
-
             ConectorJSON.GuardarObjeto("./productos.json", this.productos);
             Estado("Actualizacion completada");
         }
@@ -2106,6 +2113,7 @@ namespace NoCocinoMas
                 nuevasLineasPedido.VincularProductos(listadoProductos);
                 nuevosPedidos.VincularLineas(nuevasLineasPedido);
                 nuevosPedidos.AgruparLineas(nuevasLineasPedido);
+                nuevosPedidos.vincularCajas(this.cajas);
 
                 //Guardamos los nuevos pedidos
                 nuevosPedidos.GuardarNuevosPedidos();
@@ -2155,6 +2163,7 @@ namespace NoCocinoMas
                 nuevasLineasPedido.VincularProductos(listadoProductos);
                 nuevosPedidos.VincularLineas(nuevasLineasPedido);
                 nuevosPedidos.AgruparLineas(nuevasLineasPedido);
+                nuevosPedidos.vincularCajas(this.cajas);
 
                 //Guardamos los nuevos pedidos
                 nuevosPedidos.GuardarNuevosPedidos();
@@ -2376,9 +2385,11 @@ namespace NoCocinoMas
                     this.pedidosTransito.Eliminar(p);
                     this.pedidosCompletar.Agregar(p);
                 }
-
                 if (mensaje.indice_modulo == 1 && !string.IsNullOrEmpty(mensaje.caja))
                 {
+                    //se comprueba que la caja exista
+                    Caja caja = this.cajas.BuscarCodigo(mensaje.caja);
+
                     if (mensaje.numero_pedido > 0)
                     {
                         if (this.pedidosTransito.BuscarNumero(mensaje.numero_pedido) != null)
@@ -2391,23 +2402,40 @@ namespace NoCocinoMas
                         }
                         else
                         {
-                            p = this.pedidos.BuscarNumero(mensaje.numero_pedido);
-                            if (p == null)
+                            if (caja == null)
                             {
-                                mensaje.mensajeError = "Pedido no encontrado";
+                                mensaje.mensajeError = string.Format("Caja no encontrada {0}", mensaje.caja);
+                            }
+                            else if ((p = this.pedidos.BuscarCaja(mensaje.caja)) != null)
+                            {
+                                mensaje.mensajeError = string.Format("Caja {0} ya utilizada en pedido {1}", mensaje.caja, p.numero);
+                            }
+                            else if ((p = this.pedidos.BuscarNumero(mensaje.numero_pedido)) == null)
+                            {
+                                mensaje.mensajeError = string.Format("Pedido {0} no encontrado", p.numero);
                             }
                             else
                             {
-                                p.AvanzarPedido(mensaje.caja);
+                                p.AvanzarPedido(caja);
                                 this.pedidosTransito.Agregar(p);
                             }
                         }
                     }
                     else
                     {
-                        //se recupera el siguiente pedido de la lista (de la mensajeria), y pasa al modulo 1
-                        p = this.pedidos.NuevaCaja(mensaje.transportista, mensaje.caja);
-                        this.pedidosTransito.Agregar(p);
+                        if (caja == null)
+                        {
+                            mensaje.mensajeError = string.Format("Caja no encontrada {0}", mensaje.caja);
+                        }
+                        else if ((p = this.pedidos.BuscarCaja(mensaje.caja)) != null) {
+                            mensaje.mensajeError = string.Format("Caja {0} ya utilizada en pedido {1}", mensaje.caja, p.numero);
+                        }
+                        else
+                        {
+                            //se recupera el siguiente pedido de la lista (de la mensajeria), y pasa al modulo 1
+                            p = this.pedidos.NuevaCaja(mensaje.transportista, caja);
+                            this.pedidosTransito.Agregar(p);
+                        }
                     }
                 }
 
@@ -2482,7 +2510,7 @@ namespace NoCocinoMas
                     //6 Cian
                     //7 Azul cobalto
                     //8 Gris
-                    csv.Add(String.Format("{0},{1},{2}", 8, ((i-1)*3) + 1, this.cajas.BuscarCodigo(pedido?.caja ?? "")?.color ?? 5)); //se suma 1 hasta que se arregle la entrada DI por la BI de la tira de leds
+                    csv.Add(String.Format("{0},{1},{2}", 8, ((i-1)*3) + 1, pedido?.c?.color ?? 0)); //se suma 1 hasta que se arregle la entrada DI por la BI de la tira de leds
                 }
 
                 string postData = string.Join(";", csv);
@@ -2532,7 +2560,7 @@ namespace NoCocinoMas
                     }
                 }
                 for(int i = 0; i < 4; i++) {
-                    csv.Add(String.Format("{0},{1},{2}", 8, (i * 3) + 3, i+1));
+                    csv.Add(String.Format("{0},{1},{2}", 8, ((i - 1) * 3) + 1, i+1));
                 }
 
                 string postData = string.Join(";", csv);
